@@ -294,6 +294,61 @@ function DashboardPage() {
   </Shell>;
 }
 
+
+function LandingPage() {
+  const products = [
+    { icon: "▦", name: "Tiffin & QSR POS", tag: "FAST SERVICE", desc: "Quick billing, counter orders, kitchen tickets and inventory for high-volume service.", features: ["Fast counter billing", "Kitchen order tickets", "Stock & recipe control"] },
+    { icon: "◫", name: "Fine Dine POS", tag: "TABLE SERVICE", desc: "Manage tables, captains, courses, KOTs and split settlements from one workspace.", features: ["Live floor & table plan", "Captain ordering", "KOT & split bills"] },
+    { icon: "⌗", name: "Table QR Ordering", tag: "CONTACTLESS", desc: "Let guests scan, browse your menu and order directly from their table.", features: ["Branded QR menus", "Table-linked orders", "Guest-friendly checkout"] },
+    { icon: "↗", name: "Food Ordering Website", tag: "DIRECT ORDERS", desc: "Launch your own ordering website with pickup, delivery and a branded menu.", features: ["Your own brand & domain", "Online payments", "Delivery & pickup"] },
+    { icon: "▣", name: "Food Ordering App", tag: "MOBILE COMMERCE", desc: "Give regular customers a convenient way to discover, order and track food.", features: ["Customer accounts", "Order tracking", "Push-ready experience"] },
+  ];
+  const capabilities = [
+    ["01", "One connected POS", "Bring dine-in, takeaway, delivery and online orders into a single operating view."],
+    ["02", "Kitchen that stays in sync", "Send orders to the right kitchen station and track preparation without re-entering tickets."],
+    ["03", "Inventory with visibility", "Keep an eye on ingredients, recipes, stock movement and low-stock items."],
+    ["04", "Business-ready insights", "Understand sales, taxes, outlet performance and daily operations with clear reports."],
+    ["05", "Built to grow", "Start with one outlet and enable more products, locations and teams as you expand."],
+    ["06", "Made for your workflow", "Choose the products and capabilities that match the way your restaurant operates."],
+  ];
+  return <main className="marketing">
+    <header className="marketing-nav">
+      <a className="marketing-brand" href="/"><span className="brand-mark">fd</span><span>fine dine<span className="brand-dot">.</span></span></a>
+      <nav className="marketing-links"><a href="#products">Products</a><a href="#platform">Platform</a><a href="#how-it-works">How it works</a><a href="#pricing">Pricing</a></nav>
+      <div className="nav-actions"><a className="nav-login" href="/login">Log in</a><a className="nav-cta" href="/register">Get started <span>↗</span></a></div>
+    </header>
+    <section className="hero-section">
+      <div className="hero-copy">
+        <div className="hero-kicker"><span></span> THE OPERATING PLATFORM FOR RESTAURANTS</div>
+        <h1>Everything your restaurant needs.<br/><em>All in one place.</em></h1>
+        <p>Run your restaurant with one connected platform for POS billing, kitchen operations, QR ordering and direct online orders. Start simple. Scale confidently.</p>
+        <div className="hero-actions"><a className="hero-primary" href="/register">Start your free trial <span>↗</span></a><a className="hero-secondary" href="#products">Explore products <span>↓</span></a></div>
+        <div className="hero-proof"><span>✓ Easy onboarding</span><span>✓ Multi-outlet ready</span><span>✓ Built for India</span></div>
+      </div>
+      <div className="hero-visual">
+        <div className="visual-glow"></div>
+        <div className="dashboard-preview">
+          <div className="preview-top"><div className="preview-brand"><span>fd</span> Fine Dine <small>WORKSPACE</small></div><div className="preview-live"><i></i> LIVE OVERVIEW</div></div>
+          <div className="preview-welcome"><div><small>MONDAY, 07 NOVEMBER</small><h3>Good morning, Souvik 👋</h3><p>Here’s what’s happening across your outlet today.</p></div><span className="preview-select">All outlets⌄</span></div>
+          <div className="preview-stats"><div><small>TODAY'S SALES</small><b>₹48,290</b><span className="up">↗ 12.8% vs yesterday</span></div><div><small>ORDERS</small><b>186</b><span>Across all channels</span></div><div><small>AVG. ORDER VALUE</small><b>₹259.62</b><span>+ 8.4% this week</span></div></div>
+          <div className="preview-lower"><div className="preview-chart"><div className="preview-chart-head"><b>Sales overview</b><small>THIS WEEK⌄</small></div><div className="chart-bars"><i style={{height:"38%"}}></i><i style={{height:"55%"}}></i><i style={{height:"46%"}}></i><i style={{height:"72%"}}></i><i style={{height:"61%"}}></i><i style={{height:"88%"}}></i><i style={{height:"100%"}}></i></div><div className="chart-days"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div></div><div className="preview-orders"><b>Recent orders</b><div><span className="order-dot green"></span><p>#1048 <small>Table 06 · Dine in</small></p><strong>₹840</strong></div><div><span className="order-dot amber"></span><p>#1047 <small>Online · Pickup</small></p><strong>₹520</strong></div><div><span className="order-dot blue"></span><p>#1046 <small>Table 02 · Dine in</small></p><strong>₹1,240</strong></div></div></div>
+        </div>
+        <div className="float-chip chip-orders"><span>↗</span><div><b>All orders, one view</b><small>POS · QR · Online</small></div></div>
+        <div className="float-chip chip-kitchen"><span>✓</span><div><b>Kitchen connected</b><small>Tickets flowing live</small></div></div>
+      </div>
+    </section>
+    <section className="trust-strip"><span>ONE PLATFORM. MULTIPLE WAYS TO SERVE.</span><div><b>QSR & TIFFIN</b><b>FINE DINING</b><b>CAFÉS</b><b>CLOUD KITCHENS</b><b>RESTAURANT GROUPS</b></div></section>
+    <section className="products-section" id="products"><div className="section-intro"><div><div className="section-kicker">A PRODUCT FOR EVERY SERVICE STYLE</div><h2>Choose what your business needs.<br/><em>Connect everything later.</em></h2></div><p>Five focused products. One shared foundation for your business, outlets, team and growth.</p></div>
+      <div className="product-grid">{products.map((p,i)=><article className={i===1?"product-card featured-product":"product-card"} key={p.name}><div className="product-card-top"><span className="product-icon">{p.icon}</span><small>{p.tag}</small></div><h3>{p.name}</h3><p>{p.desc}</p><ul>{p.features.map(x=><li key={x}><span>✓</span>{x}</li>)}</ul><a href="/register">Explore product <span>↗</span></a></article>)}</div>
+    </section>
+    <section className="platform-section" id="platform"><div className="platform-copy"><div className="section-kicker">ONE CONNECTED PLATFORM</div><h2>Less switching.<br/><em>More serving.</em></h2><p>Your front counter, kitchen, customers and business operations should work together. Fine Dine brings the everyday restaurant workflow into one connected system.</p><a className="dark-link" href="/register">Build your workspace <span>↗</span></a></div><div className="platform-list">{capabilities.map(([n,t,d])=><div className="capability-row" key={n}><span>{n}</span><div><h3>{t}</h3><p>{d}</p></div><b>↗</b></div>)}</div></section>
+    <section className="workflow-section" id="how-it-works"><div className="section-kicker">SIMPLE FROM DAY ONE</div><h2>From first order to final report.</h2><p className="workflow-sub">A connected flow that keeps your team moving.</p><div className="workflow-steps"><div><span>01</span><b>Take the order</b><p>POS, captain, QR or online ordering.</p></div><i>→</i><div><span>02</span><b>Prepare & serve</b><p>Send tickets to the right kitchen station.</p></div><i>→</i><div><span>03</span><b>Bill & settle</b><p>Manage payments and GST-ready billing.</p></div><i>→</i><div><span>04</span><b>Track performance</b><p>Review sales, stock and outlet reports.</p></div></div></section>
+    <section className="pricing-section" id="pricing"><div><div className="section-kicker">FLEXIBLE FOR YOUR BUSINESS</div><h2>Start with what you need.<br/><em>Scale when you're ready.</em></h2><p>Choose the products and outlet setup that fit your operation. Add capabilities as your business grows.</p></div><div className="pricing-card"><span className="pricing-label">YOUR RESTAURANT WORKSPACE</span><h3>One platform. Your choice.</h3><p>Product plans designed around your service model, with room to expand across outlets.</p><ul><li>Choose from five restaurant products</li><li>Enable products for each outlet</li><li>Manage your business from one account</li></ul><a href="/register">Create your account <span>↗</span></a><small>Plan and pricing details are shared during onboarding.</small></div></section>
+    <section className="final-cta"><div><div className="section-kicker">YOUR NEXT SERVICE STARTS HERE</div><h2>Ready to run a smarter restaurant?</h2><p>Bring your orders, kitchen and operations together with Fine Dine.</p></div><a href="/register">Get started today <span>↗</span></a></section>
+    <footer className="marketing-footer"><a className="marketing-brand" href="/"><span className="brand-mark">fd</span><span>fine dine<span className="brand-dot">.</span></span></a><span>Restaurant operations, made simpler.</span><div><a href="/login">Log in</a><a href="/register">Create account</a></div><small>© {new Date().getFullYear()} Fine Dine. All rights reserved.</small></footer>
+  </main>;
+}
+
 export default function App() {
   const path=window.location.pathname.replace(/\/+$/,"")||"/";
   if(path==="/register")return <RegisterPage/>;
@@ -301,6 +356,7 @@ export default function App() {
   if(path==="/forgot-password")return <ForgotPage/>;
   if(path==="/reset-password")return <ResetPage/>;
   if(path==="/dashboard")return <DashboardPage/>;
-  if(path==="/login"||path==="/")return <LoginPage/>;
+  if(path==="/")return <LandingPage/>;
+  if(path==="/login")return <LoginPage/>;
   return <Shell><div className="eyebrow">PAGE NOT FOUND</div><h2>We can’t find that page.</h2><a className="text-link" href="/login">Return to sign in</a></Shell>;
 }
