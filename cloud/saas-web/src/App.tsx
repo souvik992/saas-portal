@@ -1,5 +1,6 @@
 import { useEffect, useId, useState, type FormEvent, type ReactNode } from "react";
 import { apiRequest } from "./api";
+import { demoCard, endsText, type DemoCard, type DemoStatus, type DemoView } from "./demo";
 import { buildRegistrationPayload, newRegistrationKey, type RegistrationFields } from "./registration";
 
 type Account = {
@@ -74,6 +75,48 @@ function Button({ children, loading = false, disabled = false, onClick }: { chil
   return <button className="primary-button" type={onClick ? "button" : "submit"} onClick={onClick} disabled={disabled || loading}>{loading ? <><span className="spinner" /> Please wait…</> : children}</button>;
 }
 function LinkRow({ children }: { children: ReactNode }) { return <div className="link-row">{children}</div>; }
+
+/** Two ways to try the product: the browser demo (a sample restaurant) and the 14-day trial on a Windows PC. */
+function TryCards() {
+  const [card, setCard] = useState<DemoCard | null>(null);
+  const [starting, setStarting] = useState(false);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    let active = true;
+    apiRequest<DemoStatus>("/api/v1/demo").then(s => { if (active) setCard(demoCard(s)); }).catch(e => { if (active) setCard(demoCard(e)); });
+    return () => { active = false; };
+  }, []);
+  async function start() {
+    setStarting(true); setError("");
+    try { const demo = await apiRequest<DemoView>("/api/v1/demo", { method: "POST" }); setCard(demoCard({ available: true, reason: null, demo })); }
+    catch (e) { setError(messageOf(e)); } finally { setStarting(false); }
+  }
+  return <div className="try-grid">
+    <section className="try-card featured" aria-labelledby="demo-title">
+      <div className="eyebrow">NOTHING TO INSTALL</div>
+      <h3 id="demo-title">Try it in your browser</h3>
+      {card === null ? <p>Checking…</p> : card.kind === "ready" ? <>
+        <p>Your sample restaurant is ready until {endsText(card.demo.expiresAt)}. Sign in on the terminal with one of these PINs:</p>
+        <div className="pins">{card.demo.staff.map(s => <div className="pin" key={s.name}>{s.name}<b>{s.pin}</b></div>)}</div>
+        <a className="open-demo" href={card.demo.url ?? "#"} target="_blank" rel="noopener">Open the demo terminal ↗</a>
+      </> : card.kind === "start" ? <>
+        <p>A sample restaurant with tables, a menu and staff, ready in about 30 seconds. Open a table, send a KOT, print and settle a bill. It is deleted after 3 days.</p>
+        {error && <Notice>{error}</Notice>}
+        <Button loading={starting} onClick={() => void start()}>Start the browser demo</Button>
+      </> : <p>{card.message}</p>}
+    </section>
+    <section className="try-card" aria-labelledby="trial-title">
+      <div className="eyebrow">14-DAY FREE TRIAL</div>
+      <h3 id="trial-title">Run it on your Windows PC</h3>
+      <ol>
+        <li>Install DinePOS on the outlet’s main PC.</li>
+        <li>Open <b>Settings › Licence</b> and sign in with this account.</li>
+        <li>Press <b>Start 14-day free trial</b>. Billing then works offline.</li>
+      </ol>
+      <p>One free trial per PC, email and mobile number.</p>
+    </section>
+  </div>;
+}
 
 function RegisterPage() {
   const [fields, setFields] = useState(initialRegistration);
@@ -261,9 +304,10 @@ function DashboardPage() {
   if(error&&!account)return <Shell aside={false}><h2>Sign in required</h2><Notice>{error}</Notice><Button onClick={()=>routeTo("/login")}>Go to sign in</Button></Shell>;
   return <Shell aside={false}><div className="dashboard-top"><div><div className="eyebrow">BUSINESS WORKSPACE</div><h2>Hello, {account?.user.fullName.split(" ")[0] || "there"}.</h2><p className="muted">Here’s your Fine Dine account overview.</p></div><button className="secondary-button" onClick={logout}>Sign out ↗</button></div>
     {notice&&<Notice kind="success">{notice}</Notice>}{error&&<Notice>{error}</Notice>}
-    <div className="dashboard-cards"><div className="stat-card"><small>ACCOUNT EMAIL</small><b>{account?.user.email}</b><span className="status-pill">Verified account</span></div>
+    <div className="dashboard-cards"><div className="stat-card"><small>ACCOUNT EMAIL</small><b className="as-typed">{account?.user.email}</b><span className="status-pill">Verified account</span></div>
       <div className="stat-card"><small>ACCESS ROLE</small><b>{account?.user.role}</b><span>Organization access</span></div>
       <div className="stat-card"><small>BUSINESS</small><b>{account?.business?.trade_name||"Not set"}</b><span>{account?.business?.business_type?.replaceAll("_"," ")}</span></div></div>
+    <TryCards/>
     {profile&&<form onSubmit={save} className="profile-card form-stack"><div><div className="eyebrow">BUSINESS SETTINGS</div><h3>Business profile</h3><p className="muted">Keep your business identity and registered address up to date.</p></div>
       <div className="form-grid">
         <Field label="Trading / brand name" value={profile.tradeName} onChange={set("tradeName")} required/>
@@ -290,7 +334,7 @@ function DashboardPage() {
       </div></div>
       <div className="save-row"><span className="fine-print">Saved PAN/GSTIN values are retained unless you enter a replacement.</span><Button loading={saving}>Save business profile</Button></div>
     </form>}
-    <div className="coming-soon"><div><b>More tools are on the way</b><p>Subscription billing, outlet and device management, and trial provisioning status will be added in a later release.</p></div><span>COMING SOON</span></div>
+    <div className="coming-soon"><div><b>More tools are on the way</b><p>Subscription billing, outlet and device management will be added in a later release.</p></div><span>COMING SOON</span></div>
   </Shell>;
 }
 
