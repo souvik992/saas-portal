@@ -2,28 +2,34 @@
 
 A multi-product SaaS platform for restaurant businesses.
 
-## Supported products
+## Product catalogue
 
-- Tiffin / QSR
-- Fine Dine
-- Table QR ordering
-- Food ordering website
-- Food ordering mobile app
+- **Tiffin / QSR** — counter service, quick billing, kitchen and inventory
+- **Fine Dine** — table service, captain ordering, KOT and settlement
+- **Table QR** — QR menus and table-side ordering
+- **Food Ordering Website** — branded menu, checkout, delivery and pickup
+- **Food Ordering App** — customer mobile ordering, notifications and tracking
 
 ## Platform foundation
 
-This repository contains the shared SaaS account portal and backend foundation. Product entitlements, subscriptions, billing, business and outlet management, roles, and product-specific configuration will be developed as shared platform capabilities.
+The shared SaaS foundation provides account authentication, business and outlet registration, PostgreSQL migrations, product catalogue, product-scoped subscriptions, plan-to-product mapping, outlet product enablement and feature entitlements.
 
-## Initial migration
+See [Multi-product platform model](docs/multi-product-platform.md) for the tenant and entitlement design.
 
-The initial portal and API foundation is being migrated from `souvik992/fine-dine` (branch `feature/saas-foundation`) into this standalone repository. The source repository remains independent.
+## Current implementation status
 
-## Structure
+The first migration brings across the existing customer portal and SaaS API foundation from `souvik992/fine-dine`, branch `feature/saas-foundation`. The source repository remains separate and unchanged.
 
-- `cloud/saas-web` — customer-facing SaaS portal
-- `cloud/saas` — SaaS API and database migrations
-- `.github/workflows` — CI workflows
+The product catalogue and entitlement schema are in place. The current registration flow still provisions a Fine Dine default subscription. Product selection during onboarding, product-specific provisioning workers, subscription checkout, the super-admin catalogue editor, and customer-facing website/mobile app provisioning are follow-on work. The repository is a foundation, not a claim that all five products are production-ready.
+
+## Repository structure
+
+- `cloud/saas-web` — customer-facing account portal
+- `cloud/saas` — SaaS API
+- `packages/saas-db/migrations` — PostgreSQL schema migrations
+- `docs` — architecture and product documentation
+- `.github/workflows` — API and portal CI
 
 ## Development
 
-See the README files inside `cloud/saas` and `cloud/saas-web` for setup, environment variables, tests, and local development.
+See the README files inside `cloud/saas` and `cloud/saas-web` for local setup, environment variables, tests and development commands.
