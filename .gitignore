@@ -1,0 +1,22 @@
+node_modules/
+dist/
+out/
+*.tsbuildinfo
+.env
+*.db
+*.db-wal
+*.db-shm
+data/
+backups/
+coverage/
+.DS_Store
+.tsbuild/
+dist-renderer/
+dist-electron/
+dist-bundle/
+.stage/
+release/
+build-cache/
+cloud/hub/hub-data/
+# P6-04: the hosted outlets server keeps its own runtime module (better-sqlite3 and its Linux builds)
+!cloud/outlet-server/node_modules/
