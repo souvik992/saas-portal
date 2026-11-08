@@ -1,4 +1,4 @@
-# Customer portal (posinext dine)
+# Customer portal (posinext)
 
 The customer portal for the restaurant products: **Fine Dine (DinePOS)** and **QSR (Tiffin POS)**. Customers sign up,
 choose their product, download the Windows app and its add-ons, see their licences, and get support.
