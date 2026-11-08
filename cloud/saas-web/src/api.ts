@@ -50,6 +50,32 @@ export interface Download {
   available: boolean; version: string | null; fileName: string | null; size: number | null; publishedAt: string | null; build: string | null;
 }
 
+export interface Licence {
+  id: string; product: ProductCode; kind: "trial" | "paid" | "manual" | "demo"; hardwareId: string; outlet: string; licensee: string;
+  seats: { terminals: number; captains: number; kds: number }; issuedAt: number; expiresAt: number; revoked: boolean; key: string;
+}
+
+export interface TicketMessage { id: string; from: "customer" | "staff"; name: string; body: string; at: number }
+export interface Ticket {
+  id: string; number: number; subject: string; product: ProductCode | null; status: "open" | "answered" | "closed";
+  createdAt: number; updatedAt: number; messages?: TicketMessage[];
+}
+export interface Announcement { id: string; title: string; body: string; product: ProductCode | null; publishedAt: number }
+export interface Article { slug: string; title: string; body: string; category: string; product: ProductCode | null; updatedAt: number }
+export interface Status { ok: boolean; checkedAt: number; components: Array<{ name: string; status: "ok" | "degraded" | "down"; note: string }> }
+
+export const support = {
+  tickets: () => api<{ tickets: Ticket[] }>("GET", "/v1/account/tickets"),
+  ticket: (id: string) => api<Ticket>("GET", `/v1/account/tickets/${encodeURIComponent(id)}`),
+  open: (b: { subject: string; product: ProductCode | null; body: string }) => api<Ticket>("POST", "/v1/account/tickets", b),
+  reply: (id: string, body: string) => api<Ticket>("POST", `/v1/account/tickets/${encodeURIComponent(id)}/reply`, { body }),
+  close: (id: string) => api<Ticket>("POST", `/v1/account/tickets/${encodeURIComponent(id)}/close`),
+  announcements: () => api<{ announcements: Announcement[] }>("GET", "/v1/announcements"),
+  articles: () => api<{ articles: Array<Omit<Article, "body">> }>("GET", "/v1/kb"),
+  article: (slug: string) => api<Article>("GET", `/v1/kb/${encodeURIComponent(slug)}`),
+  status: () => api<Status>("GET", "/v1/status"),
+};
+
 export const account = {
   signup: (b: { businessName: string; name: string; email: string; phone: string; password: string; products: ProductCode[] }) =>
     api<{ email: string; verify: true }>("POST", "/v1/account/signup", b),
@@ -63,6 +89,7 @@ export const account = {
   changePassword: (current: string, password: string) => api<{ ok: true }>("POST", "/v1/account/password", { current, password }),
   setProducts: (products: ProductCode[]) => api<{ products: ProductCode[] }>("POST", "/v1/account/products", { products }),
   downloads: () => api<{ downloads: Download[] }>("GET", "/v1/downloads"),
+  licences: () => api<{ licences: Licence[] }>("GET", "/v1/account/licences"),
 };
 
 /** The link that starts a download (the cloud records it, then sends the installer). */
