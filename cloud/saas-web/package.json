@@ -1,7 +1,8 @@
 {
-  "name": "@finedine/saas-web",
-  "version": "0.1.0",
+  "name": "@posinext/portal",
+  "version": "0.2.0",
   "private": true,
+  "description": "Customer portal for Fine Dine (DinePOS) and QSR (Tiffin POS). UI only: the backend is DinePOS Cloud (fine-dine cloud/hub).",
   "type": "module",
   "engines": {
     "node": ">=22"
@@ -13,6 +14,7 @@
     "preview": "vite preview --host 127.0.0.1"
   },
   "dependencies": {
+    "lucide-react": "^0.468.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
