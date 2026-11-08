@@ -14,6 +14,12 @@ const envSchema = z.object({
   SMTP_PASSWORD: z.string().optional(),
   SMTP_FROM: z.string().default("Fine Dine <no-reply@example.com>"),
   SESSION_TTL_DAYS: z.coerce.number().int().min(1).max(90).default(14),
+  // Licence keys (packages/licensing): the Ed25519 private key (PEM file). Not set: keys cannot be issued.
+  LICENCE_SIGNING_KEY_FILE: z.string().optional(),
+  // The id written into each key; the products must trust this id with the public key (GET /api/v1/licensing/public-keys).
+  LICENCE_SIGNING_KEY_ID: z.string().regex(/^[a-z][a-z0-9_-]{0,31}$/).default("cloud"),
+  // The longest key this server signs. Fine Dine trusts its "cloud" key for at most 400 days.
+  LICENCE_MAX_DAYS: z.coerce.number().int().min(1).max(400).default(400),
 });
 
 const parsed = envSchema.safeParse(process.env);

@@ -5,12 +5,14 @@ on:
     paths:
       - "cloud/saas/**"
       - "packages/saas-db/migrations/**"
+      - "packages/licensing/**"
       - ".github/workflows/saas-api.yml"
   push:
     branches: [main]
     paths:
       - "cloud/saas/**"
       - "packages/saas-db/migrations/**"
+      - "packages/licensing/**"
       - ".github/workflows/saas-api.yml"
 
 jobs:

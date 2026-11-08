@@ -7,21 +7,27 @@
     "node": ">=22"
   },
   "scripts": {
+    "licensing": "npm install --prefix ../../packages/licensing --no-package-lock --no-audit --no-fund && npm run build --prefix ../../packages/licensing",
+    "predev": "npm run licensing",
     "dev": "tsx watch src/index.ts",
+    "prebuild": "npm run licensing",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
     "migrate": "tsx src/migrate.ts",
+    "pretest": "npm run licensing",
     "test": "node --import tsx --test src/*.test.ts"
   },
   "dependencies": {
     "@fastify/cors": "^11.3.1",
     "@fastify/rate-limit": "^10.3.0",
+    "@finedine/licensing": "file:../../packages/licensing",
     "fastify": "^5.12.7",
     "nodemailer": "^7.0.10",
     "pg": "^8.16.3",
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.3.16",
     "@types/node": "^22.0.0",
     "@types/nodemailer": "^6.4.17",
     "@types/pg": "^8.15.5",

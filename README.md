@@ -20,13 +20,14 @@ See [Multi-product platform model](docs/multi-product-platform.md) for the tenan
 
 The first migration brings across the existing customer portal and SaaS API foundation from `souvik992/fine-dine`, branch `feature/saas-foundation`. The source repository remains separate and unchanged.
 
-The product catalogue and entitlement schema are in place. The current registration flow still provisions a Fine Dine default subscription. Product selection during onboarding, product-specific provisioning workers, subscription checkout, the super-admin catalogue editor, and customer-facing website/mobile app provisioning are follow-on work. The repository is a foundation, not a claim that all five products are production-ready.
+The product catalogue and entitlement schema are in place. Licence keys are issued per outlet and product from the live trial or plan (`packages/licensing`, `/api/v1/.../licences`). The current registration flow still provisions a Fine Dine default subscription. Product selection during onboarding, product-specific provisioning workers, subscription checkout, the super-admin catalogue editor, and customer-facing website/mobile app provisioning are follow-on work. The repository is a foundation, not a claim that all five products are production-ready.
 
 ## Repository structure
 
 - `cloud/saas-web` — customer-facing account portal
 - `cloud/saas` — SaaS API
 - `packages/saas-db/migrations` — PostgreSQL schema migrations
+- `packages/licensing` — signed, offline-checkable licence keys for every product (Ed25519)
 - `docs` — architecture and product documentation
 - `.github/workflows` — API and portal CI
 

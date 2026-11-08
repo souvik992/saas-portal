@@ -34,6 +34,28 @@ In local development, email links are written to the API logger. Configure SMTP 
 - `PATCH /api/v1/business-profile`
 - `POST /api/v1/auth/forgot-password`
 - `POST /api/v1/auth/reset-password`
+- `GET /api/v1/licensing/public-keys` (public): the key id and public key products should trust
+- `GET /api/v1/licences`: the account's licence keys, newest first
+- `POST /api/v1/outlets/:outletId/licences` (owner/admin): `{ productCode, hardwareId }` signs a key for that PC
+- `POST /api/v1/licences/:licenceId/revoke` (owner/admin): `{ reason? }`
+
+## Licence keys
+Keys are made with [`packages/licensing`](../../packages/licensing/README.md) (Ed25519, checked offline by the
+product). `npm run dev`, `build` and `test` build that package first (`npm run licensing`).
+
+- Set `LICENCE_SIGNING_KEY_FILE` to the PEM private key (Fine Dine: the cloud key pair in the vendor's keygen
+  folder, `keys/dinepos-cloud-signing-private.pem`, whose public half the app already trusts as `cloud`). Without it,
+  issuing answers `503 LICENSING_UNAVAILABLE`. `LICENCE_SIGNING_KEY_ID` (default `cloud`) and `LICENCE_MAX_DAYS`
+  (default and maximum 400) must match what the products trust.
+- A key is signed from the outlet's live subscription to the product: a trial until `trial_end_at` (feature `trial`),
+  a paid plan until `current_period_end`, never longer than `LICENCE_MAX_DAYS`. Seats come from the product's
+  defaults, then plan entitlements, then subscription entitlements named `seats.<kind>` (Fine Dine:
+  `seats.terminals`, `seats.captains`, `seats.kds`).
+- Asking again for the same PC and period returns the same key. A key for another PC supersedes the outlet's earlier
+  key for that product.
+- `licences` rows are append-only (migration 0004 trigger): only the status of an active key may change, once.
+- Revoking stops the key being shown and renewed here. A product checks keys offline, so a copy already installed
+  keeps working until it ends.
 
 Registration creates a pending owner account, organization, business profile, first on-premise outlet and a queued Windows trial provisioning job in one PostgreSQL transaction. It does not start the 14-day trial clock: the future provisioning worker must start the trial only after the hub/outlet provisioning has succeeded.
 
@@ -55,4 +77,5 @@ Registration creates a pending owner account, organization, business profile, fi
 - Organization team invitations and multi-organization switching.
 - Trial provisioning worker and hub adapter.
 - Razorpay, subscriptions and invoice generation.
-- Automated integration tests against PostgreSQL.
+- Automated integration tests against a PostgreSQL server (licence tests run on PGlite, an in-process PostgreSQL).
+- Moving a licence to a new PC at most once per 30 days, and seat counting from device activations.

@@ -3,8 +3,10 @@ import cors from "@fastify/cors";
 import rateLimit from "@fastify/rate-limit";
 import pg from "pg";
 import { z } from "zod";
+import { loadSigningKey } from "@finedine/licensing";
 import { config } from "./config.js";
 import { sendActionEmail } from "./email.js";
+import { issueLicence, LicenceError, listLicences, revokeLicence, trustedKeyInfo, type Signer } from "./licences.js";
 import { clearSessionCookie, hashPassword, hashToken, randomToken, readCookie, sessionCookie, verifyPassword } from "./security.js";
 
 const { Pool } = pg;
@@ -131,8 +133,19 @@ async function issueAuthToken(userId: string, purpose: "email_verification" | "p
   return token;
 }
 
+function licenceSigner(): Signer | null {
+  if (!config.LICENCE_SIGNING_KEY_FILE) return null;
+  return { key: loadSigningKey(config.LICENCE_SIGNING_KEY_FILE), kid: config.LICENCE_SIGNING_KEY_ID, maxDays: config.LICENCE_MAX_DAYS };
+}
+
 export function buildSaasApp(): FastifyInstance {
   const app = Fastify({ logger: true, bodyLimit: 64 * 1024 });
+  const signer = licenceSigner();
+  const licenceFailure = (reply: FastifyReply, request: FastifyRequest, error: unknown, what: string) => {
+    if (error instanceof LicenceError) return reply.code(error.status).send(failure(error.code, error.message));
+    request.log.error({ err: error }, what);
+    return reply.code(500).send(failure("LICENCE_FAILED", "We could not complete this licence request. Please try again."));
+  };
   app.register(cors, {
     origin: (origin, callback) => callback(null, !origin || config.allowedOrigins.includes(origin)),
     credentials: true,
@@ -422,6 +435,46 @@ export function buildSaasApp(): FastifyInstance {
       await client.query("ROLLBACK");
       request.log.error({ err: error }, "Password reset failed");
       return reply.code(500).send(failure("RESET_FAILED", "We could not reset the password."));
+    } finally { client.release(); }
+  });
+
+  // ---- licence keys (packages/licensing, src/licences.ts)
+  app.get("/api/v1/licensing/public-keys", async () => success({ keys: trustedKeyInfo(signer) }));
+
+  app.get("/api/v1/licences", async (request, reply) => {
+    const user = await requireUser(request, reply);
+    if (!user) return;
+    return success({ licences: await listLicences(pool, user.organization_id) });
+  });
+
+  app.post("/api/v1/outlets/:outletId/licences", { config: { rateLimit: { max: 20, timeWindow: "1 hour" } } }, async (request, reply) => {
+    const user = await requireUser(request, reply);
+    if (!user) return;
+    if (!["owner", "admin"].includes(user.role)) return reply.code(403).send(failure("FORBIDDEN", "Only an owner or administrator can get licence keys."));
+    const params = z.object({ outletId: z.string().uuid() }).safeParse(request.params);
+    const body = z.object({ productCode: z.string().trim().min(1).max(40), hardwareId: z.string().trim().min(1).max(40) }).strict().safeParse(request.body);
+    if (!params.success || !body.success) return reply.code(400).send(failure("VALIDATION_ERROR", "Send the product and the PC's hardware id."));
+    const client = await pool.connect();
+    try {
+      const { licence, reused } = await issueLicence(client, signer, { organizationId: user.organization_id, outletId: params.data.outletId, productCode: body.data.productCode, hardwareId: body.data.hardwareId, actorUserId: user.id });
+      return reply.code(reused ? 200 : 201).send(success({ licence, reused }));
+    } catch (error) {
+      return licenceFailure(reply, request, error, "Licence issue failed");
+    } finally { client.release(); }
+  });
+
+  app.post("/api/v1/licences/:licenceId/revoke", async (request, reply) => {
+    const user = await requireUser(request, reply);
+    if (!user) return;
+    if (!["owner", "admin"].includes(user.role)) return reply.code(403).send(failure("FORBIDDEN", "Only an owner or administrator can revoke licence keys."));
+    const params = z.object({ licenceId: z.string().uuid() }).safeParse(request.params);
+    const body = z.object({ reason: z.string().trim().max(200).optional() }).strict().safeParse(request.body ?? {});
+    if (!params.success || !body.success) return reply.code(400).send(failure("VALIDATION_ERROR", "Send a valid licence id and, optionally, a reason."));
+    const client = await pool.connect();
+    try {
+      return success({ licence: await revokeLicence(client, { organizationId: user.organization_id, licenceId: params.data.licenceId, reason: body.data.reason, actorUserId: user.id }) });
+    } catch (error) {
+      return licenceFailure(reply, request, error, "Licence revoke failed");
     } finally { client.release(); }
   });
 
