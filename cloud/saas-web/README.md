@@ -1,27 +1,33 @@
-# Fine Dine customer portal
+# Customer portal
 
-Separate React + TypeScript + Vite frontend for the SaaS account API. It does not join the repository root workspaces or alter the POS/hub runtime.
+The customer portal for **QSR (Tiffin POS)** and **Fine Dine (DinePOS)**, in the DinePOS look (orange, Manrope and
+Fraunces). React + Vite, no backend of its own: every call goes to **DinePOS Cloud** (fine-dine `cloud/hub`) on the
+same origin (`/v1/...`), which also sets the HttpOnly session cookie. See fine-dine `docs/adr/0007-one-backend-two-products.md`.
 
-## Local development
+## Develop
 
 ```powershell
-cd cloud/saas-web
-Copy-Item .env.example .env
+# 1. a local DinePOS Cloud (codes are printed in its window)
+cd fine-dine/cloud/hub
+npm run dev
+# 2. the portal (forwards /v1 to http://localhost:4900; PORTAL_HUB_URL to change it)
+cd saas-portal/cloud/saas-web
 npm install
 npm run dev
 ```
 
-Set `VITE_SAAS_API_URL` to the API origin (default `http://localhost:4100`). Run the API from `cloud/saas` in a second terminal. Configure the API's `SAAS_ALLOWED_ORIGINS` to include the portal origin and keep both services on the same registrable site in production so the HttpOnly SameSite=Lax session cookie is sent.
+`npm test` (vitest: form checks and helpers), `npm run build` (typecheck + `dist/`).
 
-## Routes
+## Pages
 
-- `/register` — owner, business and first-outlet registration; includes terms acceptance and an `Idempotency-Key`.
-- `/login` — email/password login.
-- `/verify-email?token=...` — consumes the one-time verification token.
-- `/forgot-password` — requests a reset email.
-- `/reset-password?token=...` — sets a new password.
-- `/dashboard` — account overview and business profile editor.
+| Path | |
+|---|---|
+| `/` | Home: the two products, their add-ons, how the 30-day trial works |
+| `/register` (`?product=fine_dine` or `tiffin_qsr`) | Product choice and details, then the 6-digit email code |
+| `/login` (`?next=/app/...`) | Sign in; an unconfirmed email goes to the code step |
+| `/forgot` | Email code, then a new password |
+| `/app/...` | Client area (signed in) |
 
-The business profile editor deliberately leaves PAN/GSTIN inputs blank and only sends replacements when entered. The API update query uses `COALESCE` for these identifiers, preserving existing values when omitted.
+## Hosting
 
-This portal is an initial account-management UI, not a complete billing console. Subscription checkout, outlet/device management, trial provisioning status, team management and payment history are not exposed yet.
+DinePOS Cloud serves the built `dist/` on the portal host, so the API is on the same origin (fine-dine roadmap P8-09).
