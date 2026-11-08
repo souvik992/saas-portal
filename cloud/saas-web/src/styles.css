@@ -46,8 +46,9 @@ p { margin: 0; }
 /* top bar and footer */
 .topbar { position: sticky; top: 0; z-index: 10; background: color-mix(in oklch, var(--background) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
 .topbar .wrap { height: 68px; display: flex; align-items: center; gap: 20px; }
-.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--foreground); font: 800 19px var(--font-sans); letter-spacing: -.02em; }
+.brand { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; flex: none; color: var(--foreground); font: 800 19px var(--font-sans); letter-spacing: -.02em; }
 .brand:hover { text-decoration: none; }
+.label-short { display: none; }
 .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--primary); color: var(--primary-foreground); }
 .nav { display: flex; gap: 22px; margin-left: 12px; }
 .nav a { color: var(--muted-foreground); font-size: 14px; }
@@ -171,6 +172,11 @@ textarea.input { height: auto; min-height: 120px; padding: 10px 12px; resize: ve
   .grid-2, .choice-grid, .steps, .tiles { grid-template-columns: 1fr; }
   .pad, .auth-card, .product { padding: 20px; }
   .cta-band { padding: 26px; }
-  .topbar .btn { padding: 0 12px; }
+  .topbar .wrap { gap: 8px; }
+  .topbar .btn { padding: 0 10px; height: 38px; font-size: 13px; }
+  .brand { font-size: 17px; gap: 8px; }
+  .brand-mark { width: 30px; height: 30px; border-radius: 9px; }
+  .label-long { display: none; }
+  .label-short { display: inline; }
   .download { flex-wrap: wrap; }
 }

@@ -5,9 +5,9 @@ import { useSession } from "../session";
 
 export function Brand() {
   return (
-    <Link to="/" className="brand" aria-label="posinext home">
+    <Link to="/" className="brand" aria-label="posinext dine home">
       <span className="brand-mark" aria-hidden><UtensilsCrossed size={18} strokeWidth={2.4} /></span>
-      posinext
+      posinext dine
     </Link>
   );
 }
@@ -32,7 +32,7 @@ export function Layout({ children }: { children: ReactNode }) {
           ) : (
             <>
               <Link to="/login" className="btn btn-ghost">Sign in</Link>
-              <Link to="/register" className="btn btn-primary">Start free trial</Link>
+              <Link to="/register" className="btn btn-primary"><span className="label-long">Start free trial</span><span className="label-short">Try free</span></Link>
             </>
           )}
         </div>
@@ -40,7 +40,7 @@ export function Layout({ children }: { children: ReactNode }) {
       <main>{children}</main>
       <footer className="footer">
         <div className="wrap">
-          <span>© {new Date().getFullYear()} posinext</span>
+          <span>© {new Date().getFullYear()} posinext dine</span>
           <span className="spacer" />
           <Link to="/app/support">Support</Link>
           <a href="mailto:support@posinext.com">support@posinext.com</a>
