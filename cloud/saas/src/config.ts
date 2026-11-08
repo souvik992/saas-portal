@@ -2,7 +2,8 @@ import { z } from "zod";
 
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-  DATABASE_URL: z.string().min(1),
+  // The SQLite database file (node:sqlite, same engine as DinePOS Cloud's hub). Created on first start.
+  SAAS_DB_PATH: z.string().min(1).default("./saas-data/saas.db"),
   HOST: z.string().default("127.0.0.1"),
   PORT: z.coerce.number().int().min(1).max(65535).default(4100),
   SAAS_WEB_URL: z.string().url().default("http://localhost:5173"),
@@ -36,5 +37,4 @@ export const config = {
 if (config.NODE_ENV === "production") {
   if (!config.smtpConfigured) throw new Error("SMTP_HOST, SMTP_USER and SMTP_PASSWORD are required in production.");
   if (!config.SAAS_WEB_URL.startsWith("https://")) throw new Error("SAAS_WEB_URL must use HTTPS in production.");
-  if (!config.DATABASE_URL.startsWith("postgres")) throw new Error("DATABASE_URL must point to PostgreSQL.");
 }

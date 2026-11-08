@@ -1,5 +1,5 @@
 // What a verified key means at a moment in time: fine, ending soon, in grace after its end, or over.
-import type { Seats, Verified } from "./key.js";
+import type { Seats, Verified } from "./key.ts";
 
 export type LicenceState = "none" | "invalid" | "ok" | "expiring" | "grace" | "expired";
 

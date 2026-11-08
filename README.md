@@ -12,7 +12,7 @@ A multi-product SaaS platform for restaurant businesses.
 
 ## Platform foundation
 
-The shared SaaS foundation provides account authentication, business and outlet registration, PostgreSQL migrations, product catalogue, product-scoped subscriptions, plan-to-product mapping, outlet product enablement and feature entitlements.
+The shared SaaS foundation provides account authentication, business and outlet registration, SQLite migrations (one file, the same engine as DinePOS Cloud's hub), product catalogue, product-scoped subscriptions, plan-to-product mapping, outlet product enablement and feature entitlements.
 
 See [Multi-product platform model](docs/multi-product-platform.md) for the tenant and entitlement design.
 
@@ -26,7 +26,7 @@ The product catalogue and entitlement schema are in place. Licence keys are issu
 
 - `cloud/saas-web` — customer-facing account portal
 - `cloud/saas` — SaaS API
-- `packages/saas-db/migrations` — PostgreSQL schema migrations
+- `packages/saas-db/migrations` — SQLite schema migrations (applied by the API on start)
 - `packages/licensing` — signed, offline-checkable licence keys for every product (Ed25519)
 - `docs` — architecture and product documentation
 - `.github/workflows` — API and portal CI

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { licenceStatus, type LicencePayload, type Verified } from "./index.js";
+import { licenceStatus, type LicencePayload, type Verified } from "./index.ts";
 
 const day = 86_400_000;
 const end = Date.parse("2027-01-31T00:00:00Z");

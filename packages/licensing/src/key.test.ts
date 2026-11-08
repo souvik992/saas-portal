@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import { generateSigningKeyPair, keyHash, loadSigningKey, parseKey, publicKeyFromBase64, signKey, verifyKey, type TrustedKey } from "./index.js";
+import { generateSigningKeyPair, keyHash, loadSigningKey, parseKey, publicKeyFromBase64, signKey, verifyKey, type TrustedKey } from "./index.ts";
 
 const fixtures = JSON.parse(readFileSync(new URL("./test-fixtures/compat.json", import.meta.url), "utf8")) as {
   masterPublicKey: string; cloudPublicKey: string; hardwareId: string; legacyKey: string; cloudKey: string;
