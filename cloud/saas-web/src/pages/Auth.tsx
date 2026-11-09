@@ -20,7 +20,7 @@ function Field({ label, error, hint, children }: { label: string; error?: string
 /** The photo beside the sign-in and sign-up forms (free Unsplash photos, kept in public/auth/). */
 const PHOTOS = {
   signin: { src: "/auth/signin-owner.jpg", alt: "A restaurant owner standing in his dining room", position: "50% 30%" },
-  register: { src: "/auth/register-owner.jpg", alt: "A cook at his food counter, smiling at the camera", position: "50% 42%" },
+  register: { src: "/auth/register-bar.jpg", alt: "A warmly lit restaurant bar with bottles, glasses and a POS terminal on the counter", position: "50% 55%" },
 } as const;
 
 function AuthPage({ side, photo = "signin", children }: { side: ReactNode; photo?: keyof typeof PHOTOS; children: ReactNode }) {
