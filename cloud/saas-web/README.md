@@ -23,10 +23,12 @@ npm run dev
 | Path | |
 |---|---|
 | `/` (also `/login`) | Sign in (`?next=/app/...`); an unconfirmed email goes to the code step. Signed in: straight to the dashboard |
-| `/register` (`?product=fine_dine` or `tiffin_qsr`) | Product choice and details, then the 6-digit email code |
+| `/register` (`?product=fine_dine` or `tiffin_qsr`) | Restaurant type (Fine Dine picks DinePOS; QSR, Tiffin, Café, Cloud Kitchen pick Tiffin POS), product choice and details, then the 6-digit email code |
 | `/forgot` | Email code, then a new password |
 | `/app/...` | Client area (signed in) |
 
 ## Hosting
 
 DinePOS Cloud serves the built `dist/` on the portal host, so the API is on the same origin (fine-dine roadmap P8-09).
+
+Sign-in and sign-up pages show a photo beside the form (`public/auth/`, free photos from Unsplash under the Unsplash licence).

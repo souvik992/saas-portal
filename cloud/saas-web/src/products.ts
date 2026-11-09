@@ -35,3 +35,24 @@ export const PRODUCT_ORDER: ProductCode[] = ["tiffin_qsr", "fine_dine"];
 export function productFromQuery(value: string | null): ProductCode | null {
   return value === "fine_dine" || value === "tiffin_qsr" ? value : null;
 }
+
+/** The kind of restaurant chosen on the sign-up page; it picks the product (both can still be chosen). */
+export type RestaurantType = "fine_dine" | "qsr" | "tiffin" | "cafe" | "cloud_kitchen";
+
+export const RESTAURANT_TYPES: { value: RestaurantType; label: string }[] = [
+  { value: "fine_dine", label: "Fine Dine" },
+  { value: "qsr", label: "QSR (quick service)" },
+  { value: "tiffin", label: "Tiffin" },
+  { value: "cafe", label: "Café" },
+  { value: "cloud_kitchen", label: "Cloud Kitchen" },
+];
+
+/** Fine dine runs DinePOS; every other kind runs Tiffin POS. */
+export function productForType(type: RestaurantType): ProductCode {
+  return type === "fine_dine" ? "fine_dine" : "tiffin_qsr";
+}
+
+/** A restaurant type from the select's value, or null. */
+export function restaurantTypeOf(value: string): RestaurantType | null {
+  return RESTAURANT_TYPES.some((t) => t.value === value) ? (value as RestaurantType) : null;
+}
