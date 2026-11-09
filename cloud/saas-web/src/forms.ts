@@ -10,7 +10,7 @@ export interface SignupForm {
   products: ProductCode[];
 }
 
-export type FieldErrors = Partial<Record<keyof SignupForm | "code", string>>;
+export type FieldErrors = Partial<Record<keyof SignupForm | "code" | "restaurantType", string>>;
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

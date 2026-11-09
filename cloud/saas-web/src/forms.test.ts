@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { checkCode, checkSignup, deviceName, formatSize, isMobile, toggleProduct, type SignupForm } from "./forms";
-import { productFromQuery } from "./products";
+import { productForType, productFromQuery, RESTAURANT_TYPES, restaurantTypeOf } from "./products";
 import { normalisePath } from "./router";
 
 const ok: SignupForm = { businessName: "Spice Garden", name: "Asha Rao", email: "asha@spicegarden.in", phone: "98765 43210", password: "tandoor-2026", products: ["fine_dine"] };
@@ -61,5 +61,18 @@ describe("deviceName", () => {
     expect(deviceName("Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Mobile Safari/537.36")).toBe("Chrome on Android");
     expect(deviceName("Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1")).toBe("Safari on iPhone or iPad");
     expect(deviceName("")).toBe("A browser");
+  });
+});
+
+describe("restaurant type", () => {
+  it("fine dine picks DinePOS; QSR, tiffin, café and cloud kitchen pick Tiffin POS", () => {
+    expect(RESTAURANT_TYPES.map((t) => [t.value, productForType(t.value)])).toEqual([
+      ["fine_dine", "fine_dine"], ["qsr", "tiffin_qsr"], ["tiffin", "tiffin_qsr"], ["cafe", "tiffin_qsr"], ["cloud_kitchen", "tiffin_qsr"],
+    ]);
+  });
+  it("only a listed type is accepted", () => {
+    expect(restaurantTypeOf("cafe")).toBe("cafe");
+    expect(restaurantTypeOf("")).toBeNull();
+    expect(restaurantTypeOf("pizza")).toBeNull();
   });
 });

@@ -25,10 +25,10 @@ command above on the server.
 
 If you copy a new Lovable build into `public/`, these need doing again:
 
-- **Sign in** (header and phone menu) opens `https://portal.posinext.com/login`.
+- **Sign in** (header and phone menu) opens `https://portal.posinext.com/login`; **Start your free trial** opens `https://portal.posinext.com/register`.
 - **Book a Demo** posts to `https://portal.posinext.com/v1/demo-requests` (DinePOS Cloud), which emails the request to the
   address set on the server (`HUB_DEMO_REQUEST_TO`). No private email address is anywhere in this site.
 - The only email address shown is `support@posinext.com` (policy pages, footer, footer Contact link).
 - Phone layout: rules at the end of `assets/styles-*.css` (`pn-cta`, `pn-products`, `pn-footer`, `pn-flink`).
-- Edited scripts and styles carry a `p1` suffix so browsers do not keep the old copies (assets are cached for a year).
+- Edited scripts and styles carry a `p<n>` suffix (bump it on each edit) so browsers do not keep the old copies (assets are cached for a year).
 - `llms.txt` and `.well-known/ard.json` describe the site for AI agents.

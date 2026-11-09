@@ -3,7 +3,7 @@ import { useState, type FormEvent, type ReactNode } from "react";
 import { account, ApiError, type ProductCode } from "../api";
 import { Notice } from "../components/Layout";
 import { checkCode, checkSignup, toggleProduct, type FieldErrors, type SignupForm } from "../forms";
-import { PRODUCT_COPY, PRODUCT_ORDER, productFromQuery } from "../products";
+import { PRODUCT_COPY, PRODUCT_ORDER, productForType, productFromQuery, RESTAURANT_TYPES, restaurantTypeOf, type RestaurantType } from "../products";
 import { Link, navigate, useLocation } from "../router";
 import { useSession } from "../session";
 
@@ -17,10 +17,23 @@ function Field({ label, error, hint, children }: { label: string; error?: string
   );
 }
 
-function AuthPage({ side, children }: { side: ReactNode; children: ReactNode }) {
+/** The photo beside the sign-in and sign-up forms (free Unsplash photos, kept in public/auth/). */
+const PHOTOS = {
+  signin: { src: "/auth/signin-owner.jpg", alt: "A restaurant owner standing in his dining room", position: "50% 30%" },
+  register: { src: "/auth/register-owner.jpg", alt: "A cook at his food counter, smiling at the camera", position: "50% 42%" },
+} as const;
+
+function AuthPage({ side, photo = "signin", children }: { side: ReactNode; photo?: keyof typeof PHOTOS; children: ReactNode }) {
+  const p = PHOTOS[photo];
   return (
     <div className="wrap auth">
-      <div className="auth-side">{side}</div>
+      <div className="auth-side auth-photo">
+        <img src={p.src} alt={p.alt} style={{ objectPosition: p.position }} />
+        <span className="auth-photo-mark" aria-hidden>
+          <svg viewBox="0 0 32 24"><path d="M2 2 L12 12 L2 22 H8 L18 12 L8 2 Z" className="brand-mark-a" /><path d="M14 2 L24 12 L14 22 H20 L30 12 L20 2 Z" className="brand-mark-b" /></svg>
+        </span>
+        <div className="auth-photo-text">{side}</div>
+      </div>
       <div className="card auth-card">{children}</div>
     </div>
   );
@@ -80,13 +93,14 @@ export function Register() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [verifying, setVerifying] = useState<string | null>(null);
+  const [type, setType] = useState<RestaurantType | null>(first === "fine_dine" ? "fine_dine" : null);
   // typing in a field clears that field's message
   const clear = (k: keyof FieldErrors) => setErrors((prev) => { const { [k]: _gone, ...rest } = prev; return rest; });
   const set = (k: keyof Omit<SignupForm, "products">) => (e: { target: { value: string } }) => { setForm({ ...form, [k]: e.target.value }); clear(k); };
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
-    const bad = checkSignup(form);
+    const bad: FieldErrors = { ...(type ? {} : { restaurantType: "Choose your restaurant type." }), ...checkSignup(form) };
     setErrors(bad);
     if (Object.keys(bad).length) return;
     setBusy(true); setError(null);
@@ -110,16 +124,28 @@ export function Register() {
   );
 
   if (verifying) {
-    return <AuthPage side={side}><VerifyCode email={verifying} onDone={() => void reload().then(() => navigate("/app?welcome=1"))} /></AuthPage>;
+    return <AuthPage side={side} photo="register"><VerifyCode email={verifying} onDone={() => void reload().then(() => navigate("/app?welcome=1"))} /></AuthPage>;
   }
   return (
-    <AuthPage side={side}>
+    <AuthPage side={side} photo="register">
       <form className="stack" onSubmit={(e) => void submit(e)} noValidate>
         <div>
           <h2>Create your account</h2>
           <p className="muted">Already have one? <Link to="/">Sign in</Link></p>
         </div>
         <Notice>{error}</Notice>
+        <Field label="Restaurant type" error={errors.restaurantType}>
+          <select className="input select" value={type ?? ""} aria-invalid={!!errors.restaurantType}
+            onChange={(e) => {
+              const t = restaurantTypeOf(e.target.value);
+              setType(t);
+              if (t) { setForm({ ...form, products: [productForType(t)] }); clear("products"); }
+              clear("restaurantType");
+            }}>
+            <option value="" disabled>Choose your restaurant type</option>
+            {RESTAURANT_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
+          </select>
+        </Field>
         <div className="field">
           <span>Your product</span>
           <div className="choice-grid" role="group" aria-label="Products">
@@ -135,7 +161,7 @@ export function Register() {
               );
             })}
           </div>
-          {errors.products ? <small className="err">{errors.products}</small> : <small>Choose one, or both if you run both kinds of outlet.</small>}
+          {errors.products ? <small className="err">{errors.products}</small> : <small>{type ? `${PRODUCT_COPY[productForType(type)].app} is picked for your restaurant type. Choose both if you run both kinds of outlet.` : "Choose one, or both if you run both kinds of outlet."}</small>}
         </div>
         <div className="divider" />
         <Field label="Business name" error={errors.businessName}><input className="input" value={form.businessName} onChange={set("businessName")} autoComplete="organization" aria-invalid={!!errors.businessName} /></Field>
