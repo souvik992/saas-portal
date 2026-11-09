@@ -25,12 +25,15 @@ export function Layout({ children }: { children: ReactNode }) {
           <span className="spacer" />
           {me ? (
             <>
-              <Link to="/app" className="btn">Dashboard</Link>
-              <button className="btn btn-ghost" onClick={() => void signOut().then(() => navigate("/"))}>Sign out</button>
+              <Link to="/app" className="navlink">Dashboard</Link>
+              <button className="navlink" onClick={() => void signOut().then(() => navigate("/"))}>Sign out</button>
+              <Link to="/app/account" className="avatar" aria-label={`My account (${me.user.name})`} title={me.user.name}>
+                {(me.user.name.trim()[0] ?? "?").toUpperCase()}
+              </Link>
             </>
           ) : (
             <>
-              <Link to="/" className="btn btn-ghost">Sign in</Link>
+              <Link to="/" className="navlink">Sign in</Link>
               <Link to="/register" className="btn btn-primary"><span className="label-long">Create account</span><span className="label-short">Sign up</span></Link>
             </>
           )}

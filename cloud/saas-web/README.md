@@ -1,7 +1,7 @@
 # Customer portal
 
-The customer portal for **QSR (Tiffin POS)** and **Fine Dine (DinePOS)**, in the DinePOS look (orange, Manrope and
-Fraunces). React + Vite, no backend of its own: every call goes to **DinePOS Cloud** (fine-dine `cloud/hub`) on the
+The customer portal for **QSR (Tiffin POS)** and **Fine Dine (DinePOS)**, in the POSINEXT look (orange,
+Rubik, white cards; the client-area design at welcome-desk-designs.lovable.app). React + Vite, no backend of its own: every call goes to **DinePOS Cloud** (fine-dine `cloud/hub`) on the
 same origin (`/v1/...`), which also sets the HttpOnly session cookie. See fine-dine `docs/adr/0007-one-backend-two-products.md`.
 
 ## Develop
