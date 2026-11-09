@@ -19,18 +19,23 @@ function Field({ label, error, hint, children }: { label: string; error?: string
 
 /** The photo beside the sign-in and sign-up forms (free Unsplash photos, kept in public/auth/). */
 const PHOTOS = {
-  signin: { src: "/auth/signin-owner.jpg", alt: "A restaurant owner standing in his dining room", position: "50% 30%" },
+  signin: { src: "/auth/signin-owner.jpg", alt: "A restaurant owner standing in his dining room", position: "42% 100%" },
   register: { src: "/auth/register-bar.jpg", alt: "A warmly lit restaurant bar with bottles, glasses and a POS terminal on the counter", position: "50% 55%" },
 } as const;
 
-function AuthPage({ side, photo = "signin", children }: { side: ReactNode; photo?: keyof typeof PHOTOS; children: ReactNode }) {
+function AuthPage({ side, photo = "signin", frame = false, children }: { side: ReactNode; photo?: keyof typeof PHOTOS; frame?: boolean; children: ReactNode }) {
   const p = PHOTOS[photo];
+  const picture = (
+    <div className={frame ? "auth-side auth-photo auth-photo-bottom" : "auth-side auth-photo"}>
+      <img src={p.src} alt={p.alt} style={{ objectPosition: p.position }} />
+      <div className="auth-photo-text">{side}</div>
+    </div>
+  );
+  // sign in: photo and form in one card that fits the screen, message at the bottom of the photo
+  if (frame) return <div className="wrap auth-frame-wrap"><div className="card auth-frame">{picture}<div className="auth-frame-form">{children}</div></div></div>;
   return (
     <div className="wrap auth">
-      <div className="auth-side auth-photo">
-        <img src={p.src} alt={p.alt} style={{ objectPosition: p.position }} />
-        <div className="auth-photo-text">{side}</div>
-      </div>
+      {picture}
       <div className="card auth-card">{children}</div>
     </div>
   );
@@ -206,9 +211,9 @@ export function Login() {
       <p className="muted">Downloads, licences, add-ons and support for your outlets.</p>
     </>
   );
-  if (verifying) return <AuthPage side={side}><VerifyCode email={verifying} onDone={() => void reload().then(() => navigate(next))} /></AuthPage>;
+  if (verifying) return <AuthPage side={side} frame><VerifyCode email={verifying} onDone={() => void reload().then(() => navigate(next))} /></AuthPage>;
   return (
-    <AuthPage side={side}>
+    <AuthPage side={side} frame>
       <form className="stack" onSubmit={(e) => void submit(e)} noValidate>
         <div>
           <h2>Sign in</h2>
