@@ -15,8 +15,8 @@ export function Brand() {
   );
 }
 
-/** Sign in and sign up show no top bar: the page is just the photo and the form. */
-const NO_TOPBAR = new Set(["/", "/login", "/register", "/signup"]);
+/** Sign in, sign up and forgot password show no top bar: the page is just the photo and the form. */
+const NO_TOPBAR = new Set(["/", "/login", "/register", "/signup", "/forgot"]);
 
 export function Layout({ children }: { children: ReactNode }) {
   const { me, signOut } = useSession();

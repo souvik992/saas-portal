@@ -31,4 +31,4 @@ npm run dev
 
 DinePOS Cloud serves the built `dist/` on the portal host, so the API is on the same origin (fine-dine roadmap P8-09).
 
-Sign-in and sign-up pages show a photo beside the form (`public/auth/`, free photos from Unsplash under the Unsplash licence; sign-up shows a restaurant bar). The photo scrolls with the page and stretches to the height of the form; the page message sits at the top of the photo. Sign in puts the photo (message at the bottom) and the form in one card sized to fit the screen. Sign in and sign up show no top bar.
+Sign-in and sign-up pages show a photo beside the form (`public/auth/`, free photos from Unsplash under the Unsplash licence; sign-up shows a restaurant bar). The photo scrolls with the page and stretches to the height of the form; the page message sits at the top of the photo. Sign in and forgot password put the photo (message at the bottom) and the form in one card that fills the screen. Sign in, sign up and forgot password show no top bar.

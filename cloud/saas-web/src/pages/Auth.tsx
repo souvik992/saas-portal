@@ -260,7 +260,7 @@ export function Forgot() {
     </>
   );
   return (
-    <AuthPage side={side}>
+    <AuthPage side={side} frame>
       {!sent ? (
         <form className="stack" onSubmit={(e) => void ask(e)} noValidate>
           <h2>Forgot your password?</h2>
