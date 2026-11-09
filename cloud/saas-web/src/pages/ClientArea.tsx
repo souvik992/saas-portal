@@ -1,34 +1,44 @@
 import {
-  Activity, BookOpen, CreditCard, Download as DownloadIcon, KeyRound, LifeBuoy, Megaphone, MessageSquarePlus, Puzzle, UserRound,
+  Activity, ArrowRight, BookOpen, CreditCard, Download as DownloadIcon, KeyRound, LifeBuoy, Megaphone, MessageSquarePlus, Puzzle, Search, UserRound,
 } from "lucide-react";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
-import { account, ApiError, downloadHref, type Download, type Licence, type Me, type ProductCode, type SignIn } from "../api";
+import { account, ApiError, downloadHref, support, type Download, type Licence, type Me, type ProductCode, type SignIn } from "../api";
 import { Notice } from "../components/Layout";
 import { deviceName, formatSize, toggleProduct } from "../forms";
 import { PRODUCT_COPY, PRODUCT_ORDER } from "../products";
 import { Link, navigate, useLocation } from "../router";
 import { useSession } from "../session";
+import { licenceSummary, TRIAL_DAYS } from "../licence-summary";
 import { Announcements, KnowledgeBase, ServiceStatus, SupportTickets } from "./Support";
 
-/** The home page tiles, in the style of a hosting client area. */
-const TILES: Array<{ to: string; icon: typeof UserRound; title: string; about: string }> = [
-  { to: "/app/account", icon: UserRound, title: "My account", about: "Your business, products and password" },
-  { to: "/app/announcements", icon: Megaphone, title: "Announcements", about: "New versions and news" },
-  { to: "/app/downloads", icon: DownloadIcon, title: "Downloads", about: "The Windows app for your products" },
-  { to: "/app/kb", icon: BookOpen, title: "Knowledge base", about: "Guides and answers to common questions" },
-  { to: "/app/licences", icon: KeyRound, title: "Licences", about: "Your PCs, trials and licence keys" },
-  { to: "/app/addons", icon: Puzzle, title: "Add-ons", about: "Table QR, ODS and more" },
-  { to: "/app/support/new", icon: MessageSquarePlus, title: "Submit a ticket", about: "Ask us for help" },
-  { to: "/app/support", icon: LifeBuoy, title: "Support tickets", about: "See and answer your tickets" },
-  { to: "/app/plans", icon: CreditCard, title: "Plans and billing", about: "Choose a plan before your trial ends" },
-  { to: "/app/status", icon: Activity, title: "Service status", about: "Is everything running?" },
+/** The dashboard's tiles, in three groups. */
+interface Tile { to: string; icon: typeof UserRound; title: string; about: string }
+const GROUPS: Array<{ name: string; tiles: Tile[] }> = [
+  { name: "Your business", tiles: [
+    { to: "/app/account", icon: UserRound, title: "My account", about: "Business, products and password" },
+    { to: "/app/licences", icon: KeyRound, title: "Licences", about: "PCs, trials and licence keys" },
+    { to: "/app/plans", icon: CreditCard, title: "Plans & billing", about: "Pick a plan before your trial ends" },
+  ] },
+  { name: "Software", tiles: [
+    { to: "/app/downloads", icon: DownloadIcon, title: "Downloads", about: "The Windows app for your products" },
+    { to: "/app/addons", icon: Puzzle, title: "Add-ons", about: "Table QR, ODS and more" },
+    { to: "/app/announcements", icon: Megaphone, title: "Announcements", about: "New versions and news" },
+  ] },
+  { name: "Help", tiles: [
+    { to: "/app/kb", icon: BookOpen, title: "Knowledge base", about: "Guides and common answers" },
+    { to: "/app/support/new", icon: MessageSquarePlus, title: "Submit a ticket", about: "Ask us for help" },
+    { to: "/app/support", icon: LifeBuoy, title: "Support tickets", about: "See and answer your tickets" },
+  ] },
 ];
 
-const TITLES: Record<string, string> = Object.fromEntries(TILES.map((t) => [t.to, t.title]));
+const TITLES: Record<string, string> = {
+  ...Object.fromEntries(GROUPS.flatMap((g) => g.tiles).map((t) => [t.to, t.title])),
+  "/app/status": "Service status",
+};
 
 function AreaPage({ title, children, actions }: { title: string; children: ReactNode; actions?: ReactNode }) {
   return (
-    <div className="wrap">
+    <div className="wrap area">
       <div className="area-head">
         <div>
           <div className="crumbs"><Link to="/app">Client area</Link>{title !== "Client area" ? <> › {title}</> : null}</div>
@@ -73,7 +83,7 @@ export function ClientArea({ path }: { path: string }) {
     case "/app/plans": return <PlansPage />;
     case "/app/support": return <AreaPage title="Support tickets"><SupportTickets /></AreaPage>;
     case "/app/support/new": return <AreaPage title="Submit a ticket"><SupportTickets compose /></AreaPage>;
-    case "/app/announcements": return <AreaPage title="Announcements"><Announcements /></AreaPage>;
+    case "/app/announcements": return <AnnouncementsPage />;
     case "/app/kb": return <AreaPage title="Knowledge base"><KnowledgeBase /></AreaPage>;
     case "/app/status": return <AreaPage title="Service status"><ServiceStatus /></AreaPage>;
     default:
@@ -82,34 +92,135 @@ export function ClientArea({ path }: { path: string }) {
   }
 }
 
+/** When the announcements page was last opened (this browser), for the "N new" badge. */
+const SEEN_KEY = "posinext.announcements.seen";
+const readSeen = () => { try { return Number(localStorage.getItem(SEEN_KEY) ?? 0) || 0; } catch { return 0; } };
+const markSeen = () => { try { localStorage.setItem(SEEN_KEY, String(Date.now())); } catch { /* storage off: the badge just stays */ } };
+
+function AnnouncementsPage() {
+  useEffect(() => { markSeen(); }, []);
+  return <AreaPage title="Announcements"><Announcements /></AreaPage>;
+}
+
+const greeting = (h = new Date().getHours()) => (h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening");
+/** The add-ons of these products, for the Add-ons tile. */
+const ADDON_NAMES: Record<ProductCode, string[]> = { fine_dine: ["Table QR", "Kitchen display"], tiffin_qsr: ["ODS"] };
+
+function LicenceCard({ licences, products }: { licences: Licence[] | null; products: ProductCode[] }) {
+  if (licences === null) return <div className="trial" aria-busy="true"><p className="label">Free trial</p><p className="big">&nbsp;</p><div className="bar" /></div>;
+  const s = licenceSummary(licences, products);
+  if (s.kind === "licensed") {
+    return (
+      <div className="trial">
+        <p className="label">Licence</p>
+        <p className="big">Active</p>
+        <p className="note">Until {date(s.until!)} · renews on its own while your PC is online</p>
+        <Link to="/app/licences" className="btn btn-primary">Manage licences <ArrowRight size={16} /></Link>
+      </div>
+    );
+  }
+  if (s.kind === "none") {
+    return (
+      <div className="trial">
+        <p className="label">Free trial</p>
+        <p className="big">{TRIAL_DAYS} days</p>
+        <p className="note">Starts when you sign in inside the app on your outlet&rsquo;s PC.</p>
+        <Link to="/app/downloads" className="btn btn-primary">Download the app <ArrowRight size={16} /></Link>
+      </div>
+    );
+  }
+  const left = s.kind === "ended" ? 0 : s.daysLeft;
+  return (
+    <div className="trial">
+      <p className="label">{s.kind === "ended" ? "Free trial ended" : "Free trial"}</p>
+      <p className="big">{left} day{left === 1 ? "" : "s"} left</p>
+      <div className="bar" role="progressbar" aria-label="Trial days left" aria-valuemin={0} aria-valuemax={TRIAL_DAYS} aria-valuenow={left}>
+        <span style={{ width: `${Math.min(100, Math.round((left / TRIAL_DAYS) * 100))}%` }} />
+      </div>
+      <Link to="/app/plans" className="btn btn-primary">Choose a plan <ArrowRight size={16} /></Link>
+    </div>
+  );
+}
+
 function AreaHome({ me }: { me: Me }) {
   const { query } = useLocation();
   const welcome = query.get("welcome") === "1";
-  const names = me.account.products.map((p) => PRODUCT_COPY[p].name).join(" and ");
+  const products = me.account.products;
+  const names = products.map((p) => PRODUCT_COPY[p].name).join(" and ");
+  const [licences, setLicences] = useState<Licence[] | null>(null);
+  const [fresh, setFresh] = useState(0);
+  const [status, setStatus] = useState<{ ok: boolean } | null>(null);
+  const [q, setQ] = useState("");
+  useEffect(() => {
+    account.licences().then((r) => setLicences(r.licences), () => setLicences([]));
+    const seen = readSeen();
+    support.announcements().then((r) => setFresh(r.announcements.filter((a) => a.publishedAt > seen && (a.product === null || products.includes(a.product))).length), () => setFresh(0));
+    support.status().then((s) => setStatus(s), () => setStatus({ ok: false }));
+  }, [products]);
+  const summary = licences ? licenceSummary(licences, products) : null;
+  const badges: Record<string, string | null> = {
+    "/app/plans": summary && (summary.kind === "trial" || summary.kind === "ended") ? "Action needed" : null,
+    "/app/announcements": fresh > 0 ? `${fresh} new` : null,
+  };
+  const about: Record<string, string> = {
+    "/app/addons": `${[...new Set(products.flatMap((p) => ADDON_NAMES[p]))].join(", ")} and more`,
+  };
+  const search = (e: FormEvent) => { e.preventDefault(); navigate(q.trim() ? `/app/kb?q=${encodeURIComponent(q.trim())}` : "/app/kb"); };
+  const first = me.user.name.trim().split(/\s+/)[0] ?? "";
   return (
-    <AreaPage title="Client area">
-      <p className="muted" style={{ marginTop: -8, marginBottom: 20 }}>Welcome, {me.user.name.split(" ")[0]}. {me.account.name} · {names}</p>
+    <div className="wrap area">
+      <section className="card dash-hero">
+        <div>
+          <p className="kicker">Client area</p>
+          <h1>{greeting()}, <span className="accent">{first}</span></h1>
+          <p className="sub">{me.account.name} • {names}</p>
+          <form className="search" role="search" onSubmit={search}>
+            <Search size={16} aria-hidden />
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search guides and answers…" aria-label="Search the knowledge base" />
+          </form>
+        </div>
+        <LicenceCard licences={licences} products={products} />
+      </section>
+
       {welcome ? (
-        <div className="card pad stack" style={{ marginBottom: 24, borderColor: "var(--primary)" }}>
-          <h2 style={{ fontSize: 24 }}>Your account is ready. Next:</h2>
-          <ol className="stack" style={{ margin: 0, paddingLeft: 20 }}>
+        <div className="card welcome stack">
+          <h2 style={{ fontSize: 20 }}>Your account is ready. Next:</h2>
+          <ol className="stack" style={{ margin: 0, paddingLeft: 20, gap: 8 }}>
             <li><b>Download</b> the Windows app for {names} and install it on your outlet&rsquo;s main PC.</li>
             <li><b>Sign in</b> in the app with this email and password, and choose <i>Start 30-day free trial</i>.</li>
           </ol>
           <div><Link to="/app/downloads" className="btn btn-primary">Go to downloads</Link></div>
         </div>
       ) : null}
-      <div className="card pad">
-        <div className="tiles">
-          {TILES.map((t) => (
-            <Link key={t.to} to={t.to} className="tile">
-              <span className="tile-icon"><t.icon size={22} /></span>
-              <span><b>{t.title}</b><span>{t.about}</span></span>
-            </Link>
-          ))}
-        </div>
+
+      <div className="dash-groups">
+        {GROUPS.map((g) => (
+          <section key={g.name}>
+            <h2>{g.name}</h2>
+            <div className="tile-list">
+              {g.tiles.map((t) => (
+                <Link key={t.to} to={t.to} className="tile">
+                  <span className="tile-icon"><t.icon size={20} /></span>
+                  <span className="tile-text">
+                    <span className="tile-title">{t.title}{badges[t.to] ? <span className="pill">{badges[t.to]}</span> : null}</span>
+                    <span className="tile-desc">{about[t.to] ?? t.about}</span>
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        ))}
       </div>
-    </AreaPage>
+
+      <Link to="/app/status" className="statusbar">
+        <span className="left">
+          <span className={`dot${status && !status.ok ? " dot-bad" : ""}`} aria-hidden />
+          <Activity size={16} aria-hidden />
+          {status === null ? "Checking services…" : status.ok ? "All systems running" : "Some services have problems"}
+        </span>
+        <span className="go">Service status →</span>
+      </Link>
+    </div>
   );
 }
 

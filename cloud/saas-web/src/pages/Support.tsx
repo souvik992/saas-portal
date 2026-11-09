@@ -1,4 +1,4 @@
-import { CheckCircle2, CircleAlert, CircleX } from "lucide-react";
+import { CheckCircle2, CircleAlert, CircleX, Search } from "lucide-react";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { ApiError, support, type Announcement, type Article, type ProductCode, type Status, type Ticket } from "../api";
 import { Notice } from "../components/Layout";
@@ -160,14 +160,25 @@ export function Announcements() {
 export function KnowledgeBase() {
   const { query } = useLocation();
   const slug = query.get("a");
+  const q = (query.get("q") ?? "").trim();
+  const [text, setText] = useState(q);
+  useEffect(() => setText(q), [q]);
   const list = useLoad(() => support.articles(), "list");
   if (slug) return <ArticleView slug={slug} />;
+  const words = q.toLowerCase().split(/\s+/).filter(Boolean);
+  const matches = (a: Omit<Article, "body">) => words.every((w) => `${a.title} ${a.category}`.toLowerCase().includes(w));
   const groups = new Map<string, Array<Omit<Article, "body">>>();
-  for (const a of list.data?.articles ?? []) groups.set(a.category, [...(groups.get(a.category) ?? []), a]);
+  for (const a of (list.data?.articles ?? []).filter(matches)) groups.set(a.category, [...(groups.get(a.category) ?? []), a]);
+  const search = (e: FormEvent) => { e.preventDefault(); navigate(text.trim() ? `/app/kb?q=${encodeURIComponent(text.trim())}` : "/app/kb", { replace: true }); };
   return (
     <div className="stack">
+      <form className="search" role="search" onSubmit={search} style={{ marginTop: 0 }}>
+        <Search size={16} aria-hidden />
+        <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Search guides and answers…" aria-label="Search the knowledge base" />
+      </form>
       <Notice>{list.error}</Notice>
-      {list.data && groups.size === 0 ? <div className="card empty">No articles yet. Ask us in a <Link to="/app/support/new">ticket</Link>.</div> : null}
+      {list.data && groups.size === 0 && q ? <div className="card empty">Nothing matches &ldquo;{q}&rdquo;. <Link to="/app/kb">See all guides</Link>, or ask us in a <Link to="/app/support/new">ticket</Link>.</div> : null}
+      {list.data && groups.size === 0 && !q ? <div className="card empty">No articles yet. Ask us in a <Link to="/app/support/new">ticket</Link>.</div> : null}
       <div className="products">
         {[...groups].map(([cat, items]) => (
           <div key={cat} className="card pad stack" style={{ gap: 10 }}>
