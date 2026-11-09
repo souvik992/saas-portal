@@ -20,3 +20,15 @@ does not accept the result.
 
 Edit in Lovable and copy the new build here (replace `public/`), or edit the files here directly; then run the
 command above on the server.
+
+## Changes made here (not in Lovable)
+
+If you copy a new Lovable build into `public/`, these need doing again:
+
+- **Sign in** (header and phone menu) opens `https://portal.posinext.com/login`.
+- **Book a Demo** posts to `https://portal.posinext.com/v1/demo-requests` (DinePOS Cloud), which emails the request to the
+  address set on the server (`HUB_DEMO_REQUEST_TO`). No private email address is anywhere in this site.
+- The only email address shown is `support@posinext.com` (policy pages, footer, footer Contact link).
+- Phone layout: rules at the end of `assets/styles-*.css` (`pn-cta`, `pn-products`, `pn-footer`, `pn-flink`).
+- Edited scripts and styles carry a `p1` suffix so browsers do not keep the old copies (assets are cached for a year).
+- `llms.txt` and `.well-known/ard.json` describe the site for AI agents.

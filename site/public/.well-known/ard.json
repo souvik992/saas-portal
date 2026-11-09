@@ -1,0 +1,37 @@
+{
+  "specVersion": "0.9",
+  "publisher": { "name": "POSINEXT", "url": "https://posinext.com/" },
+  "entries": [
+    {
+      "identifier": "urn:air:posinext.com:site:llms",
+      "displayName": "POSINEXT overview for language models",
+      "description": "What POSINEXT is, its products, how to book a demo, sign in and get support.",
+      "type": "text/markdown",
+      "url": "https://posinext.com/llms.txt",
+      "representativeQueries": ["What is POSINEXT?", "Restaurant POS software for fine dine and QSR in India", "Which products does POSINEXT offer?"]
+    },
+    {
+      "identifier": "urn:air:posinext.com:site:home",
+      "displayName": "POSINEXT restaurant POS software",
+      "description": "The POSINEXT home page: Fine Dine, QSR, Table QR, Captain App, Cloud Kitchen, delivery app and website ordering.",
+      "type": "text/html",
+      "url": "https://posinext.com/",
+      "representativeQueries": ["Book a demo of POSINEXT", "POS with Table QR ordering", "Restaurant billing software with captain app"]
+    },
+    {
+      "identifier": "urn:air:posinext.com:portal:login",
+      "displayName": "POSINEXT customer portal",
+      "description": "Sign in or create an account: downloads, free trial, licences and support tickets.",
+      "type": "text/html",
+      "url": "https://portal.posinext.com/login",
+      "representativeQueries": ["Sign in to POSINEXT", "Download POSINEXT for Windows", "Start a POSINEXT free trial"]
+    },
+    {
+      "identifier": "urn:air:posinext.com:site:sitemap",
+      "displayName": "POSINEXT sitemap",
+      "type": "application/xml",
+      "url": "https://posinext.com/sitemap.xml",
+      "representativeQueries": ["POSINEXT pages", "POSINEXT privacy, terms and security pages"]
+    }
+  ]
+}
