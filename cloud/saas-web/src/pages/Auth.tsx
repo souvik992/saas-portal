@@ -23,20 +23,21 @@ const PHOTOS = {
   register: { src: "/auth/register-bar.jpg", alt: "A warmly lit restaurant bar with bottles, glasses and a POS terminal on the counter", position: "50% 55%" },
 } as const;
 
-function AuthPage({ side, photo = "signin", frame = false, children }: { side: ReactNode; photo?: keyof typeof PHOTOS; frame?: boolean; children: ReactNode }) {
+/**
+ * frame="fit": photo (message at the bottom) and form in one card sized to the screen (sign in, forgot password).
+ * frame="grow": the same card, but it grows with a long form and the page scrolls; message at the top (sign up).
+ */
+function AuthPage({ side, photo = "signin", frame = "fit", children }: { side: ReactNode; photo?: keyof typeof PHOTOS; frame?: "fit" | "grow"; children: ReactNode }) {
   const p = PHOTOS[photo];
-  const picture = (
-    <div className={frame ? "auth-side auth-photo auth-photo-bottom" : "auth-side auth-photo"}>
-      <img src={p.src} alt={p.alt} style={{ objectPosition: p.position }} />
-      <div className="auth-photo-text">{side}</div>
-    </div>
-  );
-  // sign in: photo and form in one card that fits the screen, message at the bottom of the photo
-  if (frame) return <div className="wrap auth-frame-wrap"><div className="card auth-frame">{picture}<div className="auth-frame-form">{children}</div></div></div>;
   return (
-    <div className="wrap auth">
-      {picture}
-      <div className="card auth-card">{children}</div>
+    <div className="wrap auth-frame-wrap">
+      <div className={frame === "grow" ? "card auth-frame auth-frame-grow" : "card auth-frame"}>
+        <div className={frame === "grow" ? "auth-side auth-photo" : "auth-side auth-photo auth-photo-bottom"}>
+          <img src={p.src} alt={p.alt} style={{ objectPosition: p.position }} />
+          <div className="auth-photo-text">{side}</div>
+        </div>
+        <div className="auth-frame-form">{children}</div>
+      </div>
     </div>
   );
 }
@@ -126,10 +127,10 @@ export function Register() {
   );
 
   if (verifying) {
-    return <AuthPage side={side} photo="register"><VerifyCode email={verifying} onDone={() => void reload().then(() => navigate("/app?welcome=1"))} /></AuthPage>;
+    return <AuthPage side={side} photo="register" frame="grow"><VerifyCode email={verifying} onDone={() => void reload().then(() => navigate("/app?welcome=1"))} /></AuthPage>;
   }
   return (
-    <AuthPage side={side} photo="register">
+    <AuthPage side={side} photo="register" frame="grow">
       <form className="stack" onSubmit={(e) => void submit(e)} noValidate>
         <div>
           <h2>Create your account</h2>
@@ -211,9 +212,9 @@ export function Login() {
       <p className="muted">Downloads, licences, add-ons and support for your outlets.</p>
     </>
   );
-  if (verifying) return <AuthPage side={side} frame><VerifyCode email={verifying} onDone={() => void reload().then(() => navigate(next))} /></AuthPage>;
+  if (verifying) return <AuthPage side={side}><VerifyCode email={verifying} onDone={() => void reload().then(() => navigate(next))} /></AuthPage>;
   return (
-    <AuthPage side={side} frame>
+    <AuthPage side={side}>
       <form className="stack" onSubmit={(e) => void submit(e)} noValidate>
         <div>
           <h2>Sign in</h2>
@@ -260,7 +261,7 @@ export function Forgot() {
     </>
   );
   return (
-    <AuthPage side={side} frame>
+    <AuthPage side={side}>
       {!sent ? (
         <form className="stack" onSubmit={(e) => void ask(e)} noValidate>
           <h2>Forgot your password?</h2>

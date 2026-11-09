@@ -120,6 +120,8 @@ main:has(.auth-frame-wrap) + .footer, main:has(.auth) + .footer { margin-top: 0;
 .auth-frame { display: grid; grid-template-columns: 1.25fr 1fr; height: clamp(480px, calc(100dvh - 110px), 780px); overflow: hidden; border-radius: 24px; box-shadow: 0 24px 60px -30px rgb(0 0 0 / .3); }
 .auth-frame .auth-photo { min-height: 0; border-radius: 0; box-shadow: none; }
 .auth-frame .auth-photo > img { inset: auto 0 0 0; height: 114%; } /* larger and anchored to the bottom: trims the empty wall above the head */
+.auth-frame-grow { grid-template-columns: 1fr 1fr; height: auto; }
+.auth-frame-grow .auth-frame-form { justify-content: flex-start; overflow: visible; }
 .auth-photo-bottom { justify-content: flex-end; }
 .auth-photo-bottom::after { background: linear-gradient(180deg, rgb(0 0 0 / 0) 40%, rgb(12 9 7 / .55) 65%, rgb(12 9 7 / .9) 100%); }
 .auth-frame .auth-side h1 { font-size: clamp(32px, 3.6vw, 44px); margin: 12px 0 10px; }
@@ -204,7 +206,7 @@ main:has(.auth-frame-wrap) + .footer, main:has(.auth) + .footer { margin-top: 0;
   .auth-frame .auth-photo { order: 0; }
   .auth-frame .auth-photo > img { height: 100%; inset: 0; object-position: 42% 30% !important; }
   .auth-frame .auth-side h1 { font-size: 30px; margin: 8px 0 0; }
-  .auth-frame .auth-photo .muted { display: none; }
+  .auth-frame .auth-photo .muted, .auth-frame .auth-photo .ticks { display: none; }
   .auth-frame .auth-photo-text { padding: 20px 24px; }
   .dash-groups { grid-template-columns: 1fr 1fr; }
 }
