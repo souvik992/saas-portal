@@ -1,13 +1,16 @@
-import { UtensilsCrossed } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link, navigate } from "../router";
 import { useSession } from "../session";
 
+/** The POSINEXT logo, as on posinext.com: two chevrons (orange and dark) and the name. */
 export function Brand() {
   return (
-    <Link to="/" className="brand" aria-label="posinext home">
-      <span className="brand-mark" aria-hidden><UtensilsCrossed size={18} strokeWidth={2.4} /></span>
-      posinext
+    <Link to="/" className="brand" aria-label="POSINEXT home">
+      <svg className="brand-mark" viewBox="0 0 32 24" aria-hidden="true">
+        <path d="M2 2 L12 12 L2 22 H8 L18 12 L8 2 Z" className="brand-mark-a" />
+        <path d="M14 2 L24 12 L14 22 H20 L30 12 L20 2 Z" className="brand-mark-b" />
+      </svg>
+      POSINEXT
     </Link>
   );
 }
