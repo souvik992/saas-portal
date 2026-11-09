@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Link, navigate } from "../router";
+import { Link, navigate, useLocation } from "../router";
 import { useSession } from "../session";
 
 /** The POSINEXT logo, as on posinext.com: two chevrons (orange and dark) and the name. */
@@ -15,11 +15,15 @@ export function Brand() {
   );
 }
 
+/** Sign in and sign up show no top bar: the page is just the photo and the form. */
+const NO_TOPBAR = new Set(["/", "/login", "/register", "/signup"]);
+
 export function Layout({ children }: { children: ReactNode }) {
   const { me, signOut } = useSession();
+  const { path } = useLocation();
   return (
     <>
-      <header className="topbar">
+      {NO_TOPBAR.has(path) ? null : <header className="topbar">
         <div className="wrap">
           <Brand />
           <span className="spacer" />
@@ -38,7 +42,7 @@ export function Layout({ children }: { children: ReactNode }) {
             </>
           )}
         </div>
-      </header>
+      </header>}
       <main>{children}</main>
       <footer className="footer">
         <div className="wrap">

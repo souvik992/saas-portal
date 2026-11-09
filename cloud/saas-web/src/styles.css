@@ -115,8 +115,8 @@ textarea.input { height: auto; min-height: 120px; padding: 12px 16px; resize: ve
 .auth-photo .ticks svg { color: #7ee2a8; }
 .auth-card { align-self: center; }
 /* sign in: photo + form in one card sized to the screen (no page scroll), message at the bottom of the photo */
-.auth-frame-wrap { padding-block: 24px; }
-.auth-frame { display: grid; grid-template-columns: 1fr 1fr; height: clamp(460px, calc(100dvh - 260px), 620px); overflow: hidden; border-radius: 24px; box-shadow: 0 24px 60px -30px rgb(0 0 0 / .3); }
+.auth-frame-wrap { padding-block: 24px; min-height: calc(100dvh - 130px); display: grid; align-content: center; }
+.auth-frame { display: grid; grid-template-columns: 1fr 1fr; height: clamp(460px, calc(100dvh - 200px), 640px); overflow: hidden; border-radius: 24px; box-shadow: 0 24px 60px -30px rgb(0 0 0 / .3); }
 .auth-frame .auth-photo { min-height: 0; border-radius: 0; box-shadow: none; }
 .auth-frame .auth-photo > img { inset: auto 0 0 0; height: 114%; } /* larger and anchored to the bottom: trims the empty wall above the head */
 .auth-photo-bottom { justify-content: flex-end; }
