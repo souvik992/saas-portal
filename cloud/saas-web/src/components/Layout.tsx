@@ -19,20 +19,16 @@ export function Layout({ children }: { children: ReactNode }) {
       <header className="topbar">
         <div className="wrap">
           <Brand />
-          <nav className="nav" aria-label="Main">
-            <a href="/#products">Products</a>
-            <a href="/#how">How it works</a>
-          </nav>
           <span className="spacer" />
           {me ? (
             <>
-              <Link to="/app" className="btn">Client area</Link>
+              <Link to="/app" className="btn">Dashboard</Link>
               <button className="btn btn-ghost" onClick={() => void signOut().then(() => navigate("/"))}>Sign out</button>
             </>
           ) : (
             <>
-              <Link to="/login" className="btn btn-ghost">Sign in</Link>
-              <Link to="/register" className="btn btn-primary"><span className="label-long">Start free trial</span><span className="label-short">Try free</span></Link>
+              <Link to="/" className="btn btn-ghost">Sign in</Link>
+              <Link to="/register" className="btn btn-primary"><span className="label-long">Create account</span><span className="label-short">Sign up</span></Link>
             </>
           )}
         </div>

@@ -90,7 +90,13 @@ export const account = {
   setProducts: (products: ProductCode[]) => api<{ products: ProductCode[] }>("POST", "/v1/account/products", { products }),
   downloads: () => api<{ downloads: Download[] }>("GET", "/v1/downloads"),
   licences: () => api<{ licences: Licence[] }>("GET", "/v1/account/licences"),
+  sessions: () => api<{ sessions: SignIn[] }>("GET", "/v1/account/sessions"),
+  revokeSession: (id: string) => api<{ ok: true }>("POST", `/v1/account/sessions/${encodeURIComponent(id)}/revoke`),
+  revokeOtherSessions: () => api<{ ok: true; signedOut: number }>("POST", "/v1/account/sessions/revoke-others"),
 };
+
+/** A device signed in to the portal (`id` is a short reference, not the sign-in itself). */
+export interface SignIn { id: string; createdAt: number; lastUsedAt: number; userAgent: string; current: boolean }
 
 /** The link that starts a download (the cloud records it, then sends the installer). */
 export const downloadHref = (id: string) => `/v1/account/downloads/${encodeURIComponent(id)}`;

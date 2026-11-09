@@ -22,9 +22,8 @@ npm run dev
 
 | Path | |
 |---|---|
-| `/` | Home: the two products, their add-ons, how the 30-day trial works |
+| `/` (also `/login`) | Sign in (`?next=/app/...`); an unconfirmed email goes to the code step. Signed in: straight to the dashboard |
 | `/register` (`?product=fine_dine` or `tiffin_qsr`) | Product choice and details, then the 6-digit email code |
-| `/login` (`?next=/app/...`) | Sign in; an unconfirmed email goes to the code step |
 | `/forgot` | Email code, then a new password |
 | `/app/...` | Client area (signed in) |
 

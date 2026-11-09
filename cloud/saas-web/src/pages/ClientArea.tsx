@@ -2,9 +2,9 @@ import {
   Activity, BookOpen, CreditCard, Download as DownloadIcon, KeyRound, LifeBuoy, Megaphone, MessageSquarePlus, Puzzle, UserRound,
 } from "lucide-react";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
-import { account, ApiError, downloadHref, type Download, type Licence, type Me, type ProductCode } from "../api";
+import { account, ApiError, downloadHref, type Download, type Licence, type Me, type ProductCode, type SignIn } from "../api";
 import { Notice } from "../components/Layout";
-import { formatSize, toggleProduct } from "../forms";
+import { deviceName, formatSize, toggleProduct } from "../forms";
 import { PRODUCT_COPY, PRODUCT_ORDER } from "../products";
 import { Link, navigate, useLocation } from "../router";
 import { useSession } from "../session";
@@ -61,7 +61,7 @@ const daysLeft = (end: number) => Math.ceil((end - Date.now()) / 86_400_000);
 export function ClientArea({ path }: { path: string }) {
   const { me, loading } = useSession();
   useEffect(() => {
-    if (!loading && !me) navigate(`/login?next=${encodeURIComponent(path)}`, { replace: true });
+    if (!loading && !me) navigate(`/?next=${encodeURIComponent(path)}`, { replace: true });
   }, [loading, me, path]);
   if (!me) return <div className="wrap empty">Loading…</div>;
   switch (path) {
@@ -242,8 +242,42 @@ function AccountPage({ me }: { me: Me }) {
           </div>
           <div><button className="btn">Change password</button></div>
         </form>
+        <SignedInDevices />
       </div>
     </AreaPage>
+  );
+}
+
+/** Sign-ins last until 400 days without a visit, so the person can see and end them. */
+function SignedInDevices() {
+  const [list, setList] = useState<SignIn[] | null>(null);
+  const [msg, setMsg] = useState<{ kind: "ok" | "error"; text: string } | null>(null);
+  const load = () => account.sessions().then((r) => setList(r.sessions)).catch(() => setMsg({ kind: "error", text: "Could not load your devices." }));
+  useEffect(() => { void load(); }, []);
+  const act = async (f: () => Promise<unknown>, ok: string) => {
+    try { await f(); setMsg({ kind: "ok", text: ok }); await load(); } catch (e) { setMsg({ kind: "error", text: e instanceof ApiError ? e.message : "Could not do that." }); }
+  };
+  const others = (list ?? []).filter((s) => !s.current).length;
+  return (
+    <div className="card pad stack">
+      <h2 style={{ fontSize: 22 }}>Signed-in devices</h2>
+      <p className="muted small">You stay signed in on each device until you sign out there or here, change your password, or do not visit for 400 days. If you see a device you do not know, sign it out and change your password.</p>
+      {msg ? <Notice kind={msg.kind}>{msg.text}</Notice> : null}
+      {list === null ? <p className="muted small">Loading…</p> : (
+        <ul className="devices">
+          {list.map((s) => (
+            <li key={s.id}>
+              <div>
+                <b>{deviceName(s.userAgent)}</b>{s.current ? <span className="pill pill-ok" style={{ marginLeft: 8 }}>This device</span> : null}
+                <div className="muted small">Last used {date(s.lastUsedAt)} · signed in {date(s.createdAt)}</div>
+              </div>
+              {s.current ? null : <button className="btn btn-ghost" onClick={() => void act(() => account.revokeSession(s.id), "That device is signed out.")}>Sign out</button>}
+            </li>
+          ))}
+        </ul>
+      )}
+      {others > 0 ? <div><button className="btn" onClick={() => void act(() => account.revokeOtherSessions(), "All other devices are signed out.")}>Sign out all other devices</button></div> : null}
+    </div>
   );
 }
 

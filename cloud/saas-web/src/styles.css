@@ -86,6 +86,8 @@ textarea.input { height: auto; min-height: 120px; padding: 10px 12px; resize: ve
 .pill-primary { background: var(--primary-soft); color: var(--primary-strong); }
 .pill-ok { background: var(--ok-soft); color: oklch(40% .12 150); }
 .pill-warn { background: oklch(95% .05 80); color: oklch(45% .12 65); }
+.devices { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.devices li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; flex-wrap: wrap; }
 .pill-danger { background: var(--danger-soft); color: var(--danger); }
 .kicker { font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--primary-strong); }
 
