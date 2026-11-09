@@ -92,7 +92,7 @@ export function Register() {
     setBusy(true); setError(null);
     try {
       const r = await account.signup({ ...form, email: form.email.trim() });
-      setVerifying(r.email);
+      if (r.verify) setVerifying(r.email); else { await reload(); navigate("/app?welcome=1"); }
     } catch (err) {
       if (err instanceof ApiError && Object.keys(err.fields).length) setErrors(err.fields as FieldErrors);
       setError(err instanceof ApiError && err.code === "EMAIL_TAKEN" ? null : message(err));
