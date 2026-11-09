@@ -78,7 +78,8 @@ export const support = {
 
 export const account = {
   signup: (b: { businessName: string; name: string; email: string; phone: string; password: string; products: ProductCode[] }) =>
-    api<{ email: string; verify: true }>("POST", "/v1/account/signup", b),
+    // verify: false when the cloud does not ask for the emailed code (HUB_SKIP_EMAIL_VERIFY): already signed in
+    api<{ email: string; verify: boolean }>("POST", "/v1/account/signup", b),
   verify: (email: string, code: string) => api<{ ok: true }>("POST", "/v1/account/verify", { email, code }),
   resend: (email: string) => api<{ ok: true }>("POST", "/v1/account/resend", { email }),
   login: (email: string, password: string) => api<{ ok: true }>("POST", "/v1/account/login", { email, password }),
