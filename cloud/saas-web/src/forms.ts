@@ -46,3 +46,12 @@ export function formatSize(bytes: number | null): string {
   if (bytes === null) return "";
   return bytes >= 1_048_576 ? `${(bytes / 1_048_576).toFixed(0)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
 }
+
+/** "Chrome on Windows" from a browser's user agent (enough to recognise a device; never shown to anyone else). */
+export function deviceName(ua: string): string {
+  const browser = /Edg\//.test(ua) ? "Edge" : /OPR\/|Opera/.test(ua) ? "Opera" : /SamsungBrowser/.test(ua) ? "Samsung Internet"
+    : /Firefox\//.test(ua) ? "Firefox" : /Chrome\//.test(ua) ? "Chrome" : /Safari\//.test(ua) ? "Safari" : "A browser";
+  const os = /Windows/.test(ua) ? "Windows" : /Android/.test(ua) ? "Android" : /iPhone|iPad|iPod/.test(ua) ? "iPhone or iPad"
+    : /Mac OS X|Macintosh/.test(ua) ? "Mac" : /Linux/.test(ua) ? "Linux" : "";
+  return os ? `${browser} on ${os}` : browser;
+}

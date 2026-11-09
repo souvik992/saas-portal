@@ -117,7 +117,7 @@ export function Register() {
       <form className="stack" onSubmit={(e) => void submit(e)} noValidate>
         <div>
           <h2>Create your account</h2>
-          <p className="muted">Already have one? <Link to="/login">Sign in</Link></p>
+          <p className="muted">Already have one? <Link to="/">Sign in</Link></p>
         </div>
         <Notice>{error}</Notice>
         <div className="field">
@@ -239,7 +239,7 @@ export function Forgot() {
           <Notice>{error}</Notice>
           <Field label="Email"><input className="input" value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="email" autoFocus /></Field>
           <button className="btn btn-primary btn-lg btn-block" disabled={busy}>{busy ? "Sending…" : "Email me a code"}</button>
-          <div className="links"><Link to="/login">Back to sign in</Link></div>
+          <div className="links"><Link to="/">Back to sign in</Link></div>
         </form>
       ) : (
         <form className="stack" onSubmit={(e) => void reset(e)} noValidate>
