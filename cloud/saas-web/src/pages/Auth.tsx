@@ -29,9 +29,6 @@ function AuthPage({ side, photo = "signin", children }: { side: ReactNode; photo
     <div className="wrap auth">
       <div className="auth-side auth-photo">
         <img src={p.src} alt={p.alt} style={{ objectPosition: p.position }} />
-        <span className="auth-photo-mark" aria-hidden>
-          <svg viewBox="0 0 32 24"><path d="M2 2 L12 12 L2 22 H8 L18 12 L8 2 Z" className="brand-mark-a" /><path d="M14 2 L24 12 L14 22 H20 L30 12 L20 2 Z" className="brand-mark-b" /></svg>
-        </span>
         <div className="auth-photo-text">{side}</div>
       </div>
       <div className="card auth-card">{children}</div>
