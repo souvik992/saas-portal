@@ -1,0 +1,30 @@
+# POSINEXT
+
+> POSINEXT is restaurant POS software for fine dine restaurants, quick service restaurants (QSR) and cloud kitchens in India: billing, KOTs, Table QR ordering, a captain app, kitchen display, online ordering website, delivery app and analytics on one connected platform.
+
+POSINEXT runs on Windows at the outlet and works offline; outlets connect to POSINEXT Cloud for online orders, backups and licences. Customers sign in at the customer portal to download the apps, manage licences and open support tickets.
+
+## Products
+
+- [Fine Dine POS](https://posinext.com/#core-pos): table billing, live floor plan, KOTs to kitchen stations, split bills, service charge and GST
+- [QSR POS](https://posinext.com/#qsr): counter billing with a photo menu, held bills, cash / UPI / card
+- [Table QR](https://posinext.com/#table-qr): guests scan the table's code to see the menu, order, call a waiter and pay
+- [Captain App](https://posinext.com/#captain-app): waiters take orders at the table on a phone or tablet
+- [Cloud Kitchen](https://posinext.com/#cloud-kitchen): several brands from one kitchen, Swiggy and Zomato orders in the POS
+- [Food Delivery App](https://posinext.com/#food-delivery-app): the restaurant's own branded ordering app
+- [Website Ordering](https://posinext.com/#delivery-website): the restaurant's own ordering website, synced with the POS menu
+
+## Get started
+
+- [Book a demo](https://posinext.com/#demo): the team shows POSINEXT live for your restaurant
+- [Customer portal](https://portal.posinext.com/login): sign in or create an account, download the apps, start the free trial, manage licences and support tickets
+
+## Support
+
+- Email: [support@posinext.com](mailto:support@posinext.com)
+
+## Policies
+
+- [Privacy](https://posinext.com/privacy)
+- [Terms](https://posinext.com/terms)
+- [Security](https://posinext.com/security)
