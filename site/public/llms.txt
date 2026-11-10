@@ -1,6 +1,6 @@
 # POSINEXT
 
-> POSINEXT is restaurant POS software for fine dine restaurants, quick service restaurants (QSR) and cloud kitchens in India: billing, KOTs, Table QR ordering, a captain app, kitchen display, online ordering website, delivery app and analytics on one connected platform.
+> POSINEXT is restaurant POS software for fine dine restaurants, quick service restaurants (QSR) and cloud kitchens in India: billing, KOTs, Table QR ordering, a captain app, kitchen display, online ordering website, app ordering, delivery app, Swiggy and Zomato integration and analytics on one connected platform.
 
 POSINEXT runs on Windows at the outlet and works offline; outlets connect to POSINEXT Cloud for online orders, backups and licences. Customers sign in at the customer portal to download the apps, manage licences and open support tickets.
 
@@ -13,6 +13,8 @@ POSINEXT runs on Windows at the outlet and works offline; outlets connect to POS
 - [Cloud Kitchen](https://posinext.com/#cloud-kitchen): several brands from one kitchen, Swiggy and Zomato orders in the POS
 - [Food Delivery App](https://posinext.com/#food-delivery-app): the restaurant's own branded ordering app
 - [Website Ordering](https://posinext.com/#delivery-website): the restaurant's own ordering website, synced with the POS menu
+- [App Ordering](https://posinext.com/#app-ordering): customers order from the restaurant's app; orders are accepted automatically and KOTs print in the kitchen
+- [Swiggy & Zomato](https://posinext.com/#swiggy-zomato): POSINEXT's own Swiggy and Zomato integration; orders are accepted automatically and KOTs print without a tap
 
 ## Get started
 

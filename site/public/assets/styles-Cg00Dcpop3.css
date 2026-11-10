@@ -16,3 +16,5 @@
 .pn-flink{display:inline-block;padding-block:.5rem}
 h1{overflow-wrap:break-word}
 }
+
+/* platform row: 9 products */@media (min-width:40rem){.pn-platform{grid-template-columns:repeat(9,minmax(0,1fr))}}

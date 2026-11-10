@@ -13,7 +13,7 @@
     {
       "identifier": "urn:air:posinext.com:site:home",
       "displayName": "POSINEXT restaurant POS software",
-      "description": "The POSINEXT home page: Fine Dine, QSR, Table QR, Captain App, Cloud Kitchen, delivery app and website ordering.",
+      "description": "The POSINEXT home page: Fine Dine, QSR, Table QR, Captain App, Cloud Kitchen, delivery app, website ordering, app ordering and Swiggy & Zomato integration.",
       "type": "text/html",
       "url": "https://posinext.com/",
       "representativeQueries": ["Book a demo of POSINEXT", "POS with Table QR ordering", "Restaurant billing software with captain app"]
