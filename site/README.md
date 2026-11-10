@@ -34,5 +34,5 @@ If you copy a new Lovable build into `public/`, these need doing again:
 - `llms.txt` and `.well-known/ard.json` describe the site for AI agents.
 - Products **08 App Ordering** and **09 Swiggy & Zomato** (and their footer links, platform icons, nav pills and the
   9-product count) were added by hand, in `assets/routes-*.js`, `assets/SiteFooter-*.js` and the pre-rendered HTML of
-  every page; the two images (`assets/app-ordering-pn1.jpg`, `assets/swiggy-zomato-pn1.jpg`) were composed here. The
+  every page; the two images (`assets/app-ordering-pn1.jpg` composed here around the app screenshot; `assets/ods-online-orders-pn1.jpg` is the ODS screen). The
   pre-rendered HTML must match what the scripts render, or React reports error #418.
