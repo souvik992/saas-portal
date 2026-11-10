@@ -32,3 +32,7 @@ If you copy a new Lovable build into `public/`, these need doing again:
 - Phone layout: rules at the end of `assets/styles-*.css` (`pn-cta`, `pn-products`, `pn-footer`, `pn-flink`).
 - Edited scripts and styles carry a `p<n>` suffix (bump it on each edit) so browsers do not keep the old copies (assets are cached for a year).
 - `llms.txt` and `.well-known/ard.json` describe the site for AI agents.
+- Products **08 App Ordering** and **09 Swiggy & Zomato** (and their footer links, platform icons, nav pills and the
+  9-product count) were added by hand, in `assets/routes-*.js`, `assets/SiteFooter-*.js` and the pre-rendered HTML of
+  every page; the two images (`assets/app-ordering-pn1.jpg`, `assets/swiggy-zomato-pn1.jpg`) were composed here. The
+  pre-rendered HTML must match what the scripts render, or React reports error #418.
