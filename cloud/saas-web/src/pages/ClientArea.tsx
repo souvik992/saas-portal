@@ -1,10 +1,11 @@
 import {
-  Activity, ArrowRight, BookOpen, CreditCard, Download as DownloadIcon, KeyRound, LifeBuoy, Megaphone, MessageSquarePlus, Puzzle, Search, Smartphone, UserRound,
+  Activity, ArrowRight, BookOpen, Check, CreditCard, Download as DownloadIcon, KeyRound, LifeBuoy, Megaphone, MessageSquarePlus, Puzzle, Search, Smartphone, UserRound,
 } from "lucide-react";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { account, ApiError, downloadHref, support, type Download, type Licence, type Me, type ProductCode, type SignIn } from "../api";
 import { Notice } from "../components/Layout";
 import { deviceName, formatSize, toggleProduct } from "../forms";
+import { PLANS, rupees } from "../plans";
 import { PRODUCT_COPY, PRODUCT_ORDER } from "../products";
 import { Link, navigate, useLocation } from "../router";
 import { useSession } from "../session";
@@ -395,10 +396,22 @@ function SignedInDevices() {
 function PlansPage() {
   return (
     <AreaPage title="Plans and billing">
-      <div className="card pad stack">
-        <h2 style={{ fontSize: 22 }}>Plans are coming soon</h2>
-        <p className="muted">Your 30-day trial includes everything. Before it ends, ask us for a plan: <Link to="/app/support/new">submit a ticket</Link> and we will set up your licence.</p>
+      <p className="muted" style={{ marginBottom: 16 }}>Prices are per outlet, per year, plus GST. Your {TRIAL_DAYS}-day trial includes everything; choose a plan before it ends and we will set up your licence.</p>
+      <div className="plans">
+        {PLANS.map((p, i) => (
+          <section key={p.code} className={`card plan${p.popular ? " plan-popular" : ""}`}>
+            <div className="row"><h2>{p.name}</h2>{p.popular ? <span className="pill pill-primary">Most popular</span> : null}</div>
+            <p className="muted small">{p.about}</p>
+            <p className="plan-price">{rupees(p.price)}<span className="muted small"> / outlet / year + GST</span></p>
+            <ul className="ticks">
+              {i > 0 ? <li><Check size={16} aria-hidden /><b>Everything in {PLANS[i - 1]!.name}</b></li> : null}
+              {p.features.map((f) => <li key={f}><Check size={16} aria-hidden />{f}</li>)}
+            </ul>
+            <Link to={`/app/support/new?plan=${p.code}`} className={`btn btn-block${p.popular ? " btn-primary" : ""}`}>Choose {p.name}</Link>
+          </section>
+        ))}
       </div>
+      <p className="muted small" style={{ marginTop: 16 }}>More than one outlet, or need something else? <Link to="/app/support/new">Submit a ticket</Link> and tell us how many outlets and PCs.</p>
     </AreaPage>
   );
 }
