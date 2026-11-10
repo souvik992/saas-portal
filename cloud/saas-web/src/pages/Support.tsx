@@ -2,6 +2,7 @@ import { CheckCircle2, CircleAlert, CircleX, Search } from "lucide-react";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { ApiError, support, type Announcement, type Article, type ProductCode, type Status, type Ticket } from "../api";
 import { Notice } from "../components/Layout";
+import { PLANS, rupees } from "../plans";
 import { PRODUCT_COPY, PRODUCT_ORDER } from "../products";
 import { Link, navigate, useLocation } from "../router";
 import { useSession } from "../session";
@@ -72,9 +73,10 @@ function TicketList() {
 
 function NewTicket() {
   const { me } = useSession();
-  const [subject, setSubject] = useState("");
+  const plan = PLANS.find((p) => p.code === useLocation().query.get("plan")); // from "Choose <plan>" on the plans page
+  const [subject, setSubject] = useState(plan ? `${plan.name} plan (${rupees(plan.price)} / outlet / year)` : "");
   const [product, setProduct] = useState<ProductCode | "">(me?.account.products.length === 1 ? me.account.products[0]! : "");
-  const [body, setBody] = useState("");
+  const [body, setBody] = useState(plan ? `I would like the ${plan.name} plan.\nOutlets: \nPCs per outlet: ` : "");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const submit = async (e: FormEvent) => {
