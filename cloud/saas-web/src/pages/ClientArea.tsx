@@ -1,5 +1,5 @@
 import {
-  Activity, ArrowRight, BookOpen, CreditCard, Download as DownloadIcon, KeyRound, LifeBuoy, Megaphone, MessageSquarePlus, Puzzle, Search, UserRound,
+  Activity, ArrowRight, BookOpen, CreditCard, Download as DownloadIcon, KeyRound, LifeBuoy, Megaphone, MessageSquarePlus, Puzzle, Search, Smartphone, UserRound,
 } from "lucide-react";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { account, ApiError, downloadHref, support, type Download, type Licence, type Me, type ProductCode, type SignIn } from "../api";
@@ -104,7 +104,7 @@ function AnnouncementsPage() {
 
 const greeting = (h = new Date().getHours()) => (h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening");
 /** The add-ons of these products, for the Add-ons tile. */
-const ADDON_NAMES: Record<ProductCode, string[]> = { fine_dine: ["Table QR", "Kitchen display"], tiffin_qsr: ["ODS"] };
+const ADDON_NAMES: Record<ProductCode, string[]> = { fine_dine: ["Table QR", "Kitchen display", "Captain app"], tiffin_qsr: ["ODS"] };
 
 function LicenceCard({ licences, products }: { licences: Licence[] | null; products: ProductCode[] }) {
   if (licences === null) return <div className="trial" aria-busy="true"><p className="label">Free trial</p><p className="big">&nbsp;</p><div className="bar" /></div>;
@@ -234,7 +234,7 @@ function DownloadsPage({ me, kind }: { me: Me; kind: "app" | "addon" }) {
       <p className="muted" style={{ marginBottom: 16 }}>
         {kind === "app"
           ? "Install on the outlet's main PC (Windows 10 or 11), then sign in inside the app with your account to start the 30-day trial."
-          : "Add-ons install after the app, on the same PC. They are included in your trial."}
+          : "Add-ons work with the app on the main PC: Table QR installs on that PC, the kitchen display on a kitchen PC, and the Captain app on waiters' Android phones (the APK; allow \"Install unknown apps\" when asked). They are included in your trial."}
         {" "}Not seeing a product? <Link to="/app/account">Change your products</Link>.
       </p>
       <div className="card">
@@ -250,7 +250,7 @@ function DownloadsPage({ me, kind }: { me: Me; kind: "app" | "addon" }) {
 function DownloadRow({ d }: { d: Download }) {
   return (
     <div className="download">
-      <span className="tile-icon">{d.kind === "app" ? <DownloadIcon size={22} /> : <Puzzle size={22} />}</span>
+      <span className="tile-icon">{d.kind === "app" ? <DownloadIcon size={22} /> : d.id === "dinepos-captain" ? <Smartphone size={22} /> : <Puzzle size={22} />}</span>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div className="row"><b>{d.name}</b><span className="pill pill-primary">{d.productName}</span></div>
         <div className="small">{d.description}</div>
