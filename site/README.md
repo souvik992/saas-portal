@@ -6,7 +6,7 @@ itself is in `public/assets/lovable/`, and the share-preview image is `public/as
 
 ## Put it on the server
 
-On the DinePOS Cloud server (it runs Caddy), after DNS for `posinext.com` and `www.posinext.com` points at it:
+On the PosiNext Cloud server (it runs Caddy), after DNS for `posinext.com` and `www.posinext.com` points at it:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/souvik992/saas-portal/main/site/deploy.sh | sudo bash
@@ -26,7 +26,7 @@ command above on the server.
 If you copy a new Lovable build into `public/`, these need doing again:
 
 - **Sign in** (header and phone menu) opens `https://portal.posinext.com/login`; **Start your free trial** opens `https://portal.posinext.com/register`.
-- **Book a Demo** posts to `https://portal.posinext.com/v1/demo-requests` (DinePOS Cloud), which emails the request to the
+- **Book a Demo** posts to `https://portal.posinext.com/v1/demo-requests` (PosiNext Cloud), which emails the request to the
   address set on the server (`HUB_DEMO_REQUEST_TO`). No private email address is anywhere in this site.
 - The only email address shown is `support@posinext.com` (policy pages, footer, footer Contact link).
 - Phone layout: rules at the end of `assets/styles-*.css` (`pn-cta`, `pn-products`, `pn-footer`, `pn-flink`).

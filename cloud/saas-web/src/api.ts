@@ -1,4 +1,4 @@
-// DinePOS Cloud's API on the same origin (/v1/...). The session is an HttpOnly cookie the cloud sets; this code never
+// PosiNext Cloud's API on the same origin (/v1/...). The session is an HttpOnly cookie the cloud sets; this code never
 // sees it. Errors come back as { error: { code, message, details } }.
 
 export class ApiError extends Error {
