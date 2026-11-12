@@ -1,4 +1,4 @@
-// The two products as the portal presents them. The rules (trials, keys, downloads) are DinePOS Cloud's.
+// The two products as the portal presents them. The rules (trials, keys, downloads) are PosiNext Cloud's.
 import type { ProductCode } from "./api";
 
 export interface ProductCopy {

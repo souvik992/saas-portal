@@ -2,7 +2,7 @@
   "name": "@posinext/portal",
   "version": "0.2.0",
   "private": true,
-  "description": "Customer portal for Fine Dine (DinePOS) and QSR (Tiffin POS). UI only: the backend is DinePOS Cloud (fine-dine cloud/hub).",
+  "description": "Customer portal for Fine Dine (DinePOS) and QSR (Tiffin POS). UI only: the backend is PosiNext Cloud (repository posinext-cloud, hub/).",
   "type": "module",
   "engines": {
     "node": ">=22"
