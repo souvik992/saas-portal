@@ -8,9 +8,14 @@
   <url><loc>https://posinext.com/contact</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://posinext.com/documentation</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://posinext.com/help-center</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://posinext.com/status</loc><changefreq>weekly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://posinext.com/changelog</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://posinext.com/privacy</loc></url>
-  <url><loc>https://posinext.com/terms</loc></url>
-  <url><loc>https://posinext.com/security</loc></url>
+  <url><loc>https://posinext.com/fine-dine</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://posinext.com/qsr</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://posinext.com/features</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://posinext.com/table-qr</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://posinext.com/captain-app</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://posinext.com/cloud-kitchen</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://posinext.com/food-delivery-app</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://posinext.com/website-ordering</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://posinext.com/app-ordering</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://posinext.com/swiggy-zomato</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>
