@@ -65,7 +65,7 @@ P = [
         related=["swiggy-zomato-integration", "online-ordering-website", "cloud-kitchen-software"],
         kw="QSR POS, quick service restaurant billing software, cafe billing software, tiffin centre billing, counter billing software"),
     dict(
-        slug="table-qr-ordering", name="Table QR", icon="qr", num="03", group="Self ordering", tone="",
+        slug="table-qr-ordering", name="Table QR", icon="qr", num="03", group="Self ordering", tone="h",
         stat="+22%", statl="Higher average ticket", img="table-qr", side="r",
         alt="Guest scanning a Table QR stand to browse a digital menu on their phone",
         home="Let guests scan, order and pay from their own phone — zero wait, zero friction. Orders land in your POS instantly with the table already attached.",
@@ -95,7 +95,7 @@ P = [
         related=["fine-dine-pos", "captain-app", "online-ordering-website"],
         kw="QR code ordering system, QR menu for restaurant, table ordering system, contactless ordering India, scan and order"),
     dict(
-        slug="captain-app", name="Captain App", icon="phone", num="04", group="Floor staff", tone="",
+        slug="captain-app", name="Captain App", icon="phone", num="04", group="Floor staff", tone="g",
         stat="2× faster", statl="Table turnaround", img="captain-app", side="l",
         alt="Waiter taking an order on the Captain App at a restaurant table",
         home="Empower your floor team with a mobile order-taking app that syncs live with the kitchen. Take orders tableside and keep guests moving.",
@@ -153,7 +153,7 @@ P = [
         related=["swiggy-zomato-integration", "qsr-pos", "food-delivery-app"],
         kw="cloud kitchen software, cloud kitchen POS, dark kitchen management, multi brand kitchen, kitchen display system"),
     dict(
-        slug="food-delivery-app", name="Food Delivery App", icon="bike", num="06", group="Direct delivery", tone="",
+        slug="food-delivery-app", name="Food Delivery App", icon="bike", num="06", group="Direct delivery", tone="h",
         stat="0%", statl="Commission on orders", img="food-delivery-app", side="l",
         alt="Delivery rider handing a food order to a customer tracking it on her phone",
         home="Your own branded delivery app on iOS and Android. Stop paying aggregator commissions and own the relationship with every customer.",
@@ -182,7 +182,7 @@ P = [
         related=["online-ordering-website", "app-ordering", "cloud-kitchen-software"],
         kw="food delivery app for restaurant, own delivery app, zero commission food ordering, restaurant app India"),
     dict(
-        slug="online-ordering-website", name="Website Ordering", icon="globe", num="07", group="Online ordering", tone="",
+        slug="online-ordering-website", name="Website Ordering", icon="globe", num="07", group="Online ordering", tone="g",
         stat="3.4×", statl="More direct orders", img="delivery-website", side="r",
         alt="Restaurant online ordering website shown on a laptop",
         home="A conversion-optimised online ordering website that drives direct orders and feeds them back into your central POS — no re-keying, no tablets on the counter.",
@@ -241,7 +241,7 @@ P = [
         related=["food-delivery-app", "online-ordering-website", "swiggy-zomato-integration"],
         kw="restaurant app ordering, auto accept orders, KOT printing, mobile ordering for restaurants"),
     dict(
-        slug="swiggy-zomato-integration", name="Swiggy &amp; Zomato", icon="printer", num="09", group="Aggregator integration", tone="",
+        slug="swiggy-zomato-integration", name="Swiggy &amp; Zomato", icon="printer", num="09", group="Aggregator integration", tone="h",
         stat="0 tablets", statl="On the counter", img="ods-online-orders", side="r",
         alt="POSINEXT ODS screen showing a Zomato delivery order arriving, with Swiggy, Zomato, app and website orders on one board",
         home="Our own Swiggy and Zomato integration, built into the POS. Orders are accepted automatically and KOTs print in the kitchen the moment they arrive, with no extra tablets on the counter.",

@@ -24,7 +24,42 @@ def minify_css(css):
     return css.replace(";}", "}").strip()
 
 
+# ---- fonts: src/fonts/<name>.woff2 cut down to the characters the site uses, saved as fonts/<name>-<hash>.woff2 ----
+FONT_TEXT = "".join(chr(c) for c in range(32, 127)) + "©·×é—–‘’“”›₹↑✓…"
+FONT_SRC = Path(__file__).parent / "fonts"
+FONT_OUT = Path(__file__).resolve().parent.parent / "public" / "fonts"
+
+
+def make_fonts():
+    """Subsets each source font (fontTools) and returns {name: '/fonts/<name>-<hash>.woff2'}; reuses an existing file."""
+    import hashlib
+    from fontTools import subset
+    FONT_OUT.mkdir(parents=True, exist_ok=True)
+    urls = {}
+    for src in sorted(FONT_SRC.glob("*.woff2")):
+        key = hashlib.sha256(src.read_bytes() + FONT_TEXT.encode()).hexdigest()[:10]
+        out = FONT_OUT / f"{src.stem}-{key}.woff2"
+        if not out.exists():
+            for old in FONT_OUT.glob(f"{src.stem}*.woff2"):
+                old.unlink()
+            o = subset.Options()
+            o.flavor, o.layout_features, o.hinting, o.desubroutinize, o.name_IDs = "woff2", ["kern", "liga", "calt"], False, True, ["*"]
+            font = subset.load_font(str(src), o)
+            s = subset.Subsetter(o)
+            s.populate(text=FONT_TEXT)
+            s.subset(font)
+            subset.save_font(font, str(out), o)
+        urls[src.stem] = f"/fonts/{out.name}"
+    for old in FONT_OUT.glob("*-latin.woff2"):
+        old.unlink()
+    return urls
+
+
+FONTS = make_fonts()
+for _n, _u in FONTS.items():
+    CSS = CSS.replace(f"__FONT_{_n}__", _u)
 CSS_MIN = minify_css(CSS)
+FONT_PRELOAD = "".join(f'<link rel="preload" href="{u}" as="font" type="font/woff2" crossorigin>' for u in FONTS.values())
 
 # ---- icons (Lucide, ISC licence): one <symbol> per icon, only the ones a page uses are inlined ----
 ICONS = {
@@ -94,7 +129,7 @@ def img(key, alt, eager=False, sizes="(min-width:1024px) 600px, calc(100vw - 2.5
 
 
 # ---- navigation and footer ----
-NAV = [("Products", "/#products"), ("Features", "/features/"), ("Pricing", "/pricing/"), ("Blog", "/blog/")]
+NAV = [("Products", "/#products"), ("Analytics", "/#analytics"), ("Platform", "/#platform"), ("Pricing", "/pricing/")]
 FOOTER = [
     ("Product", [("Fine Dine", "/fine-dine-pos/"), ("QSR", "/qsr-pos/"), ("Features", "/features/"), ("Pricing", "/pricing/"),
                  ("Changelog", "/changelog/"), ("Compare", "/compare/petpooja-alternative/")]),
@@ -108,7 +143,7 @@ FOOTER = [
 
 def header(path):
     links = "".join(f'<a href="{h}"{" aria-current=page" if h == path else ""}>{t}</a>' for t, h in NAV)
-    mob = "".join(f'<a href="{h}">{t}</a>' for t, h in NAV + [("Contact", "/contact/"), ("Sign in", PORTAL + "/login")])
+    mob = "".join(f'<a href="{h}">{t}</a>' for t, h in NAV + [("Features", "/features/"), ("Blog", "/blog/"), ("Contact", "/contact/"), ("Sign in", PORTAL + "/login")])
     return (f'<header class="hd"><div class="w"><a href="/" aria-label="POSINEXT home">{LOGO}</a>'
             f'<nav class="nv" aria-label="Main">{links}</nav>'
             f'<div class="hb"><a class="btn btn-sm btn-gh" href="{PORTAL}/login">Sign in</a>'
@@ -122,10 +157,10 @@ def footer():
         f'<div><h2>{title}</h2><ul>' + "".join(f'<li><a href="{h}">{t}</a></li>' for t, h in links) + "</ul></div>"
         for title, links in FOOTER)
     return (f'<footer class="ft"><div class="w"><div class="fg"><div class="fb">{LOGO}'
-            f'<p>The complete restaurant operating system. One platform, every touchpoint. Restaurant POS software made for India.</p>'
+            f'<p>The complete restaurant operating system. One platform, every touchpoint.</p>'
             f'<p><a href="mailto:{EMAIL}">{EMAIL}</a></p></div>{cols}</div>'
             f'<div class="fbt"><p>&copy; 2026 POSINEXT. All rights reserved.</p><div><a href="/privacy/">Privacy</a>'
-            f'<a href="/terms/">Terms</a><a href="/security/">Security</a><a href="/sitemap.xml">Sitemap</a></div></div></div></footer>')
+            f'<a href="/terms/">Terms</a><a href="/security/">Security</a></div></div></div></footer>')
 
 
 # ---- components ----
@@ -178,8 +213,8 @@ def faq_section(items, title="Frequently asked questions", eyebrow="FAQ", bg="")
 
 
 def cta_band(title="Ready to modernise your restaurant?",
-             text="Join 500+ restaurants already running on POSINEXT. Get set up in a day, not a week."):
-    return (f'<section class="cta sec-s"><div class="w"><div class="bx"><h2>{title}</h2><p>{text}</p>'
+             text="Join 500+ restaurants already running on POSINEXT. Get set up in a day, not a week.", cls="sec-s"):
+    return (f'<section class="cta {cls}"><div class="w"><div class="bx"><h2>{title}</h2><p>{text}</p>'
             + btns(("Start your free trial", PORTAL + "/register"), ("Book a demo", "/book-a-demo/"), light=True)
             + "</div></div></section>")
 
@@ -236,7 +271,7 @@ def page(path, title, desc, body, schema=(), og_type="website", og_img="/img/og.
             f'<meta name="viewport" content="width=device-width,initial-scale=1">'
             f"<title>{esc(title)}</title><meta name=\"description\" content=\"{esc(desc)}\">"
             f'<link rel="canonical" href="{url}"><meta name="robots" content="{robots}">'
-            f'<style>{CSS_MIN}</style>{pre}'
+            f'{FONT_PRELOAD}<style>{CSS_MIN}</style>{pre}'
             f'<link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#f15b00">'
             f'<link rel="alternate" hreflang="en-IN" href="{url}"><link rel="alternate" hreflang="x-default" href="{url}">'
             f'<meta name="author" content="POSINEXT"><meta name="geo.region" content="IN">'

@@ -9,9 +9,10 @@ The design is the original Lovable site's (gallery-of-stories.lovable.app), rebu
 
 ## Change the site
 
-Edit the sources, then run the build (Python 3 with Pillow):
+Edit the sources, then run the build (Python 3 with Pillow and fontTools):
 
 ```bash
+pip install pillow fonttools brotli   # once
 python site/src/build.py
 ```
 
