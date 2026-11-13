@@ -1,7 +1,7 @@
 """Footer pages: Product (features, pricing, changelog, compare), Company, Support and policies; plus sitemap, robots, llms."""
 import json
 from urllib.parse import quote
-from kit import PORTAL, EMAIL, WA, SITE, UPDATED, ico, check_list, cards, faq_section, sec_head, btns, page, crumbs
+from kit import PORTAL, EMAIL, SITE, demo_form, UPDATED, ico, check_list, cards, faq_section, sec_head, btns, page, crumbs
 from products import P
 
 PLANS = [
@@ -163,29 +163,22 @@ def build(simple, write):
            prose(careers), [("Careers", "/careers/")])
 
     # ---------- Contact ----------
-    wa_txt = quote("Hi POSINEXT, I'd like to know more about POSINEXT for my restaurant.")
     contact = W(cards([
         ("mail", "Email", f'Questions, quotes and support: <a class="pc" href="mailto:{EMAIL}">{EMAIL}</a>'),
-        ("chat", "WhatsApp", f'Chat with the team: <a class="pc" href="https://wa.me/{WA}?text={wa_txt}" rel="noopener">message us on WhatsApp</a>'),
         ("calendar", "Book a demo", 'See POSINEXT live for your restaurant: <a class="pc" href="/book-a-demo/">book a free demo</a>'),
         ("buoy", "Customers", f'Open a support ticket in the <a class="pc" href="{PORTAL}/login">customer portal</a>, where replies are kept with your account.'),
         ("book", "Documentation", 'Set-up guides for the POS, printers and devices: <a class="pc" href="/docs/">read the docs</a>'),
         ("shield", "Security", 'Report a security concern: <a class="pc" href="/security/">how to report</a>'),
     ]))
     simple("/contact/", "Contact POSINEXT: Sales, Support and Demo",
-           "Contact POSINEXT restaurant POS: email support@posinext.com, WhatsApp the team, book a free demo, or open a support ticket in the customer portal.",
+           "Contact POSINEXT restaurant POS: email support@posinext.com, book a free demo or open a support ticket in the customer portal.",
            "Contact", "Talk to the POSINEXT team", "Sales questions, a quote for your outlets or help with your POS: pick whatever is easiest.",
            contact, [("Contact", "/contact/")], [{"@type": "ContactPage", "url": SITE + "/contact/"}])
 
-    # ---------- Book a demo (no JS: the form opens WhatsApp with the details filled in) ----------
-    tmpl = ("Hi POSINEXT, I'd like a free demo.\nName: \nPhone: \nRestaurant: \nCity: \nOutlets: \n"
-            "Type (Fine Dine / QSR / Café / Cloud kitchen): \nMessage: ")
-    mail_body = quote(tmpl.replace("Hi POSINEXT, I'd like a free demo.\n", ""))
-    form = (f'<form class="fm box" method="get" action="https://wa.me/{WA}" target="_blank">'
-            f'<div><label for="t">Your details</label><textarea id="t" name="text" rows="10" required>{tmpl}</textarea>'
-            f'<p class="mc mt2" style="font-size:.8125rem">Fill in after each label, then send. WhatsApp opens with your message ready.</p></div>'
-            f'<button class="btn btn-p" type="submit">{ico("chat")} Send on WhatsApp</button>'
-            f'<a class="btn btn-o" href="mailto:{EMAIL}?subject={quote("Demo request")}&amp;body={mail_body}">{ico("mail")} Send by email instead</a></form>')
+    # ---------- Book a demo: the same form as the dialog on every other page (kit.demo_form) ----------
+    form = ('<div class="box"><h2 class="t" style="margin-top:0;font-size:1.5rem">Book a free demo</h2>'
+            "<p class=\"mc\" style=\"margin-bottom:1.25rem\">Tell us about your restaurant and we'll show you POSINEXT live.</p>"
+            + demo_form("d") + "</div>")
     why = ('<div class="rel"><h2 class="t" style="margin-top:0">What happens in the demo</h2>'
            + check_list(["We show POSINEXT live, set up like your restaurant: Fine Dine, QSR, café or cloud kitchen",
                          "Billing, KOTs, captain app, kitchen display and online orders, end to end",
@@ -265,7 +258,7 @@ def build(simple, write):
             ("1. Scope of this notice", "This draft covers the public POSINEXT website and its demo request options. It does not describe how a restaurant processes its guests' information or establish the privacy terms of a purchased POSINEXT service."),
             ("2. Information in a demo request", "A demo request asks for your name, phone number and restaurant name. You can also provide your email, city, number of outlets and a message. Please avoid including payment details, passwords or personal information about restaurant guests in your enquiry."),
             ("3. Enquiry handling", "Demo requests reach the POSINEXT team so we can respond to your enquiry. Sending a request asks for contact about POSINEXT; it is not a purchase or subscription."),
-            ("4. WhatsApp, email and other external services", "If you choose to send a request by WhatsApp or email, you leave this website and communicate through that service. Review that service's privacy information before sending personal details. This website loads no analytics, advertising or tracking scripts and sets no cookies."),
+            ("4. How a request is sent", "The demo form sends your details securely to the POSINEXT customer portal (portal.posinext.com), which passes them to the team. If you write to us by email instead, review your email provider's privacy information. This website loads no analytics, advertising or tracking scripts and sets no cookies."),
             ("5. Privacy questions and requests", f"For questions about an enquiry, or to ask about access, correction or deletion of information you submitted, email {EMAIL}. Include enough detail to identify your enquiry, but do not send passwords or sensitive documents. This draft does not promise a response deadline or a particular outcome."),
             ("6. Details awaiting confirmation", "The site owner needs to confirm the legal business identity, applicable privacy requirements, retention periods and provider arrangements before adopting a final notice. No retention period, legal compliance status or data-sharing guarantee is stated here.")]),
         "terms": ("Website Terms | POSINEXT", "Draft POSINEXT website terms covering enquiries, product information and service agreements.",
@@ -275,7 +268,7 @@ def build(simple, write):
             ("3. Product information", "Confirm features, device compatibility, integrations, availability and performance expectations for your specific operation before ordering. Website examples and screenshots should not be treated as a signed specification or service-level agreement."),
             ("4. Responsible use", "Please provide accurate contact details, submit only information you are authorized to share, and do not use the enquiry options for spam or harmful content. Do not attempt to access another person's information or disrupt the website."),
             ("5. Pricing and commercial arrangements", "Request a written proposal identifying the products, add-ons, onboarding arrangements and support included. Payment, renewal, cancellation, refund and service commitments need to be agreed separately; this draft does not set those conditions."),
-            ("6. External links", "External services, including WhatsApp, have their own terms. Review those terms when you use their services."),
+            ("6. External links", "External services linked from this website have their own terms. Review those terms when you use their services."),
             ("7. Questions and final agreement", f"Contact {EMAIL} for product or agreement questions. The owner must confirm the contracting business, applicable law and final legal terms before adopting this draft. It does not impose liability limits, a dispute process or a governing jurisdiction.")]),
         "security": ("Security | POSINEXT", "How to report a security concern to POSINEXT, what to include, and how POSINEXT protects restaurant data.",
                      "Security", "Contact and reporting guidance for security concerns involving POSINEXT.", [

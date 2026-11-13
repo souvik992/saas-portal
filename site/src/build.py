@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from kit import (PORTAL, EMAIL, WA, SITE, UPDATED, esc, ico, img, page, check_list, ticks, btns, sec_head, cards,
+from kit import (PORTAL, EMAIL, SITE, UPDATED, esc, ico, img, page, check_list, ticks, btns, sec_head, cards,
                  faq_section, cta_band, crumbs, software)
 from products import P, BY_SLUG
 import pages

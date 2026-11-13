@@ -1,5 +1,6 @@
 """Reusable building blocks for posinext.com: the page shell (head, header, footer), icons and section components.
-Everything is rendered at build time into plain HTML; pages ship no JavaScript."""
+Everything is rendered at build time into plain HTML. The only script is DEMO_JS: it opens the Book a Demo form in a
+dialog and sends it to the portal."""
 import html
 import json
 import re
@@ -8,7 +9,6 @@ from pathlib import Path
 SITE = "https://posinext.com"
 PORTAL = "https://portal.posinext.com"
 EMAIL = "support@posinext.com"
-WA = "917872735817"
 UPDATED = "2026-11-13"
 CSS = (Path(__file__).parent / "site.css").read_text(encoding="utf-8")
 
@@ -163,6 +163,52 @@ def footer():
             f'<a href="/terms/">Terms</a><a href="/security/">Security</a></div></div></div></footer>')
 
 
+# ---- Book a Demo: one form (same fields as the hub's POST /v1/demo-requests), in a dialog on every page ----
+DEMO_API = PORTAL + "/v1/demo-requests"
+
+
+def demo_form(p):
+    """p: id prefix, so the form can appear twice on a page without clashing ids."""
+    def f(k, label, attrs=""):
+        return f'<div><label for="{p}-{k}">{label}</label><input id="{p}-{k}" name="{k}" {attrs}></div>'
+    return (f'<form class="fm dm" action="{DEMO_API}" method="post">'
+            '<input type="hidden" name="source" value="Book a Demo">'
+            '<div class="hp" aria-hidden="true"><label>Website <input name="website" tabindex="-1" autocomplete="off"></label></div>'
+            '<div class="g2">' + f("name", "Your name *", 'autocomplete="name" maxlength="100" required')
+            + f("phone", "Phone *", 'type="tel" autocomplete="tel" maxlength="20" minlength="7" required') + "</div>"
+            + f("email", "Email", 'type="email" autocomplete="email" maxlength="255"')
+            + f("restaurant", "Restaurant name *", 'autocomplete="organization" maxlength="150" required')
+            + '<div class="g2">' + f("city", "City", 'autocomplete="address-level2" maxlength="100"')
+            + f("outlets", "Number of outlets", 'maxlength="20" placeholder="e.g. 1, 2–5"') + "</div>"
+            + f'<div><label for="{p}-message">What are you looking for?</label><textarea id="{p}-message" name="message" rows="3" maxlength="1000"></textarea></div>'
+            '<p class="er" role="alert" hidden></p>'
+            '<button class="btn btn-p" type="submit">Request demo</button>'
+            f'<noscript><p class="mc" style="font-size:.8125rem">This form needs JavaScript. You can also email these details to <a href="mailto:{EMAIL}">{EMAIL}</a>.</p></noscript></form>'
+            f'<div class="dm-ok" role="status" hidden><span class="ti">{ico("check", "i5")}</span><h2>Request received</h2>'
+            '<p>Thanks! Our team will contact you shortly.</p></div>')
+
+
+DEMO_DIALOG = ('<dialog id="demo" class="dlg" aria-labelledby="demo-t"><div class="dlg-b">'
+               '<button class="x" type="button" aria-label="Close">&times;</button>'
+               '<h2 id="demo-t">Book a free demo</h2><p class="mc">Tell us about your restaurant and we\'ll show you POSINEXT live.</p>'
+               + demo_form("dd") + "</div></dialog>")
+
+DEMO_JS = ("(()=>{const d=document.getElementById('demo');"
+           "document.addEventListener('click',e=>{const a=e.target.closest('a[href=\"/book-a-demo/\"]');"
+           "if(!a||!d||!d.showModal||e.ctrlKey||e.metaKey||e.shiftKey||e.button)return;e.preventDefault();"
+           "const m=a.closest('details');if(m)m.open=false;"
+           "d.querySelector('[name=source]').value=(a.textContent.trim()||'Book a Demo').slice(0,60);"
+           "d.querySelector('form').hidden=false;d.querySelector('.dm-ok').hidden=true;d.showModal()});"
+           "if(d)d.addEventListener('click',e=>{if(e.target===d||e.target.closest('.x'))d.close()});"
+           "document.querySelectorAll('form.dm').forEach(f=>f.addEventListener('submit',async e=>{e.preventDefault();"
+           "const b=f.querySelector('[type=submit]'),er=f.querySelector('.er');let m='';er.hidden=true;b.disabled=true;b.textContent='Sending…';"
+           "try{const r=await fetch(f.action,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(f)))});"
+           "if(r.ok){f.reset();f.hidden=true;f.nextElementSibling.hidden=false}"
+           "else{const j=await r.json().catch(()=>null);m=j&&j.error&&j.error.message||''}}catch(x){}"
+           "if(!f.hidden){er.textContent=(m?m+'. ':'Something went wrong. ')+'Please try again, or email " + EMAIL + ".';er.hidden=false}"
+           "b.disabled=false;b.textContent='Request demo'}))})();")
+
+
 # ---- components ----
 def check_list(items, cls="ck"):
     return f'<ul class="{cls}">' + "".join(
@@ -284,6 +330,7 @@ def page(path, title, desc, body, schema=(), og_type="website", og_img="/img/og.
             f'<meta name="twitter:image" content="{SITE}{og_img}">'
             f'<link rel="alternate" type="text/plain" title="POSINEXT for AI assistants" href="/llms.txt">'
             f'<script type="application/ld+json">{ld}</script></head>')
-    main = f'<a class="skip" href="#main">Skip to content</a>{header(path)}<main id="main">{body}</main>{footer()}'
-    doc = f"{head}<body>{sprite(main)}{main}</body></html>"
+    dlg = "" if 'class="fm dm"' in body else DEMO_DIALOG
+    main = f'<a class="skip" href="#main">Skip to content</a>{header(path)}<main id="main">{body}</main>{footer()}{dlg}'
+    doc = f"{head}<body>{sprite(main)}{main}<script>{DEMO_JS}</script></body></html>"
     return re.sub(r">\s+<", "><", doc)
