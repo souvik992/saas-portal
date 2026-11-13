@@ -1,0 +1,233 @@
+# POSINEXT: full product details
+
+> POSINEXT is restaurant POS software for fine dine restaurants, quick service restaurants (QSR), cafés and cloud kitchens in India: GST billing, KOTs, table management, Table QR ordering, a captain app, kitchen display, online ordering website, app ordering, Swiggy and Zomato integration, inventory and reports. It runs on Windows at the outlet and works offline.
+
+Prices: Base ₹10,800, Growth ₹18,000, Scale ₹27,000 per outlet per year plus GST (10% below Petpooja's published prices). 30-day free trial, no setup fees.
+
+## Fine Dine — https://posinext.com/fine-dine-pos/
+
+POSINEXT Fine Dine (DinePOS) runs on your outlet's Windows PC and keeps billing even when the internet is down. See every table live, fire KOTs to the right kitchen station, split bills any way guests ask and close the day with a Z-report.
+
+- Live floor plan: Tables by area with their status: running, cooking, food ready, served and bill printed, with timers and running totals. Move and merge tables or transfer items between them.
+- Station-wise KOTs: Each dish prints at its own kitchen station. Reduced or cancelled items print as change slips, and a reprint matches the original KOT exactly.
+- Split bills and GST: Split equally, by item (even one dish shared between guests) or by share. Inclusive or exclusive GST, service charge, discounts within role limits and a UPI QR code on the bill.
+- Roles, PINs and approvals: Staff sign in with their name and a PIN. Voids, big discounts and reprints need a manager PIN, and every action is kept in the audit log.
+- Leakage dashboard: Items cancelled after the KOT, voided bills, reprints, complimentary dishes and cash taken out, each with who, when and why.
+- Works offline: The outlet server runs on one PC on your network, so terminals, captain phones and kitchen screens keep working without the internet. Backups run every 15 minutes.
+
+Q: Does the fine dine POS work without internet?
+A: Yes. DinePOS runs its own server on the outlet's PC, so billing, KOTs, the captain app and kitchen screens keep working on your local network when the internet is down. Online orders and cloud backups catch up when it is back.
+
+Q: Which printers does it support?
+A: 58 mm and 80 mm thermal printers that use ESC/POS, on your network (LAN or Wi-Fi) or by USB through Windows. Each kitchen station can have its own printer.
+
+Q: Can guests split the bill?
+A: Yes: equally, by item (including one dish shared between guests) or by share. Each part is rounded so the parts always add up to the bill total, and each part is paid on its own.
+
+Q: Does it handle table reservations?
+A: Yes. Bookings hold their tables ahead of time, and a waitlist lets you seat walk-ins in order.
+
+Q: How much does the fine dine POS cost?
+A: Plans start at ₹10,800 per outlet per year plus GST, with a 30-day free trial. See pricing for what each plan includes.
+
+## QSR — https://posinext.com/qsr-pos/
+
+POSINEXT QSR (Tiffin POS) is a Windows billing app for quick-service restaurants, cafés, bakeries, tiffin centres and cloud kitchens. A photo-first menu, one-tap add and cash, UPI and card in one panel keep the queue moving, online or offline.
+
+- Photo-grid menu: Category tabs and dish photos, so new staff find items fast. Mark a dish sold out in a tap.
+- GST bills in seconds: GST-ready bills with split payments, held bills, shifts and credit notes, in a bill design with your logo for 58 or 80 mm printers.
+- Printing that never loses a ticket: USB, LAN and Wi-Fi receipt printers. Bills and KOTs wait in a print queue and print in order, even after a printer was off.
+- KOTs and kitchen display: KOTs go straight to the kitchen printer or screen, so cooking starts while the customer pays.
+- Stock and recipes: Raw materials, purchases and wastage, with recipes that use up stock as you sell.
+- Offline, with backups: No server and no internet needed to bill. Reports and automatic backups are built in.
+
+Q: Does the QSR billing software work offline?
+A: Yes. Tiffin POS bills with no internet and no server. Online orders and online backups catch up when the connection is back.
+
+Q: Is it right for a café, bakery or tiffin centre?
+A: Yes. QSR is made for counter service of any kind: quick-service restaurants, cafés, bakeries, tiffin centres, food courts and cloud kitchens.
+
+Q: Can I take Swiggy and Zomato orders?
+A: Yes, with the ODS screen: website, app, Swiggy and Zomato orders appear on one screen and KOTs print automatically. See Swiggy & Zomato integration.
+
+Q: Which printers work?
+A: 58 mm and 80 mm thermal receipt printers by USB, LAN or Wi-Fi. A USB printer can be set up from the billing screen in one tap.
+
+Q: How much does it cost?
+A: From ₹10,800 per outlet per year plus GST, after a 30-day free trial. See pricing.
+
+## Table QR — https://posinext.com/table-qr-ordering/
+
+Every table gets its own QR code. Guests scan it with their phone camera to see your menu, order, call a waiter or ask for the bill, with no app to download. Orders land in the POS with the table attached and KOTs print in the kitchen.
+
+- A code for every table: Codes are made per table, with a ready-to-print sheet for table tents and stickers.
+- Digital menu with photos: Guests see the same menu, prices and photos as your POS, so there is nothing to update twice.
+- Staff or automatic accepting: Choose whether staff approve each QR order, or it is accepted and sent to the kitchen straight away.
+- Call a waiter, ask for the bill: A tap on the guest's phone alerts your staff in the POS, with the table marked on the floor plan.
+- Running bill and UPI: Guests see their running bill and can pay by UPI; the cashier confirms the payment in the POS.
+- Works on mobile data: Codes can open through PosiNext Cloud, so guests on mobile data can order, not only those on your Wi-Fi.
+
+Q: Do guests need to download an app?
+A: No. The QR code opens the menu in the phone's browser.
+
+Q: Does QR ordering work with my POS?
+A: Table QR is an add-on for POSINEXT Fine Dine (DinePOS). Orders appear on the floor plan and KOTs print like any other order.
+
+Q: Can staff check QR orders before they go to the kitchen?
+A: Yes. Choose staff accepting, and each QR order waits for a staff member to accept it. Or choose automatic accepting to send it straight through.
+
+Q: How do guests pay?
+A: Guests see their running bill and can pay by UPI; the cashier confirms the payment. They can also pay at the counter as usual.
+
+Q: What does Table QR cost?
+A: Table QR ordering and waiter calling are included in the Growth plan, ₹18,000 per outlet per year plus GST. See pricing.
+
+## Captain App — https://posinext.com/captain-app/
+
+Captains take orders at the table on a phone and fire them straight to the kitchen. The app shows live table status, keeps orders safe when the Wi-Fi drops and tells the cashier when a table asks for the bill.
+
+- Order at the table: Menu with category chips and search, options and add-ons, and a basket grouped by course.
+- Fire by course: Fire everything at once or one course at a time. Notes go to the kitchen on the KOT.
+- Keeps orders when Wi-Fi drops: Every change is saved on the phone and sent in order when the connection is back, so no order is lost.
+- Sections and my tables: Give each captain a section of the floor; captains see their own tables first.
+- Request the bill: One tap asks for the bill and shows a card on every billing screen.
+- Captain performance: Tables served, guests, sales per cover and average bill for each captain, in the reports.
+
+Q: Which phones does the captain app run on?
+A: Android phones and tablets, with an app you download from the customer portal. It also opens in a phone's browser on the outlet network.
+
+Q: Does the captain app need internet?
+A: No. It works over the outlet's Wi-Fi with the POS on your PC. Phones can also connect from anywhere through PosiNext Cloud.
+
+Q: What happens if the Wi-Fi drops while taking an order?
+A: The order is kept on the phone and sent in the right order when the connection returns. Anything that needs attention is shown to the captain.
+
+Q: Is the captain app included in my plan?
+A: The captain app is included in the Growth and Scale plans. See pricing.
+
+## Cloud Kitchen — https://posinext.com/cloud-kitchen-software/
+
+Run your delivery brands from one kitchen. Swiggy, Zomato, website and app orders arrive on one screen, KOTs print automatically and the kitchen display shows what to cook next and how long each order has waited.
+
+- Every channel on one screen: Orders from Swiggy, Zomato, your website and your app on the ODS screen, each marked with its channel.
+- Automatic accepting: Orders can be accepted the moment they arrive, with a chime that repeats until every order is handled.
+- Kitchen display: New, Ready and All-day views per station, with ticket ages turning amber, then red, when an order runs late.
+- Prep clock and late alarm: Each accepted order carries its preparation time, with an alarm when it runs late.
+- Stock by recipe: Recipes use up raw materials as you sell, so you know what to buy before you run out.
+- Nearest-outlet delivery: One brand website can send each delivery to the nearest outlet that is open and delivers to the address.
+
+Q: Can I run several brands from one kitchen?
+A: Yes. Orders for every brand and channel come to one screen and one kitchen display, so the kitchen works from a single queue. Book a demo and we will set it up for your brands.
+
+Q: Which channels are supported?
+A: Swiggy, Zomato, your own ordering website and your own app.
+
+Q: Do I need someone watching the tablets?
+A: No. Orders can be accepted automatically and their KOTs print straight away; a chime repeats until every order is handled.
+
+Q: What does it cost?
+A: Online orders on one screen (ODS) are part of the Growth plan, ₹18,000 per outlet per year plus GST. See pricing.
+
+## Food Delivery App — https://posinext.com/food-delivery-app/
+
+Give your regulars a reason to order from you directly. Your branded app takes delivery and pickup orders that go straight into the POS, with no commission on each order, and every customer stays yours.
+
+- Branded with your name: The app carries your restaurant's name and logo, not a marketplace's.
+- 0% commission: Orders through your own app pay no per-order commission to a marketplace.
+- Straight into the POS: Orders appear in the POS with items, notes and charges, and KOTs print in the kitchen.
+- Delivery areas and charges: Set delivery distances with a charge for each; addresses outside your area are refused before ordering.
+- Order status: Mark orders preparing, ready, out for delivery with the rider, and delivered, from the POS.
+- Safer cash on delivery: Cash-on-delivery orders need a verified mobile number.
+
+Q: Do I pay commission on app orders?
+A: No per-order commission. Payment gateway charges, if you take online payments, are separate.
+
+Q: How is the delivery app different from the ordering website?
+A: The app lives on the customer's phone for repeat orders; the ordering website needs no install and is easy to find on Google. Many restaurants use both; orders from both go into the same POS.
+
+Q: Do orders go into my POS?
+A: Yes. Orders arrive in the POS like any other, KOTs print in the kitchen and the bill is made automatically.
+
+Q: What does it cost?
+A: Pricing depends on your setup. Book a demo and we will send a written quote.
+
+## Website Ordering — https://posinext.com/online-ordering-website/
+
+Take pickup and delivery orders on your own website. The menu, prices, photos and opening hours come from the POS, orders land in the POS with KOTs, and the built-in website builder makes it look like your brand.
+
+- Website builder: Colours, fonts, logo, announcement bar and home-page sections (hero, featured dishes, about, gallery, reviews, hours, map, FAQ) with a live preview and one-click publish.
+- Menu synced from the POS: Menu, prices, dish photos and opening hours always match the POS. Change a price once.
+- Made to be found: Set your own Google title, description and share picture.
+- Nearest outlet for chains: One brand website for several outlets: each delivery goes to the nearest outlet that is open and delivers to that address.
+- Orders wait if your internet drops: Orders placed while the shop is offline wait in the cloud and reach the POS when it reconnects.
+- Safe ordering: Closed or paused outlets get no orders, changed prices are refused before ordering, and cash on delivery needs a verified mobile.
+
+Q: Do I pay commission on website orders?
+A: No per-order commission. Payment gateway charges, if you take online payments, are separate.
+
+Q: Do I need to update the menu on the website?
+A: No. The menu, prices, dish photos and opening hours come from your POS.
+
+Q: I have several outlets. Can I have one website?
+A: Yes. A brand website serves all your outlets: delivery goes to the nearest outlet that is open and delivers to the address; pickup goes to the nearest open outlet.
+
+Q: What if my internet goes down?
+A: Orders placed meanwhile wait in PosiNext Cloud and reach the POS as soon as it reconnects.
+
+Q: What does it cost?
+A: Website orders on the ODS screen are part of the Growth plan. Book a demo for a quote for the website itself.
+
+## App Ordering — https://posinext.com/app-ordering/
+
+Customers order from your own app: browse dishes with photos, add to cart and pay. Every order is accepted automatically and its KOT prints in the kitchen straight away, with nobody touching the POS.
+
+- Photo menu: Categories, search and recommended dishes, with photos from your POS menu.
+- Accepted automatically: Orders are accepted the moment they are placed; staff can still accept by hand if you prefer.
+- KOTs print instantly: The KOT prints at the right kitchen printer, with the customer's note on it.
+- Chime until handled: A chime repeats on every screen while an order waits, so no order is missed in a rush.
+- Prep clock: Each accepted order shows its preparation time, with a late alarm.
+- One screen for every channel: App orders sit with website, Swiggy and Zomato orders, each marked with its channel.
+
+Q: Do staff need to accept app orders?
+A: No. With automatic accepting, orders are accepted and printed the moment they are placed. You can switch to staff accepting at any time.
+
+Q: Which POS does app ordering work with?
+A: Both POSINEXT QSR (Tiffin POS, with the ODS screen) and Fine Dine (DinePOS).
+
+Q: What if the kitchen printer is off?
+A: The KOT waits in the print queue and prints when the printer is back; every screen shows a print alarm meanwhile.
+
+Q: What does it cost?
+A: App orders on one screen are part of the Growth plan. Book a demo for a quote for your app.
+
+## Swiggy & Zomato — https://posinext.com/swiggy-zomato-integration/
+
+Stop re-keying orders from two tablets. Swiggy and Zomato orders arrive in POSINEXT with items, notes, charges and the platform's order number, are accepted automatically and print as KOTs in the kitchen.
+
+- Auto-accept and KOT: Orders are accepted the moment they arrive and their KOTs print at the right kitchen printer.
+- One screen for every channel: Swiggy (S-) and Zomato (Z-) orders sit with website and app orders on one board, each with its channel badge.
+- Status back to the platform: Accepted with the preparation time, food ready, dispatched, completed, or cancelled with a reason: updates go back from the POS.
+- Rider details: The rider's name, phone and progress show on the order.
+- Menu published from the POS: Your POS menu is published to Swiggy and Zomato, and the bill uses each channel's price.
+- No duplicates, no missed cancels: The same order sent twice makes one order; a cancellation from the platform flags the bill for cancelling.
+
+Q: Do I still need to watch the Swiggy and Zomato tablets?
+A: No. Orders are accepted and printed from the POS, so nobody has to watch a tablet during the rush.
+
+Q: Do I need my own Swiggy and Zomato accounts?
+A: Yes. Your restaurant must be listed on Swiggy and/or Zomato; POSINEXT connects those listings to your POS.
+
+Q: Which POS does the integration work with?
+A: Both POSINEXT QSR (Tiffin POS, on the ODS screen) and Fine Dine (DinePOS).
+
+Q: Does the menu sync to Swiggy and Zomato?
+A: Your POS menu is published to the platforms from POSINEXT, and orders are billed at the channel's price.
+
+Q: What does it cost?
+A: Swiggy and Zomato orders on one screen (ODS) are part of the Growth plan, ₹18,000 per outlet per year plus GST. See pricing.
+
+## Plans
+
+- Base: ₹10,800 per outlet per year plus GST. Billing, menu, stock and reports for one outlet. Includes: Fine Dine (DinePOS) or QSR (Tiffin POS); Billing with GST and UPI, works offline; Menu management, stock and recipes; Reports and automatic backups; Online installation and training; Support by ticket and email.
+- Growth: ₹18,000 per outlet per year plus GST. Add-ons for busier floors and kitchens. Includes: Captain app for waiters' phones; Kitchen display; Table QR ordering and waiter calling; ODS: website, app, Swiggy and Zomato orders on one screen; Installation and training: 1 visit.
+- Scale: ₹27,000 per outlet per year plus GST. For high-volume outlets that want us on site. Includes: Installation and training: 2 visits; Priority support.

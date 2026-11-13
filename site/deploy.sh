@@ -35,13 +35,26 @@ cat > "$OURS" <<EOF
 # posinext.com website (saas-portal site/deploy.sh). Imported by the Caddyfile.
 posinext.com {
   root * $DIR
-  encode gzip
-  @assets path /assets/*
-  header @assets Cache-Control "public, max-age=31536000, immutable"
+  encode zstd gzip
+  @fonts path /fonts/*
+  header @fonts Cache-Control "public, max-age=31536000, immutable"
+  @img path /img/* /favicon.svg
+  header @img Cache-Control "public, max-age=2592000"
+  @pages not path /fonts/* /img/* /favicon.svg
+  header @pages Cache-Control "public, max-age=600"
   header X-Content-Type-Options nosniff
   header Referrer-Policy strict-origin-when-cross-origin
-  try_files {path} {path}/index.html /index.html
+  # old Lovable script and style files are gone: no page needs them
+  @lovable path /assets/*
+  respond @lovable 410
+  try_files {path} {path}/index.html
   file_server
+  # unknown addresses answer 404 with the site's 404 page (not the home page), so search engines see a real 404
+  handle_errors {
+    @404 expression "{err.status_code} == 404"
+    rewrite @404 /404.html
+    file_server
+  }
 }
 www.posinext.com {
   redir https://posinext.com{uri} permanent
