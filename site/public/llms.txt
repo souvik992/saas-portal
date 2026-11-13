@@ -19,15 +19,15 @@ POSINEXT runs on Windows at the outlet and supports offline operation for suppor
 
 ## Products
 
-- [Fine Dine POS](https://posinext.com/#core-pos): table billing, live floor plan, KOTs to kitchen stations and split bills
-- [QSR POS](https://posinext.com/#qsr): counter billing with a photo menu, held bills and payment workflows
-- [Table QR](https://posinext.com/#table-qr): guests scan a table code to view the menu and place orders
-- [Captain App](https://posinext.com/#captain-app): waiters take orders at the table on a phone or tablet
-- [Cloud Kitchen](https://posinext.com/#cloud-kitchen): multiple brands and kitchen stations from one operation
-- [Food Delivery App](https://posinext.com/#food-delivery-app): the restaurant's own branded ordering app
-- [Website Ordering](https://posinext.com/#delivery-website): the restaurant's own ordering website
-- [App Ordering](https://posinext.com/#app-ordering): customers order from the restaurant's app
-- [Swiggy & Zomato](https://posinext.com/#swiggy-zomato): supported aggregator orders flow into the POS workflow
+- [Fine Dine POS](https://posinext.com/fine-dine): table billing, live floor plan, KOTs to kitchen stations and split bills
+- [QSR POS](https://posinext.com/qsr): counter billing with a photo menu, held bills and payment workflows
+- [Table QR](https://posinext.com/table-qr): guests scan a table code to view the menu and place orders
+- [Captain App](https://posinext.com/captain-app): waiters take orders at the table on a phone or tablet
+- [Cloud Kitchen](https://posinext.com/cloud-kitchen): multiple brands and kitchen stations from one operation
+- [Food Delivery App](https://posinext.com/food-delivery-app): the restaurant's own branded ordering app
+- [Website Ordering](https://posinext.com/website-ordering): the restaurant's own ordering website
+- [App Ordering](https://posinext.com/app-ordering): customers order from the restaurant's app
+- [Swiggy & Zomato](https://posinext.com/swiggy-zomato): supported aggregator orders flow into the POS workflow
 
 ## Get started
 
