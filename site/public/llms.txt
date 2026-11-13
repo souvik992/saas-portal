@@ -1,32 +1,47 @@
 # POSINEXT
 
-> POSINEXT is restaurant POS software for fine dine restaurants, quick service restaurants (QSR) and cloud kitchens in India: billing, KOTs, Table QR ordering, a captain app, kitchen display, online ordering website, app ordering, delivery app, Swiggy and Zomato integration and analytics on one connected platform.
+> POSINEXT is restaurant POS software for fine dine restaurants, quick service restaurants (QSR), cafés and cloud kitchens in India: GST billing, KOTs, table management, Table QR ordering, a captain app, kitchen display, online ordering website, app ordering, Swiggy and Zomato integration, inventory and reports. It runs on Windows at the outlet and works offline.
 
-POSINEXT runs on Windows at the outlet and works offline; outlets connect to POSINEXT Cloud for online orders, backups and licences. Customers sign in at the customer portal to download the apps, manage licences and open support tickets.
+Prices: Base ₹10,800, Growth ₹18,000, Scale ₹27,000 per outlet per year plus GST (10% below Petpooja's published prices). 30-day free trial, no setup fees.
 
 ## Products
 
-- [Fine Dine POS](https://posinext.com/#core-pos): table billing, live floor plan, KOTs to kitchen stations, split bills, service charge and GST
-- [QSR POS](https://posinext.com/#qsr): counter billing with a photo menu, held bills, cash / UPI / card
-- [Table QR](https://posinext.com/#table-qr): guests scan the table's code to see the menu, order, call a waiter and pay
-- [Captain App](https://posinext.com/#captain-app): waiters take orders at the table on a phone or tablet
-- [Cloud Kitchen](https://posinext.com/#cloud-kitchen): several brands from one kitchen, Swiggy and Zomato orders in the POS
-- [Food Delivery App](https://posinext.com/#food-delivery-app): the restaurant's own branded ordering app
-- [Website Ordering](https://posinext.com/#delivery-website): the restaurant's own ordering website, synced with the POS menu
-- [App Ordering](https://posinext.com/#app-ordering): customers order from the restaurant's app; orders are accepted automatically and KOTs print in the kitchen
-- [Swiggy & Zomato](https://posinext.com/#swiggy-zomato): POSINEXT's own Swiggy and Zomato integration; orders are accepted automatically and KOTs print without a tap
+- [Fine Dine](https://posinext.com/fine-dine-pos/): POSINEXT Fine Dine (DinePOS) runs on your outlet's Windows PC and keeps billing even when the internet is down. See every table live, fire KOTs to the right kitchen station, split bills any way guests ask and close the day with a Z-report.
+- [QSR](https://posinext.com/qsr-pos/): POSINEXT QSR (Tiffin POS) is a Windows billing app for quick-service restaurants, cafés, bakeries, tiffin centres and cloud kitchens. A photo-first menu, one-tap add and cash, UPI and card in one panel keep the queue moving, online or offline.
+- [Table QR](https://posinext.com/table-qr-ordering/): Every table gets its own QR code. Guests scan it with their phone camera to see your menu, order, call a waiter or ask for the bill, with no app to download. Orders land in the POS with the table attached and KOTs print in the kitchen.
+- [Captain App](https://posinext.com/captain-app/): Captains take orders at the table on a phone and fire them straight to the kitchen. The app shows live table status, keeps orders safe when the Wi-Fi drops and tells the cashier when a table asks for the bill.
+- [Cloud Kitchen](https://posinext.com/cloud-kitchen-software/): Run your delivery brands from one kitchen. Swiggy, Zomato, website and app orders arrive on one screen, KOTs print automatically and the kitchen display shows what to cook next and how long each order has waited.
+- [Food Delivery App](https://posinext.com/food-delivery-app/): Give your regulars a reason to order from you directly. Your branded app takes delivery and pickup orders that go straight into the POS, with no commission on each order, and every customer stays yours.
+- [Website Ordering](https://posinext.com/online-ordering-website/): Take pickup and delivery orders on your own website. The menu, prices, photos and opening hours come from the POS, orders land in the POS with KOTs, and the built-in website builder makes it look like your brand.
+- [App Ordering](https://posinext.com/app-ordering/): Customers order from your own app: browse dishes with photos, add to cart and pay. Every order is accepted automatically and its KOT prints in the kitchen straight away, with nobody touching the POS.
+- [Swiggy & Zomato](https://posinext.com/swiggy-zomato-integration/): Stop re-keying orders from two tablets. Swiggy and Zomato orders arrive in POSINEXT with items, notes, charges and the platform's order number, are accepted automatically and print as KOTs in the kitchen.
 
-## Get started
+## Pages
 
-- [Book a demo](https://posinext.com/#demo): the team shows POSINEXT live for your restaurant
-- [Customer portal](https://portal.posinext.com/login): sign in or create an account, download the apps, start the free trial, manage licences and support tickets
+- [Features](https://posinext.com/features/)
+- [Pricing](https://posinext.com/pricing/)
+- [POSINEXT vs Petpooja](https://posinext.com/compare/petpooja-alternative/)
+- [Documentation](https://posinext.com/docs/)
+- [Help Center](https://posinext.com/help/)
+- [Changelog](https://posinext.com/changelog/)
+- [Book a demo](https://posinext.com/book-a-demo/)
+- [Customer portal (sign in, free trial)](https://portal.posinext.com/register)
+- [Full details for language models](https://posinext.com/llms-full.txt)
 
-## Support
+## Guides
 
-- Email: [support@posinext.com](mailto:support@posinext.com)
+- [How to Choose Restaurant POS Software in India (2026 Checklist)](https://posinext.com/blog/how-to-choose-restaurant-pos-software-india/): A practical checklist for choosing restaurant POS software in India: offline billing, GST, KOTs, Swiggy and Zomato, captain app, inventory, pricing and support.
+- [GST on Restaurant Bills in India: Rates, Rules and Billing Guide](https://posinext.com/blog/gst-on-restaurant-bills-india/): GST on restaurant bills explained: the 5% and 18% rates, composition scheme, Swiggy and Zomato orders, service charge, and what a GST bill must show.
+- [Swiggy and Zomato POS Integration: How It Works and What to Ask](https://posinext.com/blog/swiggy-zomato-pos-integration-guide/): How Swiggy and Zomato POS integration works: orders into the POS, auto-accept, KOT printing, menu publishing and status updates. What to check first.
+- [How to Reduce Revenue Leakage in Your Restaurant: 8 Controls](https://posinext.com/blog/reduce-restaurant-revenue-leakage/): Revenue leakage in restaurants: cancelled items after KOT, voids, reprints, unbilled food and cash out. Eight POS controls that stop money slipping away.
+
+## Contact
+
+- Email: support@posinext.com
+- Book a demo: https://posinext.com/book-a-demo/
 
 ## Policies
 
-- [Privacy](https://posinext.com/privacy)
-- [Terms](https://posinext.com/terms)
-- [Security](https://posinext.com/security)
+- [Privacy](https://posinext.com/privacy/)
+- [Terms](https://posinext.com/terms/)
+- [Security](https://posinext.com/security/)

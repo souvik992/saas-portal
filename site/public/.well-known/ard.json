@@ -1,37 +1,70 @@
 {
   "specVersion": "0.9",
-  "publisher": { "name": "POSINEXT", "url": "https://posinext.com/" },
+  "publisher": {
+    "name": "POSINEXT",
+    "url": "https://posinext.com/"
+  },
   "entries": [
     {
       "identifier": "urn:air:posinext.com:site:llms",
       "displayName": "POSINEXT overview for language models",
-      "description": "What POSINEXT is, its products, how to book a demo, sign in and get support.",
       "type": "text/markdown",
       "url": "https://posinext.com/llms.txt",
-      "representativeQueries": ["What is POSINEXT?", "Restaurant POS software for fine dine and QSR in India", "Which products does POSINEXT offer?"]
+      "representativeQueries": [
+        "What is POSINEXT?",
+        "Restaurant POS software for fine dine and QSR in India"
+      ]
+    },
+    {
+      "identifier": "urn:air:posinext.com:site:llms-full",
+      "displayName": "POSINEXT full product details",
+      "type": "text/markdown",
+      "url": "https://posinext.com/llms-full.txt",
+      "representativeQueries": [
+        "POSINEXT features",
+        "Does POSINEXT work offline?"
+      ]
+    },
+    {
+      "identifier": "urn:air:posinext.com:site:pricing",
+      "displayName": "POSINEXT pricing",
+      "type": "text/html",
+      "url": "https://posinext.com/pricing/",
+      "representativeQueries": [
+        "How much does POSINEXT cost?",
+        "Restaurant POS price India",
+        "Petpooja alternative cheaper"
+      ]
     },
     {
       "identifier": "urn:air:posinext.com:site:home",
       "displayName": "POSINEXT restaurant POS software",
-      "description": "The POSINEXT home page: Fine Dine, QSR, Table QR, Captain App, Cloud Kitchen, delivery app, website ordering, app ordering and Swiggy & Zomato integration.",
       "type": "text/html",
       "url": "https://posinext.com/",
-      "representativeQueries": ["Book a demo of POSINEXT", "POS with Table QR ordering", "Restaurant billing software with captain app"]
+      "representativeQueries": [
+        "Book a demo of POSINEXT",
+        "POS with Table QR ordering",
+        "Swiggy Zomato POS integration"
+      ]
     },
     {
-      "identifier": "urn:air:posinext.com:portal:login",
-      "displayName": "POSINEXT customer portal",
-      "description": "Sign in or create an account: downloads, free trial, licences and support tickets.",
+      "identifier": "urn:air:posinext.com:portal:register",
+      "displayName": "POSINEXT free trial",
       "type": "text/html",
-      "url": "https://portal.posinext.com/login",
-      "representativeQueries": ["Sign in to POSINEXT", "Download POSINEXT for Windows", "Start a POSINEXT free trial"]
+      "url": "https://portal.posinext.com/register",
+      "representativeQueries": [
+        "Start a POSINEXT free trial",
+        "Download POSINEXT for Windows"
+      ]
     },
     {
       "identifier": "urn:air:posinext.com:site:sitemap",
       "displayName": "POSINEXT sitemap",
       "type": "application/xml",
       "url": "https://posinext.com/sitemap.xml",
-      "representativeQueries": ["POSINEXT pages", "POSINEXT privacy, terms and security pages"]
+      "representativeQueries": [
+        "POSINEXT pages"
+      ]
     }
   ]
 }

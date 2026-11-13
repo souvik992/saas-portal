@@ -22,3 +22,6 @@ build-cache/
 
 # SaaS API data (SQLite)
 cloud/saas/saas-data/
+
+# site build cache
+__pycache__/
