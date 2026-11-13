@@ -96,6 +96,42 @@ export const account = {
   revokeOtherSessions: () => api<{ ok: true; signedOut: number }>("POST", "/v1/account/sessions/revoke-others"),
 };
 
+// ---- sales analytics (GET /v1/account/analytics; amounts in paise, dates are business dates in India)
+export interface SalesTotals { sales: number; orders: number; avgTicket: number; tax: number; discount: number; covers: number; voids: number; voidAmount: number; refunds: number; refundAmount: number }
+export interface Analytics {
+  range: { from: string; to: string; days: number };
+  previous: { from: string; to: string };
+  filters: {
+    brands: Array<{ slug: string; name: string }>;
+    stores: Array<{ slug: string; name: string; product: string | null; brand: string | null; lastSyncAt: number | null }>;
+    terminals: Array<{ store: string; name: string }>;
+  };
+  totals: SalesTotals;
+  previousTotals: SalesTotals;
+  daily: Array<{ date: string; sales: number; orders: number }>;
+  /** dow: 0 = Sunday; hour: 0-23 */
+  hours: Array<{ dow: number; hour: number; orders: number; sales: number }>;
+  topItems: Array<{ name: string; category: string; qtyMilli: number; amount: number }>;
+  categories: Array<{ name: string; qtyMilli: number; amount: number }>;
+  itemTotals: { qtyMilli: number; amount: number };
+  /** "" = the POS build did not record it */
+  orderTypes: Array<{ type: string; orders: number; sales: number }>;
+  channels: Array<{ channel: string; orders: number; sales: number }>;
+  payments: Array<{ mode: string; amount: number }>;
+  outlets: Array<{ slug: string; name: string; product: string | null; brand: string | null; brandName: string | null; lastSyncAt: number | null; sales: number; orders: number; avgTicket: number; previousSales: number }>;
+  terminals: Array<{ store: string; storeName: string; name: string; sales: number; orders: number; avgTicket: number }>;
+  recorded: { items: boolean; orderTypes: boolean; terminals: boolean };
+  lastSyncAt: number | null;
+  generatedAt: number;
+}
+export const analytics = (q: { from: string; to: string; brand?: string; store?: string; terminal?: string }) => {
+  const p = new URLSearchParams({ from: q.from, to: q.to });
+  if (q.brand) p.set("brand", q.brand);
+  if (q.store) p.set("store", q.store);
+  if (q.terminal) p.set("terminal", q.terminal);
+  return api<Analytics>("GET", `/v1/account/analytics?${p}`);
+};
+
 /** A device signed in to the portal (`id` is a short reference, not the sign-in itself). */
 export interface SignIn { id: string; createdAt: number; lastUsedAt: number; userAgent: string; current: boolean }
 

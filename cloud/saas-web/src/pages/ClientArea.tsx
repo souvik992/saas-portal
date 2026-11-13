@@ -1,5 +1,5 @@
 import {
-  Activity, ArrowRight, BookOpen, Check, CreditCard, Download as DownloadIcon, KeyRound, LifeBuoy, Megaphone, MessageSquarePlus, Puzzle, Search, Smartphone, UserRound,
+  Activity, ArrowRight, BarChart3, BookOpen, Check, CreditCard, Download as DownloadIcon, KeyRound, LifeBuoy, Megaphone, MessageSquarePlus, Puzzle, Search, Smartphone, UserRound,
 } from "lucide-react";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { account, ApiError, downloadHref, support, type Download, type Licence, type Me, type ProductCode, type SignIn } from "../api";
@@ -10,12 +10,14 @@ import { PRODUCT_COPY, PRODUCT_ORDER } from "../products";
 import { Link, navigate, useLocation } from "../router";
 import { useSession } from "../session";
 import { licenceSummary, TRIAL_DAYS } from "../licence-summary";
+import { AnalyticsPage } from "./Analytics";
 import { Announcements, KnowledgeBase, ServiceStatus, SupportTickets } from "./Support";
 
 /** The dashboard's tiles, in three groups. */
 interface Tile { to: string; icon: typeof UserRound; title: string; about: string }
 const GROUPS: Array<{ name: string; tiles: Tile[] }> = [
   { name: "Your business", tiles: [
+    { to: "/app/analytics", icon: BarChart3, title: "Analytics", about: "Sales, orders and top items by outlet" },
     { to: "/app/account", icon: UserRound, title: "My account", about: "Business, products and password" },
     { to: "/app/licences", icon: KeyRound, title: "Licences", about: "PCs, trials and licence keys" },
     { to: "/app/plans", icon: CreditCard, title: "Plans & billing", about: "Pick a plan before your trial ends" },
@@ -77,6 +79,7 @@ export function ClientArea({ path }: { path: string }) {
   if (!me) return <div className="wrap empty">Loading…</div>;
   switch (path) {
     case "/app": return <AreaHome me={me} />;
+    case "/app/analytics": return <AnalyticsPage me={me} />;
     case "/app/account": return <AccountPage me={me} />;
     case "/app/downloads": return <DownloadsPage me={me} kind="app" />;
     case "/app/addons": return <DownloadsPage me={me} kind="addon" />;
