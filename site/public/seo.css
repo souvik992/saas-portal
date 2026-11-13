@@ -35,3 +35,9 @@ h2,h3{font-family:var(--font-display);letter-spacing:-.025em;color:var(--foregro
 .footrow{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
 .footlinks{display:flex;flex-wrap:wrap;gap:1.25rem}
 @media(max-width:767px){.top>div{align-items:flex-start;flex-direction:column;padding:1rem 1.25rem}.top nav{gap:.85rem;flex-wrap:wrap}.top nav a{font-size:.8rem}main.wrap{padding:3.5rem 1rem 4rem}.grid{margin-top:2.5rem}.content{margin-top:3rem}.foot .wrap{width:calc(100% - 2rem)}}
+
+/* The standalone pages use the homepage header but expose its links on mobile. */
+.top>div{height:auto!important;min-height:4rem;padding-top:1rem;padding-bottom:1rem}
+.top nav{display:flex!important;flex-wrap:wrap;gap:1rem}
+.top button{display:none!important}
+@media(max-width:767px){.top>div{align-items:flex-start;flex-direction:column}.top nav{gap:.8rem}.top nav a{font-size:.8rem}}
