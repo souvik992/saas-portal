@@ -1,32 +1,39 @@
 # POSINEXT
 
-> POSINEXT is restaurant POS software for fine dine restaurants, quick service restaurants (QSR) and cloud kitchens in India: billing, KOTs, Table QR ordering, a captain app, kitchen display, online ordering website, app ordering, delivery app, Swiggy and Zomato integration and analytics on one connected platform.
+> POSINEXT is restaurant POS software for fine dine restaurants, quick service restaurants (QSR), cafés and cloud kitchens in India. It connects billing, KOTs, Table QR, Captain App, kitchen display, website and app ordering, delivery app, Swiggy and Zomato integration and analytics.
 
-POSINEXT runs on Windows at the outlet and works offline; outlets connect to POSINEXT Cloud for online orders, backups and licences. Customers sign in at the customer portal to download the apps, manage licences and open support tickets.
+POSINEXT runs on Windows at the outlet and is designed to work offline for local POS operations. Outlets connect to POSINEXT Cloud for online orders, backups and licences. Customers use the customer portal for installers, licences and support tickets.
+
+## Public pages
+- [Home](https://posinext.com/)
+- [About POSINEXT](https://posinext.com/about)
+- [Restaurant POS pricing](https://posinext.com/pricing): Base ₹10,800, Growth ₹18,000 and Scale ₹27,000 per outlet per year, plus GST
+- [Product documentation](https://posinext.com/documentation)
+- [Help Center](https://posinext.com/help-center)
+- [Service status](https://posinext.com/status)
+- [Product changelog](https://posinext.com/changelog)
+- [Contact](https://posinext.com/contact)
+- [Blog](https://posinext.com/blog)
+- [Careers](https://posinext.com/careers)
 
 ## Products
-
-- [Fine Dine POS](https://posinext.com/#core-pos): table billing, live floor plan, KOTs to kitchen stations, split bills, service charge and GST
-- [QSR POS](https://posinext.com/#qsr): counter billing with a photo menu, held bills, cash / UPI / card
-- [Table QR](https://posinext.com/#table-qr): guests scan the table's code to see the menu, order, call a waiter and pay
+- [Fine Dine POS](https://posinext.com/#core-pos): table billing, live floor plan, KOTs to kitchen stations, split bills and GST
+- [QSR POS](https://posinext.com/#qsr): counter billing with a photo menu, held bills and cash / UPI / card
+- [Table QR](https://posinext.com/#table-qr): guests scan a table code to see the menu, order and call a waiter
 - [Captain App](https://posinext.com/#captain-app): waiters take orders at the table on a phone or tablet
-- [Cloud Kitchen](https://posinext.com/#cloud-kitchen): several brands from one kitchen, Swiggy and Zomato orders in the POS
-- [Food Delivery App](https://posinext.com/#food-delivery-app): the restaurant's own branded ordering app
-- [Website Ordering](https://posinext.com/#delivery-website): the restaurant's own ordering website, synced with the POS menu
-- [App Ordering](https://posinext.com/#app-ordering): customers order from the restaurant's app; orders are accepted automatically and KOTs print in the kitchen
-- [Swiggy & Zomato](https://posinext.com/#swiggy-zomato): POSINEXT's own Swiggy and Zomato integration; orders are accepted automatically and KOTs print without a tap
+- [Cloud Kitchen](https://posinext.com/#cloud-kitchen): multi-brand kitchen operations and order handling
+- [Website and app ordering](https://posinext.com/#delivery-website): direct restaurant online ordering synced with POS
+- [Swiggy and Zomato](https://posinext.com/#swiggy-zomato): integrated aggregator orders and kitchen tickets
 
 ## Get started
-
-- [Book a demo](https://posinext.com/#demo): the team shows POSINEXT live for your restaurant
-- [Customer portal](https://portal.posinext.com/login): sign in or create an account, download the apps, start the free trial, manage licences and support tickets
+- [Book a demo](https://posinext.com/#demo)
+- [Customer portal](https://portal.posinext.com/login): account access, installers, licence management and support tickets
+- [Register / start trial](https://portal.posinext.com/register): portal trial (30 days)
 
 ## Support
-
 - Email: [support@posinext.com](mailto:support@posinext.com)
 
 ## Policies
-
 - [Privacy](https://posinext.com/privacy)
 - [Terms](https://posinext.com/terms)
 - [Security](https://posinext.com/security)
