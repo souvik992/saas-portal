@@ -29,7 +29,8 @@ export function Layout({ children }: { children: ReactNode }) {
           <span className="spacer" />
           {me ? (
             <>
-              <Link to="/app" className="navlink">Dashboard</Link>
+              <Link to="/app" className="navlink nav-wide">Dashboard</Link>
+              <Link to="/app/analytics" className="navlink">Analytics</Link>
               <button className="navlink" onClick={() => void signOut().then(() => navigate("/"))}>Sign out</button>
               <Link to="/app/account" className="avatar" aria-label={`My account (${me.user.name})`} title={me.user.name}>
                 {(me.user.name.trim()[0] ?? "?").toUpperCase()}
