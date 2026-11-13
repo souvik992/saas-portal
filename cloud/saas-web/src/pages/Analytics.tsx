@@ -12,7 +12,7 @@ import { Link } from "../router";
  * always carry their name and figure beside them.
  */
 
-const TYPE_COLOR: Record<string, string> = { dine_in: "var(--viz-1)", takeaway: "var(--viz-2)", delivery: "var(--viz-3)", "": "var(--viz-none)" };
+const TYPE_COLOR: Record<string, string> = { dine_in: "var(--viz-1)", takeaway: "var(--viz-2)", delivery: "var(--viz-3)", counter: "var(--viz-4)", "": "var(--viz-none)" };
 const DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const WEEK = [1, 2, 3, 4, 5, 6, 0]; // Monday first
 
@@ -366,7 +366,7 @@ export function AnalyticsPage({ me }: { me: Me }) {
                   : <NeedsUpdate what="the items on each bill" />}
               </Panel>
 
-              <Panel icon={<ShoppingCart size={18} />} title="Order types" hint="Dine-in, takeaway and delivery">
+              <Panel icon={<ShoppingCart size={18} />} title="Order types" hint="Counter, dine-in, takeaway and delivery">
                 {data.recorded.orderTypes ? <OrderTypes types={data.orderTypes} /> : <NeedsUpdate what="the order type" />}
                 {data.channels.some((c) => c.channel !== "" && c.channel !== "pos") ? (
                   <>

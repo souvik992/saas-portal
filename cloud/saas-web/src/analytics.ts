@@ -84,7 +84,7 @@ export function ago(at: number, now = Date.now()): string {
 }
 
 const LABELS: Record<string, string> = {
-  dine_in: "Dine-in", takeaway: "Takeaway", delivery: "Delivery", pos: "At the outlet", website: "Your website", app: "Your app", swiggy: "Swiggy", zomato: "Zomato",
+  dine_in: "Dine-in", takeaway: "Takeaway", delivery: "Delivery", counter: "Counter", pos: "At the outlet", website: "Your website", app: "Your app", swiggy: "Swiggy", zomato: "Zomato",
   cash: "Cash", upi: "UPI", card: "Card", wallet: "Wallet", credit: "Credit", due: "Due (pay later)", complimentary: "Complimentary", online: "Paid online", other: "Other",
 };
 /** A plain name for an order type, sales channel or payment mode ("" = the POS did not record it). */

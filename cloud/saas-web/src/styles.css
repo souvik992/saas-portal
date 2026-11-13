@@ -208,7 +208,7 @@ main:has(.auth-frame-wrap) + .footer, main:has(.auth) + .footer { margin-top: 0;
 
 /* analytics (pages/Analytics.tsx). Chart colours: one blue for amounts (light = little, dark = a lot); order types
    use three fixed colours (checked for colour-blind readers) and always show their name and figure as well. */
-.an { --viz: #2a78d6; --viz-soft: #cde2fb; --viz-1: #2a78d6; --viz-2: #eb6834; --viz-3: #1baf7a; --viz-none: #b9bec8; }
+.an { --viz: #2a78d6; --viz-soft: #cde2fb; --viz-1: #2a78d6; --viz-2: #eb6834; --viz-3: #1baf7a; --viz-4: #eda100; --viz-none: #b9bec8; }
 .an-filters { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; padding: 16px 20px; margin-bottom: 16px; }
 .an-filter { display: grid; gap: 4px; min-width: 150px; }
 .an-filter > span { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: var(--muted-foreground); }
