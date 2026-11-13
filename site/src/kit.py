@@ -276,14 +276,14 @@ def crumbs(trail):
     return f'<nav class="bc w" aria-label="Breadcrumb"><ol>{lis}</ol></nav>', schema
 
 
-ORG = {"@type": "Organization", "@id": SITE + "/#org", "name": "POSINEXT", "url": SITE + "/",
+ORG = {"@type": "Organization", "@id": SITE + "/#org", "name": "POSINEXT", "alternateName": ["PosiNext", "Posi Next"], "url": SITE + "/",
        "logo": {"@type": "ImageObject", "url": SITE + "/favicon.svg"}, "email": EMAIL,
        "description": "Restaurant POS software for fine dine restaurants, quick service restaurants and cloud kitchens in India.",
        "areaServed": {"@type": "Country", "name": "India"},
        "contactPoint": [{"@type": "ContactPoint", "contactType": "customer support", "email": EMAIL,
                          "areaServed": "IN", "availableLanguage": ["English", "Hindi"]},
                         {"@type": "ContactPoint", "contactType": "sales", "url": SITE + "/book-a-demo/", "areaServed": "IN"}]}
-WEBSITE = {"@type": "WebSite", "@id": SITE + "/#website", "name": "POSINEXT", "url": SITE + "/",
+WEBSITE = {"@type": "WebSite", "@id": SITE + "/#website", "name": "POSINEXT", "alternateName": ["PosiNext", "Posi Next", "posinext.com"], "url": SITE + "/",
            "inLanguage": "en-IN", "publisher": {"@id": SITE + "/#org"}}
 OFFERS = {"@type": "AggregateOffer", "priceCurrency": "INR", "lowPrice": "10800", "highPrice": "27000", "offerCount": "3",
           "url": SITE + "/pricing/"}

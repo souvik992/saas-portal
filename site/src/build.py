@@ -91,7 +91,7 @@ def home():
                         "Reports", "Offline mode", "Automatic backups"]), fq_schema,
               {"@type": "ItemList", "name": "POSINEXT products", "itemListElement": [
                   {"@type": "ListItem", "position": i + 1, "name": p["name"].replace("&amp;", "&"), "url": f'{SITE}/{p["slug"]}/'} for i, p in enumerate(P)]}]
-    write("/", page("/", "Restaurant POS Software & Billing System in India | POSINEXT", desc, body, schema, preload="core-pos"), "1.0")
+    write("/", page("/", "POSINEXT: Restaurant POS & Billing Software in India", desc, body, schema, preload="core-pos"), "1.0")
 
 
 # ---------------- product pages ----------------
