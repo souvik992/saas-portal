@@ -132,6 +132,38 @@ export const analytics = (q: { from: string; to: string; brand?: string; store?:
   return api<Analytics>("GET", `/v1/account/analytics?${p}`);
 };
 
+// ---- purchases and stock (GET /v1/account/inventory; quantities in thousandths of the unit, amounts in paise)
+export interface StockLine { store: string; storeName: string; name: string; unit: string; onHandMilli: number; reorderMilli: number; unitCost: number | null; value: number; low: boolean }
+export interface Inventory {
+  range: { from: string; to: string; days: number };
+  previous: { from: string; to: string };
+  filters: { brands: Array<{ slug: string; name: string }>; stores: Array<{ slug: string; name: string; brand: string | null }> };
+  stock: {
+    value: number; items: number; low: number; out: number;
+    /** the oldest stock list among the outlets shown */
+    updatedAt: number | null;
+    outlets: Array<{ slug: string; name: string; brandName: string | null; items: number; low: number; value: number; updatedAt: number | null }>;
+    lowItems: StockLine[];
+    /** the whole list, when one outlet is chosen */
+    list: StockLine[] | null;
+  };
+  purchases: {
+    total: number; count: number; previousTotal: number;
+    daily: Array<{ date: string; total: number; count: number }>;
+    suppliers: Array<{ supplier: string; total: number; count: number }>;
+    materials: Array<{ name: string; unit: string; qtyMilli: number; amount: number }>;
+    recent: Array<{ store: string; storeName: string; date: string; supplier: string; billNo: string | null; total: number; lines: number }>;
+  };
+  cost: { used: number; waste: number; sales: number; recorded: boolean };
+  generatedAt: number;
+}
+export const inventory = (q: { from: string; to: string; brand?: string; store?: string }) => {
+  const p = new URLSearchParams({ from: q.from, to: q.to });
+  if (q.brand) p.set("brand", q.brand);
+  if (q.store) p.set("store", q.store);
+  return api<Inventory>("GET", `/v1/account/inventory?${p}`);
+};
+
 /** A device signed in to the portal (`id` is a short reference, not the sign-in itself). */
 export interface SignIn { id: string; createdAt: number; lastUsedAt: number; userAgent: string; current: boolean }
 

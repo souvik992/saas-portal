@@ -26,6 +26,7 @@ npm run dev
 | `/register` (`?product=fine_dine` or `tiffin_qsr`) | Restaurant type (Fine Dine picks DinePOS; QSR, Tiffin, Café, Cloud Kitchen pick Tiffin POS), product choice and details, then the 6-digit email code |
 | `/forgot` | Email code, then a new password |
 | `/app/...` | Client area (signed in) |
+| `/app/inventory` | Purchases and stock, view only (`pages/Inventory.tsx`): stock value, materials running low, purchases by day, supplier and material, food cost against sales, stock by outlet, one outlet's stock list, recent purchases. Entered in the POS at each outlet |
 | `/app/analytics` | Sales analytics for the account's outlets: dates, brand, outlet and terminal filters; totals against the period before, daily sales, peak hours, top items, order types, payments, outlets and terminals (`pages/Analytics.tsx`; charts are hand-drawn SVG and CSS, no chart library) |
 
 ## Hosting

@@ -16,10 +16,10 @@ const TYPE_COLOR: Record<string, string> = { dine_in: "var(--viz-1)", takeaway: 
 const DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const WEEK = [1, 2, 3, 4, 5, 6, 0]; // Monday first
 
-function Delta({ now, before, days }: { now: number; before: number; days: number }) {
+export function Delta({ now, before, days, quiet = "No sales" }: { now: number; before: number; days: number; quiet?: string }) {
   const c = change(now, before);
   const than = days === 1 ? "the day before" : `the ${days} days before`;
-  if (c === null) return <span className="an-delta muted">No sales in {than}</span>;
+  if (c === null) return <span className="an-delta muted">{quiet} in {than}</span>;
   const up = c >= 0;
   return (
     <span className="an-delta">
@@ -29,7 +29,7 @@ function Delta({ now, before, days }: { now: number; before: number; days: numbe
   );
 }
 
-function Kpi({ icon, title, value, children }: { icon: ReactNode; title: string; value: string; children?: ReactNode }) {
+export function Kpi({ icon, title, value, children }: { icon: ReactNode; title: string; value: string; children?: ReactNode }) {
   return (
     <div className="card an-kpi">
       <span className="tile-icon">{icon}</span>
@@ -42,7 +42,7 @@ function Kpi({ icon, title, value, children }: { icon: ReactNode; title: string;
   );
 }
 
-function Panel({ icon, title, hint, actions, children, wide }: { icon: ReactNode; title: string; hint?: string; actions?: ReactNode; children: ReactNode; wide?: boolean }) {
+export function Panel({ icon, title, hint, actions, children, wide }: { icon: ReactNode; title: string; hint?: string; actions?: ReactNode; children: ReactNode; wide?: boolean }) {
   return (
     <section className={`card an-panel${wide ? " an-wide" : ""}`}>
       <header className="an-panel-head">
@@ -55,7 +55,7 @@ function Panel({ icon, title, hint, actions, children, wide }: { icon: ReactNode
   );
 }
 
-const Empty = ({ children }: { children: ReactNode }) => <div className="an-empty muted small">{children}</div>;
+export const Empty = ({ children }: { children: ReactNode }) => <div className="an-empty muted small">{children}</div>;
 const NeedsUpdate = ({ what }: { what: string }) => (
   <Empty>Your POS app does not send {what} yet. <Link to="/app/downloads">Install the latest version</Link> on the outlet&rsquo;s PC and new bills will show here.</Empty>
 );
@@ -76,7 +76,7 @@ function useWidth<T extends HTMLElement>(): [React.RefObject<T | null>, number] 
 }
 
 /** Sales or orders per day: a line over a light fill, with a crosshair and a tooltip. One series, so no legend. */
-function DailyChart({ daily, metric }: { daily: Analytics["daily"]; metric: "sales" | "orders" }) {
+export function DailyChart({ daily, metric, noun = "order", what }: { daily: Analytics["daily"]; metric: "sales" | "orders"; noun?: string; what?: string }) {
   const [ref, width] = useWidth<HTMLDivElement>();
   const [hover, setHover] = useState<number | null>(null);
   const H = 260, L = 52, R = 12, T = 12, B = 28;
@@ -85,7 +85,7 @@ function DailyChart({ daily, metric }: { daily: Analytics["daily"]; metric: "sal
   const n = daily.length, innerW = Math.max(10, width - L - R), innerH = H - T - B;
   const x = (i: number) => L + (n === 1 ? innerW / 2 : (i / (n - 1)) * innerW);
   const y = (v: number) => T + innerH - (Math.max(0, v) / max) * innerH;
-  const fmt = (v: number) => (metric === "sales" ? rupees(v) : `${count(v)} order${v === 1 ? "" : "s"}`);
+  const fmt = (v: number) => (metric === "sales" ? rupees(v) : `${count(v)} ${noun}${v === 1 ? "" : "s"}`);
   const path = daily.map((d, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(1)},${y(d[metric]).toFixed(1)}`).join(" ");
   const every = Math.max(1, Math.ceil(n / Math.max(2, Math.floor(innerW / 70))));
   const move = (clientX: number, box: DOMRect) => setHover(Math.min(n - 1, Math.max(0, Math.round(((clientX - box.left - L) / innerW) * (n - 1)))));
@@ -93,7 +93,7 @@ function DailyChart({ daily, metric }: { daily: Analytics["daily"]; metric: "sal
   return (
     <div ref={ref} className="an-chart" style={{ height: H }}>
       {width > 0 ? (
-        <svg width={width} height={H} role="img" aria-label={`${metric === "sales" ? "Sales" : "Orders"} per day, ${rangeLabel(daily[0]!.date, daily[n - 1]!.date)}`}
+        <svg width={width} height={H} role="img" aria-label={`${what ?? (metric === "sales" ? "Sales" : "Orders")} per day, ${rangeLabel(daily[0]!.date, daily[n - 1]!.date)}`}
           onMouseMove={(e) => move(e.clientX, e.currentTarget.getBoundingClientRect())} onMouseLeave={() => setHover(null)}
           onTouchStart={(e) => move(e.touches[0]!.clientX, e.currentTarget.getBoundingClientRect())} onTouchMove={(e) => move(e.touches[0]!.clientX, e.currentTarget.getBoundingClientRect())}>
           {ticks.map((t) => (
@@ -113,7 +113,7 @@ function DailyChart({ daily, metric }: { daily: Analytics["daily"]; metric: "sal
         <div className="an-tip" style={{ left: Math.min(Math.max(x(hover!), 80), width - 80), top: Math.max(0, y(h[metric]) - 64) }} role="status">
           <b>{fmt(h[metric])}</b>
           <span>{dayLabel(h.date, true)}</span>
-          <span>{metric === "sales" ? `${count(h.orders)} order${h.orders === 1 ? "" : "s"}` : rupees(h.sales)}</span>
+          <span>{metric === "sales" ? `${count(h.orders)} ${noun}${h.orders === 1 ? "" : "s"}` : rupees(h.sales)}</span>
         </div>
       ) : null}
     </div>
@@ -155,7 +155,7 @@ function PeakHours({ hours }: { hours: Analytics["hours"] }) {
 }
 
 /** A list of names with a bar and a figure each: the bar compares, the figure tells. */
-function BarList({ rows }: { rows: Array<{ key: string; name: string; note?: string | undefined; value: number; figure: string; aside?: string | undefined }> }) {
+export function BarList({ rows }: { rows: Array<{ key: string; name: string; note?: string | undefined; value: number; figure: string; aside?: string | undefined }> }) {
   const max = Math.max(1, ...rows.map((r) => r.value));
   return (
     <ol className="an-bars">
