@@ -37,7 +37,8 @@ export async function api<T>(method: "GET" | "POST", path: string, body?: unknow
   return json as T;
 }
 
-export type ProductCode = "fine_dine" | "tiffin_qsr";
+/** The products PosiNext Cloud serves (its src/products.ts). Sign-up offers the two restaurant products only. */
+export type ProductCode = "fine_dine" | "tiffin_qsr" | "grocery" | "apparel" | "pharmacy";
 
 export interface Me {
   user: { id: string; name: string; email: string; role: "owner" | "admin" | "billing" };

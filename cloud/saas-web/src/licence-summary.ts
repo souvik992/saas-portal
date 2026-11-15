@@ -15,3 +15,13 @@ export function licenceSummary(licences: Licence[], products: ProductCode[], now
   return mine.length ? { kind: "ended", daysLeft: 0, until: Math.max(...mine.map((l) => l.expiresAt)) } : { kind: "none", daysLeft: TRIAL_DAYS, until: null };
 }
 const daysLeftOf = (end: number, now: number) => Math.max(0, Math.ceil((end - now) / 86_400_000));
+
+/** "2 terminals, 1 captain, 1 kitchen": only the kinds of seat that product has (retail products have terminals only). */
+export function seatsText(l: Pick<Licence, "product" | "seats">): string {
+  const s: Partial<Licence["seats"]> = l.seats ?? {};
+  const n = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? v : 0);
+  const parts = [`${n(s.terminals)} terminal${n(s.terminals) === 1 ? "" : "s"}`];
+  if (l.product === "fine_dine") parts.push(`${n(s.captains)} captain`, `${n(s.kds)} kitchen`);
+  else if (l.product === "tiffin_qsr") parts.push(`${n(s.kds)} kitchen`);
+  return parts.join(", ");
+}

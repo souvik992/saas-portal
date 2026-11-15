@@ -3,7 +3,7 @@ import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { ApiError, support, type Announcement, type Article, type ProductCode, type Status, type Ticket } from "../api";
 import { Notice } from "../components/Layout";
 import { PLANS, rupees } from "../plans";
-import { PRODUCT_COPY, PRODUCT_ORDER } from "../products";
+import { PRODUCT_ORDER, productCopy } from "../products";
 import { Link, navigate, useLocation } from "../router";
 import { useSession } from "../session";
 
@@ -58,7 +58,7 @@ function TicketList() {
                 <tr key={t.id}>
                   <td>#{t.number}</td>
                   <td><Link to={`/app/support/${t.id}`}>{t.subject}</Link></td>
-                  <td>{t.product ? PRODUCT_COPY[t.product].name : "—"}</td>
+                  <td>{t.product ? productCopy(t.product).name : "—"}</td>
                   <td><span className={`pill ${STATUS[t.status].cls}`}>{STATUS[t.status].label}</span></td>
                   <td className="muted small">{when(t.updatedAt)}</td>
                 </tr>
@@ -94,7 +94,7 @@ function NewTicket() {
         <label className="field"><span>Product</span>
           <select className="input" value={product} onChange={(e) => setProduct(e.target.value as ProductCode | "")}>
             <option value="">Both / not about one product</option>
-            {PRODUCT_ORDER.map((p) => <option key={p} value={p}>{PRODUCT_COPY[p].name} ({PRODUCT_COPY[p].app})</option>)}
+            {PRODUCT_ORDER.map((p) => <option key={p} value={p}>{productCopy(p).name} ({productCopy(p).app})</option>)}
           </select>
         </label>
       </div>
@@ -151,7 +151,7 @@ export function Announcements() {
       {data && mine.length === 0 ? <div className="card empty">No announcements yet.</div> : null}
       {mine.map((a) => (
         <article key={a.id} className="card pad stack" style={{ gap: 10 }}>
-          <div className="row"><h2 style={{ fontSize: 22 }}>{a.title}</h2>{a.product ? <span className="pill pill-primary">{PRODUCT_COPY[a.product].name}</span> : null}<span className="spacer" /><span className="muted small">{day(a.publishedAt)}</span></div>
+          <div className="row"><h2 style={{ fontSize: 22 }}>{a.title}</h2>{a.product ? <span className="pill pill-primary">{productCopy(a.product).name}</span> : null}<span className="spacer" /><span className="muted small">{day(a.publishedAt)}</span></div>
           <Prose text={a.body} />
         </article>
       ))}
@@ -201,7 +201,7 @@ function ArticleView({ slug }: { slug: string }) {
     <article className="card pad stack">
       <Link to="/app/kb">← All articles</Link>
       <h2 style={{ fontSize: 28 }}>{data.title}</h2>
-      <div className="muted small">{data.category}{data.product ? ` · ${PRODUCT_COPY[data.product].name}` : ""} · updated {day(data.updatedAt)}</div>
+      <div className="muted small">{data.category}{data.product ? ` · ${productCopy(data.product).name}` : ""} · updated {day(data.updatedAt)}</div>
       <Prose text={data.body} />
     </article>
   );

@@ -6,10 +6,10 @@ import { account, ApiError, downloadHref, support, type Download, type Licence, 
 import { Notice } from "../components/Layout";
 import { deviceName, formatSize, toggleProduct } from "../forms";
 import { PLANS, rupees } from "../plans";
-import { PRODUCT_COPY, PRODUCT_ORDER } from "../products";
+import { PRODUCT_ORDER, productCopy } from "../products";
 import { Link, navigate, useLocation } from "../router";
 import { useSession } from "../session";
-import { licenceSummary, TRIAL_DAYS } from "../licence-summary";
+import { licenceSummary, seatsText, TRIAL_DAYS } from "../licence-summary";
 import { AnalyticsPage } from "./Analytics";
 import { InventoryPage } from "./Inventory";
 import { Announcements, KnowledgeBase, ServiceStatus, SupportTickets } from "./Support";
@@ -111,7 +111,7 @@ function AnnouncementsPage() {
 
 const greeting = (h = new Date().getHours()) => (h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening");
 /** The add-ons of these products, for the Add-ons tile. */
-const ADDON_NAMES: Record<ProductCode, string[]> = { fine_dine: ["Table QR", "Kitchen display", "Captain app"], tiffin_qsr: ["ODS"] };
+const ADDON_NAMES: Partial<Record<ProductCode, string[]>> = { fine_dine: ["Table QR", "Kitchen display", "Captain app"], tiffin_qsr: ["ODS"] };
 
 function LicenceCard({ licences, products }: { licences: Licence[] | null; products: ProductCode[] }) {
   if (licences === null) return <div className="trial" aria-busy="true"><p className="label">Free trial</p><p className="big">&nbsp;</p><div className="bar" /></div>;
@@ -153,7 +153,7 @@ function AreaHome({ me }: { me: Me }) {
   const { query } = useLocation();
   const welcome = query.get("welcome") === "1";
   const products = me.account.products;
-  const names = products.map((p) => PRODUCT_COPY[p].name).join(" and ");
+  const names = products.map((p) => productCopy(p).name).join(" and ");
   const [licences, setLicences] = useState<Licence[] | null>(null);
   const [fresh, setFresh] = useState(0);
   const [status, setStatus] = useState<{ ok: boolean } | null>(null);
@@ -170,7 +170,7 @@ function AreaHome({ me }: { me: Me }) {
     "/app/announcements": fresh > 0 ? `${fresh} new` : null,
   };
   const about: Record<string, string> = {
-    "/app/addons": `${[...new Set(products.flatMap((p) => ADDON_NAMES[p]))].join(", ")} and more`,
+    "/app/addons": `${[...new Set(products.flatMap((p) => ADDON_NAMES[p] ?? []))].join(", ")} and more`,
   };
   const search = (e: FormEvent) => { e.preventDefault(); navigate(q.trim() ? `/app/kb?q=${encodeURIComponent(q.trim())}` : "/app/kb"); };
   const first = me.user.name.trim().split(/\s+/)[0] ?? "";
@@ -291,9 +291,9 @@ function LicencesPage() {
             <tbody>
               {data.licences.map((l) => (
                 <tr key={l.id}>
-                  <td><b>{PRODUCT_COPY[l.product].app}</b><div className="muted small">{PRODUCT_COPY[l.product].name}</div></td>
+                  <td><b>{productCopy(l.product).app}</b><div className="muted small">{productCopy(l.product).name}</div></td>
                   <td>{l.outlet}<div className="muted small">{l.hardwareId}</div></td>
-                  <td className="small">{l.seats.terminals} terminal{l.seats.terminals === 1 ? "" : "s"}{l.product === "fine_dine" ? `, ${l.seats.captains} captain, ${l.seats.kds} kitchen` : `, ${l.seats.kds} kitchen`}</td>
+                  <td className="small">{seatsText(l)}</td>
                   <td>{date(l.expiresAt)}</td>
                   <td>{status(l)}</td>
                   <td>
@@ -345,7 +345,7 @@ function AccountPage({ me }: { me: Me }) {
             {PRODUCT_ORDER.map((code) => (
               <button key={code} type="button" className="choice" aria-pressed={products.includes(code)} disabled={!canEdit} onClick={() => setProducts(toggleProduct(products, code))}>
                 <span className="tick" aria-hidden>{products.includes(code) ? "✓" : null}</span>
-                <b>{PRODUCT_COPY[code].name}</b><small>{PRODUCT_COPY[code].app} · {PRODUCT_COPY[code].addon.name}</small>
+                <b>{productCopy(code).name}</b><small>{productCopy(code).app} · {productCopy(code).addon.name}</small>
               </button>
             ))}
           </div>

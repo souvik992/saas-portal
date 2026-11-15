@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Layout } from "./components/Layout";
+import { PageGuard } from "./components/PageGuard";
 import { Forgot, Login, Register } from "./pages/Auth";
 import { ClientArea } from "./pages/ClientArea";
 import { Link, navigate, useLocation } from "./router";
@@ -32,10 +33,15 @@ function Page() {
   );
 }
 
+function GuardedPage() {
+  const { path } = useLocation();
+  return <PageGuard resetKey={path}><Page /></PageGuard>;
+}
+
 export function App() {
   return (
     <SessionProvider>
-      <Layout><Page /></Layout>
+      <Layout><GuardedPage /></Layout>
     </SessionProvider>
   );
 }
