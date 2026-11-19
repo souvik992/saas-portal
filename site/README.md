@@ -68,4 +68,10 @@ In repository **Settings → Pages**, set the publishing source to **GitHub Acti
 - [Configure a GitHub Pages publishing source](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
 - [Configure a custom domain and DNS](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site)
 
-The current `posinext.com` DNS must be pointed to the GitHub Pages DNS targets shown by GitHub after adding the custom domain in Pages settings. Do not switch DNS before the Pages custom domain is saved and GitHub confirms its target values. The current production host remains in place until that DNS cutover is completed.
+Complete the custom-domain cutover in this order:
+1. In repository **Settings → Pages**, keep **GitHub Actions** as the publishing source. Under **Custom domain**, enter `posinext.com` and click **Save**. GitHub's custom-domain field must be configured even when using a custom Actions workflow.
+2. At the DNS provider for `posinext.com`, point the apex `@` to all four GitHub Pages A-record targets: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, and `185.199.111.153`. For `www`, create a CNAME pointing to `souvik992.github.io`.
+3. Remove only conflicting web-host A/AAAA/CNAME records for `@` and `www`; do not delete mail (MX), verification or other unrelated TXT records. GitHub recommends adding the custom domain in Pages before changing DNS.
+4. After DNS validates, enable **Enforce HTTPS** in Pages settings. DNS updates may take up to 24 hours.
+
+Until these GitHub Pages and DNS settings are complete, the old production host remains in control of `posinext.com`, so a successful Actions run alone does not prove that the custom domain serves the new admin page.
