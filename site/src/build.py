@@ -129,7 +129,6 @@ def simple(path, title, desc, eyebrow, h1, lead, inner, trail, schema=(), priori
 
 def images():
     """src/images/<key>.(jpg|png) -> public/img/<key>-<480|800|1200>.webp (only when missing or older), and img/og.jpg."""
-    from PIL import Image
     src = Path(__file__).parent / "images"
     (OUT / "img").mkdir(exist_ok=True)
     for f in sorted(src.iterdir()):
@@ -137,6 +136,7 @@ def images():
         if key == "og":
             o = OUT / "img" / "og.jpg"
             if not o.exists() or o.stat().st_mtime < f.stat().st_mtime:
+                from PIL import Image
                 Image.open(f).convert("RGB").resize((1200, 675), Image.LANCZOS).save(o, "JPEG", quality=80, optimize=True, progressive=True)
             continue
         im = None
@@ -144,6 +144,7 @@ def images():
             o = OUT / "img" / f"{key}-{w}.webp"
             if o.exists() and o.stat().st_mtime >= f.stat().st_mtime:
                 continue
+            from PIL import Image  # only needed when an image must be (re)made
             im = im or Image.open(f).convert("RGB")
             im.resize((w, round(im.height * w / im.width)), Image.LANCZOS).save(o, "WEBP", quality=68 if w > 480 else 62, method=6)
 

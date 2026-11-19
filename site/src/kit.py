@@ -33,13 +33,13 @@ FONT_OUT = Path(__file__).resolve().parent.parent / "public" / "fonts"
 def make_fonts():
     """Subsets each source font (fontTools) and returns {name: '/fonts/<name>-<hash>.woff2'}; reuses an existing file."""
     import hashlib
-    from fontTools import subset
     FONT_OUT.mkdir(parents=True, exist_ok=True)
     urls = {}
     for src in sorted(FONT_SRC.glob("*.woff2")):
         key = hashlib.sha256(src.read_bytes() + FONT_TEXT.encode()).hexdigest()[:10]
         out = FONT_OUT / f"{src.stem}-{key}.woff2"
         if not out.exists():
+            from fontTools import subset  # only needed when a font must be (re)made
             for old in FONT_OUT.glob(f"{src.stem}*.woff2"):
                 old.unlink()
             o = subset.Options()

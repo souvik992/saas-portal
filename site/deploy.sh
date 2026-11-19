@@ -3,8 +3,9 @@
 # Run once as root; after that a systemd timer keeps the site up to date by itself:
 #   curl -fsSL https://raw.githubusercontent.com/souvik992/saas-portal/main/site/deploy.sh | sudo bash
 #   (another branch: ... | sudo bash -s <branch>)
-# Each run downloads the repo at the branch's latest commit, runs site/src/build.py here (so /admin/ and CMS posts
-# from content/posts/ are always included), and serves site/public from /var/www/posinext-site.
+# Each run downloads the repo at the branch's latest commit, runs site/src/build.py here with the server's python3 (so
+# /admin/ and CMS posts from content/posts/ are always included; nothing is installed with apt),
+# and serves site/public from /var/www/posinext-site.
 # The timer (posinext-site-update.timer) checks every 10 minutes and rebuilds when the branch has a new commit (e.g. a
 # post saved in /admin/) or the India date has changed (scheduled posts go live). Force a rebuild now:
 #   sudo posinext-site-update --force
@@ -24,18 +25,13 @@ VENV=$STATE/venv
 command -v caddy >/dev/null || { echo "Caddy is not installed on this server." >&2; exit 1; }
 mkdir -p "$STATE"
 
-# ---- Python for the build (Pillow, fontTools, brotli in a private venv) ----
-if ! python3 -c 'import venv, ensurepip' >/dev/null 2>&1; then
-  command -v apt-get >/dev/null || { echo "Install python3 and python3-venv, then run this again." >&2; exit 1; }
-  echo "Installing python3-venv"
-  DEBIAN_FRONTEND=noninteractive apt-get update -qq </dev/null
-  DEBIAN_FRONTEND=noninteractive apt-get install -y -qq python3 python3-venv </dev/null >/dev/null
-fi
-[ -x "$VENV/bin/python" ] || python3 -m venv "$VENV" </dev/null
-if ! "$VENV/bin/python" -c 'import PIL, fontTools, brotli' >/dev/null 2>&1; then
-  echo "Installing the build's Python packages"
-  "$VENV/bin/pip" install -q --disable-pip-version-check pillow fonttools brotli </dev/null
-fi
+# ---- Python for the build: the server's own python3 is enough ----
+# The images and fonts in site/public are committed, so the build only needs the standard library. Pillow/fontTools
+# are needed only if an image or font changed without its built file being committed; then they are tried from PyPI
+# in a private venv (never apt), and the deploy stops with a clear message if that is not possible.
+command -v python3 >/dev/null || { echo "python3 is not installed on this server." >&2; exit 1; }
+PY=python3
+if [ -x "$VENV/bin/python" ] && "$VENV/bin/python" -c 'import PIL, fontTools' </dev/null >/dev/null 2>&1; then PY="$VENV/bin/python"; fi
 
 # ---- download the exact commit and build it ----
 SHA=$(curl -fsSL -H "Accept: application/vnd.github.sha" "https://api.github.com/repos/$REPO/commits/$REF") \
@@ -47,7 +43,19 @@ curl -fsSL "https://codeload.github.com/$REPO/tar.gz/$SHA" | tar -xz -C "$tmp"
 root=$(find "$tmp" -mindepth 1 -maxdepth 1 -type d | head -1)
 [ -f "$root/site/src/build.py" ] || { echo "No site/src/build.py in $REPO@$REF." >&2; exit 1; }
 echo "Building the site"
-"$VENV/bin/python" "$root/site/src/build.py" </dev/null
+if ! "$PY" "$root/site/src/build.py" </dev/null 2>"$tmp/build.log"; then
+  if grep -q "No module named '\(PIL\|fontTools\|brotli\)'" "$tmp/build.log"; then
+    echo "An image or font changed, so the build needs Pillow/fontTools; installing them from PyPI"
+    { [ -x "$VENV/bin/pip" ] || python3 -m venv "$VENV" </dev/null; } \
+      && "$VENV/bin/pip" install -q --disable-pip-version-check pillow fonttools brotli </dev/null \
+      || { echo "Could not install them here. Run python site/src/build.py on your PC, commit site/public, and run this again." >&2; exit 1; }
+    PY="$VENV/bin/python"
+    "$PY" "$root/site/src/build.py" </dev/null
+  else
+    cat "$tmp/build.log" >&2; exit 1
+  fi
+fi
+cat "$tmp/build.log"
 src="$root/site/public"
 [ -f "$src/index.html" ] && [ -f "$src/admin/index.html" ] || { echo "The build did not produce index.html and admin/." >&2; exit 1; }
 

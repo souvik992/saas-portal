@@ -37,7 +37,7 @@ On the PosiNext Cloud server (it runs Caddy), after DNS for `posinext.com` and `
 curl -fsSL https://raw.githubusercontent.com/souvik992/saas-portal/main/site/deploy.sh | sudo bash
 ```
 
-The script builds the site on the server (`src/build.py` in a private Python venv), so `/admin/` and CMS posts are always
+The script builds the site on the server (`src/build.py` with the server's own python3; no apt or pip needed), so `/admin/` and CMS posts are always
 included, and installs `posinext-site-update.timer`: every 10 minutes it rebuilds if `main` has a new commit (e.g. a post
 saved in `/admin/`) or the India date changed (scheduled posts). Force a rebuild with `sudo posinext-site-update --force`.
 `www.posinext.com` redirects to `posinext.com`.
