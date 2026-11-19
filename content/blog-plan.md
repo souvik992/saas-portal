@@ -31,7 +31,7 @@ Each post goes deep on one channel or problem and links back to the pillar guide
 ## Topic queue (channel → post)
 
 - [x] Pillar: How to get more restaurant customers in India, 8 channels compared — restaurant-marketing-channels-india (2026-11-19)
-- [ ] Google Business Profile for restaurants in India: step-by-step setup and ranking checklist
+- [x] Google Business Profile for restaurants in India: step-by-step setup and ranking checklist — google-business-profile-for-restaurants-india (2026-11-19)
 - [ ] How to get more Google reviews for your restaurant (and reply to bad ones) without breaking the rules
 - [ ] Swiggy and Zomato commission explained: calculate your real cost and margin per order
 - [ ] Direct online ordering for restaurants in India: website vs app vs aggregator
@@ -71,3 +71,4 @@ questions restaurant owners search for) before writing.
 ## Log
 
 - 2026-11-19 restaurant-marketing-channels-india — pillar guide (written in chat)
+- 2026-11-19 google-business-profile-for-restaurants-india — setup, verification, menu/order links, photos, reviews and a 30-day checklist, sourced from Google help pages
