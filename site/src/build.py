@@ -162,8 +162,6 @@ def main():
     admin_output = OUT / "admin" / "index.html"
     admin_output.parent.mkdir(parents=True, exist_ok=True)
     admin_output.write_text(admin_source.read_text(encoding="utf-8"), encoding="utf-8")
-    # GitHub Pages uses this file in the deployment artifact to retain the apex custom domain.
-    (OUT / "CNAME").write_text("posinext.com\\n", encoding="utf-8")
     check_font_coverage()
     print(f"built {len(BUILT)} pages into {OUT}")
 
