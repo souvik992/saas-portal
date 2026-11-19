@@ -170,13 +170,22 @@ POSTS = [
 ]
 
 
+ALL = []        # every post on the site (code + CMS), newest first; filled by build() for llms.txt
+LASTMOD = {}    # '/blog/<slug>/' -> last-modified date, for sitemap.xml
+
+
 def build(simple, write):
     # CMS posts live as JSON in content/posts (repo root). Drafts stay private; scheduled posts
-    # enter the static site on the first daily build on/after their publish date.
+    # enter the static site on the first build on/after their publish date.
     all_posts = list(POSTS)
     existing_slugs = {p[0] for p in all_posts}
     all_posts.extend(load_managed_posts(existing_slugs))
     all_posts.sort(key=lambda p: p[3], reverse=True)
+    ALL[:] = all_posts
+    for s, _, _, d, *rest in all_posts:
+        LASTMOD[f"/blog/{s}/"] = rest[2] if len(rest) > 2 and rest[2] else d
+    if all_posts:
+        LASTMOD["/blog/"] = max(LASTMOD.values())
     lst = cards([("file", t, d, f"/blog/{s}/") for s, t, d, *_ in all_posts], "cards c2")
     simple("/blog/", "Restaurant POS Blog: Guides for Restaurant Owners | POSINEXT",
            "Practical restaurant management guides for India: POS software, GST billing, inventory, food cost, online orders and operational control.",
@@ -185,16 +194,19 @@ def build(simple, write):
            [{"@type": "Blog", "name": "POSINEXT Blog", "url": SITE + "/blog/", "publisher": {"@id": SITE + "/#org"},
              "blogPost": [{"@type": "BlogPosting", "headline": t, "url": f"{SITE}/blog/{s}/", "datePublished": d} for s, t, _, d, *_ in all_posts]}],
            priority="0.8")
-    for slug, title, desc, date, body, faqs in all_posts:
-        fh, fschema = faq(faqs)
+    for slug, title, desc, date, body, faqs, *extra in all_posts:
+        modified = extra[0] if extra and extra[0] else date
+        if "<table>" in body and '<div class="tb">' not in body:  # CMS tables: scroll sideways on phones
+            body = body.replace("<table>", '<div class="tb"><table>').replace("</table>", "</table></div>")
+        fh, fschema = faq(faqs) if faqs else ("", None)
         others = [p for p in all_posts if p[0] != slug][:3]
         more = ('<h2>More guides</h2><ul>' + "".join(f'<li><a href="/blog/{s}/">{t}</a></li>' for s, t, *_ in others) + "</ul>")
         fh = fh.replace('<div class="fq">', '<div class="fq" style="margin-left:0;max-width:46rem">', 1)
         inner = (f'<section class="sec-s"><div class="w"><article class="pr"><p class="meta">By the POSINEXT team · '
-                 f'<time datetime="{date}">{__import__("datetime").datetime.strptime(date, "%Y-%m-%d").strftime("%d %B %Y")}</time></p>{body}<h2>Frequently asked questions</h2></article>'
+                 f'<time datetime="{date}">{__import__("datetime").datetime.strptime(date, "%Y-%m-%d").strftime("%d %B %Y")}</time></p>{body}{"<h2>Frequently asked questions</h2>" if faqs else ""}</article>'
                  f'{fh}<div class="pr">{more}</div></div></section>')
-        art = {"@type": "BlogPosting", "headline": title, "description": desc, "datePublished": date, "dateModified": date,
+        art = {"@type": "BlogPosting", "headline": title, "description": desc, "datePublished": date, "dateModified": modified,
                "author": {"@type": "Organization", "name": "POSINEXT", "url": SITE + "/"}, "publisher": {"@id": SITE + "/#org"},
                "image": SITE + "/img/og.jpg", "mainEntityOfPage": f"{SITE}/blog/{slug}/", "inLanguage": "en-IN"}
         simple(f"/blog/{slug}/", title, desc, "Guide", title.split(":")[0] if ":" in title and len(title) > 70 else title, desc,
-               inner, [("Blog", "/blog/"), (title.split(":")[0], f"/blog/{slug}/")], [art, fschema], priority="0.7")
+               inner, [("Blog", "/blog/"), (title.split(":")[0], f"/blog/{slug}/")], [art] + ([fschema] if fschema else []), priority="0.7")

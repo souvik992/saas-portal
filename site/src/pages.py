@@ -287,7 +287,7 @@ def build(simple, write):
 def extras(write, built):
     """404, sitemap.xml, robots.txt, llms.txt, llms-full.txt, ard.json."""
     from pathlib import Path
-    from posts import POSTS
+    from posts import ALL as POSTS, LASTMOD
     OUT = Path(__file__).resolve().parent.parent / "public"
     # 404
     body = ('<section class="ph"><div class="w c"><span class="ey ey-h">404</span><h1>This page is not on the menu</h1>'
@@ -296,7 +296,7 @@ def extras(write, built):
             + "</div></section>")
     (OUT / "404.html").write_text(page("/404.html", "Page not found | POSINEXT", "This page does not exist.", body, noindex=True), encoding="utf-8")
     # sitemap
-    urls = "".join(f"<url><loc>{SITE}{p}</loc><lastmod>{UPDATED}</lastmod><priority>{pr}</priority></url>" for p, pr in built)
+    urls = "".join(f"<url><loc>{SITE}{p}</loc><lastmod>{LASTMOD.get(p, UPDATED)}</lastmod><priority>{pr}</priority></url>" for p, pr in built)
     (OUT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
                                      + urls + "</urlset>\n", encoding="utf-8")
     # robots: every search engine and AI assistant is welcome

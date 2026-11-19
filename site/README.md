@@ -63,7 +63,8 @@ The CMS admin interface is built from `site/src/admin.html` and is served at `/a
 - Create and edit CMS posts, save drafts, publish immediately, or schedule a future date for the daily 9:00 AM India-time build.
 - Posts are JSON files in `content/posts/` at the repository root. Drafts are omitted from the public site; published posts and scheduled posts whose date has arrived are rendered into static HTML.
 - Article body markup is sanitized by `site/src/cms.py` before rendering.
-- The daily GitHub Actions workflow builds and deploys the static website. No app server, database, production Caddy host or VPS is required for the CMS or deployment.
+- A daily scheduled task researches and commits one post from the queue in `content/blog-plan.md`. Optional `updated_on` (YYYY-MM-DD) in a post's JSON sets its modified date in the sitemap and schema.
+- The posinext.com server (`site/deploy.sh`) rebuilds within 10 minutes of a commit and each day for scheduled posts. The GitHub Actions workflow only checks that the site builds; it deploys nothing.
 
 ### Enable serverless website hosting
 

@@ -102,7 +102,10 @@ def load_managed_posts(existing_slugs=None):
                     q, a = str(entry[0]).strip(), str(entry[1]).strip()
                 if q and a:
                     faqs.append((html.escape(q), html.escape(a)))
-            loaded.append((slug, title, desc, date, body, faqs))
+            updated = str(item.get("updated_on") or "")
+            if updated:
+                datetime.strptime(updated, "%Y-%m-%d")
+            loaded.append((slug, title, desc, date, body, faqs, updated))
             existing.add(slug)
         except (OSError, ValueError, KeyError, TypeError, IndexError, json.JSONDecodeError) as exc:
             print(f"Skipping invalid CMS post {path.name}: {exc}")
