@@ -303,7 +303,7 @@ def extras(write, built):
     bots = ["Googlebot", "Bingbot", "Google-Extended", "GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-SearchBot", "Claude-User",
             "anthropic-ai", "PerplexityBot", "Perplexity-User", "Applebot", "Applebot-Extended", "CCBot", "DuckDuckBot", "YandexBot",
             "meta-externalagent", "Amazonbot", "cohere-ai", "Bytespider", "Twitterbot", "facebookexternalhit", "LinkedInBot", "WhatsApp"]
-    robots = "".join(f"User-agent: {b}\nAllow: /\n\n" for b in bots) + "User-agent: *\nAllow: /\nDisallow: /404.html\n\nSitemap: https://posinext.com/sitemap.xml\n"
+    robots = "".join(f"User-agent: {b}\nAllow: /\n\n" for b in bots) + "User-agent: *\nAllow: /\nDisallow: /404.html\nDisallow: /admin/\n\nSitemap: https://posinext.com/sitemap.xml\n"
     (OUT / "robots.txt").write_text(robots, encoding="utf-8")
     # llms.txt (index) and llms-full.txt (everything an assistant needs to answer about POSINEXT)
     plain = lambda s: s.replace("&amp;", "&").replace("&lt;", "<")
