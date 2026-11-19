@@ -171,7 +171,7 @@ POSTS = [
 
 
 def build(simple, write):
-    # CMS posts live as JSON in site/content/posts. Drafts stay private; scheduled posts
+    # CMS posts live as JSON in content/posts (repo root). Drafts stay private; scheduled posts
     # enter the static site on the first daily build on/after their publish date.
     all_posts = list(POSTS)
     existing_slugs = {p[0] for p in all_posts}

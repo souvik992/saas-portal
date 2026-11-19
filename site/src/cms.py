@@ -7,7 +7,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-CONTENT_DIR = Path(__file__).resolve().parent.parent / "content" / "posts"
+# repo-root content/posts: where the /admin/ CMS commits posts (site/src/cms.py -> ../../content/posts)
+CONTENT_DIR = Path(__file__).resolve().parents[2] / "content" / "posts"
 LOCAL_TZ = ZoneInfo("Asia/Kolkata")
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 ALLOWED = {"p","h2","h3","h4","ul","ol","li","strong","b","em","i","blockquote","br","hr","a","table","thead","tbody","tr","th","td","pre","code"}

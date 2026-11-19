@@ -37,7 +37,10 @@ On the PosiNext Cloud server (it runs Caddy), after DNS for `posinext.com` and `
 curl -fsSL https://raw.githubusercontent.com/souvik992/saas-portal/main/site/deploy.sh | sudo bash
 ```
 
-Run it again after changing the site (commit the built `public/` first). `www.posinext.com` redirects to `posinext.com`.
+The script builds the site on the server (`src/build.py` in a private Python venv), so `/admin/` and CMS posts are always
+included, and installs `posinext-site-update.timer`: every 10 minutes it rebuilds if `main` has a new commit (e.g. a post
+saved in `/admin/`) or the India date changed (scheduled posts). Force a rebuild with `sudo posinext-site-update --force`.
+`www.posinext.com` redirects to `posinext.com`.
 Unknown addresses return a real 404 with `404.html`. The script only writes `/etc/caddy/posinext-site.caddy` and undoes
 everything if Caddy does not accept the result.
 
@@ -58,7 +61,7 @@ The CMS admin interface is built from `site/src/admin.html` and is served at `/a
 - Enter admin label `souvik` and a fine-grained GitHub personal access token for this repository.
 - Scope the token to `souvik992/saas-portal` only, with **Contents: Read and write**. The token remains in the browser tab's memory and is not saved to browser storage or committed.
 - Create and edit CMS posts, save drafts, publish immediately, or schedule a future date for the daily 9:00 AM India-time build.
-- Posts are JSON files in `content/posts/`. Drafts are omitted from the public site; published posts and scheduled posts whose date has arrived are rendered into static HTML.
+- Posts are JSON files in `content/posts/` at the repository root. Drafts are omitted from the public site; published posts and scheduled posts whose date has arrived are rendered into static HTML.
 - Article body markup is sanitized by `site/src/cms.py` before rendering.
 - The daily GitHub Actions workflow builds and deploys the static website. No app server, database, production Caddy host or VPS is required for the CMS or deployment.
 
