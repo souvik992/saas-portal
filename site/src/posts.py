@@ -109,7 +109,7 @@ POSTS = [
 <h2>How POSINEXT does it</h2>
 <p>POSINEXT Fine Dine has a <strong>leakage dashboard</strong> with cards for items cancelled or reduced after KOT, voids, discounts above limit, reprints, table moves, complimentary items, cash out and drawer opens, day-end difference, and food made but never paid, each with a drill-down to who, when and why. Sensitive actions need a manager's PIN, and everything is in the audit log. See <a href="/fine-dine-pos/">Fine Dine POS</a> and <a href="/features/#security">staff and security features</a>.</p>""",
      [("What is revenue leakage in a restaurant?", "Money lost through small gaps: items cancelled after KOT, voided or reprinted bills, unapproved discounts, cash taken out of the drawer and food that was made but never billed."),
-      ("How can a POS reduce leakage?", "By giving every staff member their own PIN, requiring a manager's PIN for sensitive actions, recording reasons, printing change slips to the kitchen and showing it all on a leakage dashboard and audit log.")]),,
+      ("How can a POS reduce leakage?", "By giving every staff member their own PIN, requiring a manager's PIN for sensitive actions, recording reasons, printing change slips to the kitchen and showing it all on a leakage dashboard and audit log.")]),
 
     ("restaurant-inventory-management-india",
      "Restaurant Inventory Management in India: A Practical Guide to Stock, Waste and Food Cost",
