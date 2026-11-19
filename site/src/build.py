@@ -156,6 +156,12 @@ def main():
     pages.build(simple, write)
     posts.build(simple, write)
     pages.extras(write, BUILT)
+    # Keep the browser-only CMS available on the static site; it is deliberately
+    # omitted from the sitemap and carries noindex metadata.
+    admin_source = Path(__file__).parent / "admin.html"
+    admin_output = OUT / "admin" / "index.html"
+    admin_output.parent.mkdir(parents=True, exist_ok=True)
+    admin_output.write_text(admin_source.read_text(encoding="utf-8"), encoding="utf-8")
     check_font_coverage()
     print(f"built {len(BUILT)} pages into {OUT}")
 
