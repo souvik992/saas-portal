@@ -1,5 +1,6 @@
 """Blog: guides for restaurant owners. Each post: (slug, title, description, date, body html, faqs)."""
 from kit import PORTAL, EMAIL, SITE, cards, faq, ico
+from cms import load_managed_posts
 
 D = "2026-11-13"
 
@@ -170,21 +171,27 @@ POSTS = [
 
 
 def build(simple, write):
-    lst = cards([("file", t, d, f"/blog/{s}/") for s, t, d, *_ in POSTS], "cards c2")
+    # CMS posts live as JSON in site/content/posts. Drafts stay private; scheduled posts
+    # enter the static site on the first daily build on/after their publish date.
+    all_posts = list(POSTS)
+    existing_slugs = {p[0] for p in all_posts}
+    all_posts.extend(load_managed_posts(existing_slugs))
+    all_posts.sort(key=lambda p: p[3], reverse=True)
+    lst = cards([("file", t, d, f"/blog/{s}/") for s, t, d, *_ in all_posts], "cards c2")
     simple("/blog/", "Restaurant POS Blog: Guides for Restaurant Owners | POSINEXT",
-           "Practical guides for restaurant owners in India: choosing a POS, GST on restaurant bills, Swiggy and Zomato integration and reducing revenue leakage.",
-           "Blog", "Guides for restaurant owners", "Practical, no-fluff guides on billing, GST, online orders and running a tighter restaurant.",
+           "Practical restaurant management guides for India: POS software, GST billing, inventory, food cost, online orders and operational control.",
+           "Blog", "Guides for restaurant owners", "Practical, no-fluff guides on billing, GST, inventory, food cost, online orders and running a tighter restaurant.",
            f'<section class="sec-s"><div class="w">{lst}</div></section>', [("Blog", "/blog/")],
            [{"@type": "Blog", "name": "POSINEXT Blog", "url": SITE + "/blog/", "publisher": {"@id": SITE + "/#org"},
-             "blogPost": [{"@type": "BlogPosting", "headline": t, "url": f"{SITE}/blog/{s}/", "datePublished": d} for s, t, _, d, *_ in POSTS]}],
+             "blogPost": [{"@type": "BlogPosting", "headline": t, "url": f"{SITE}/blog/{s}/", "datePublished": d} for s, t, _, d, *_ in all_posts]}],
            priority="0.8")
-    for slug, title, desc, date, body, faqs in POSTS:
+    for slug, title, desc, date, body, faqs in all_posts:
         fh, fschema = faq(faqs)
-        others = [p for p in POSTS if p[0] != slug][:3]
+        others = [p for p in all_posts if p[0] != slug][:3]
         more = ('<h2>More guides</h2><ul>' + "".join(f'<li><a href="/blog/{s}/">{t}</a></li>' for s, t, *_ in others) + "</ul>")
         fh = fh.replace('<div class="fq">', '<div class="fq" style="margin-left:0;max-width:46rem">', 1)
         inner = (f'<section class="sec-s"><div class="w"><article class="pr"><p class="meta">By the POSINEXT team · '
-                 f'<time datetime="{date}">13 November 2026</time></p>{body}<h2>Frequently asked questions</h2></article>'
+                 f'<time datetime="{date}">{__import__("datetime").datetime.strptime(date, "%Y-%m-%d").strftime("%d %B %Y")}</time></p>{body}<h2>Frequently asked questions</h2></article>'
                  f'{fh}<div class="pr">{more}</div></div></section>')
         art = {"@type": "BlogPosting", "headline": title, "description": desc, "datePublished": date, "dateModified": date,
                "author": {"@type": "Organization", "name": "POSINEXT", "url": SITE + "/"}, "publisher": {"@id": SITE + "/#org"},
