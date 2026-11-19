@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+"""Set the POSINEXT blog CMS admin login and the GitHub token it commits with. Run on the server:
+    sudo posinext-cms-setup
+Press Enter at a prompt to keep the current value. Changing the password signs out every open admin session."""
+import getpass
+import grp
+import json
+import os
+import sys
+import urllib.error
+import urllib.request
+
+sys.path.insert(0, "/opt/posinext-cms")
+from cms_server import hash_password  # noqa: E402
+
+CONFIG = "/etc/posinext-cms/config.json"
+REPO = "souvik992/saas-portal"
+
+
+def gh(token, path):
+    req = urllib.request.Request("https://api.github.com" + path, headers={
+        "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "posinext-cms-setup"})
+    with urllib.request.urlopen(req, timeout=20) as r:
+        return json.loads(r.read())
+
+
+def main():
+    if os.geteuid() != 0:
+        sys.exit("Run it with sudo.")
+    try:
+        cfg = json.load(open(CONFIG))
+    except FileNotFoundError:
+        cfg = {}
+    print("POSINEXT blog CMS setup (press Enter to keep the current value)\n")
+
+    user = input(f"Admin username [{cfg.get('username', 'souvik')}]: ").strip() or cfg.get("username", "souvik")
+
+    while True:
+        pw = getpass.getpass("Admin password (at least 10 characters)" + (", Enter to keep: " if cfg.get("password_hash") else ": "))
+        if not pw and cfg.get("password_hash"):
+            break
+        if len(pw) < 10:
+            print("  Too short.")
+            continue
+        if getpass.getpass("Repeat the password: ") != pw:
+            print("  The passwords do not match.")
+            continue
+        cfg["password_hash"] = hash_password(pw)
+        break
+
+    while True:
+        tok = getpass.getpass("GitHub fine-grained token for " + REPO + " (Contents: Read and write)"
+                              + (", Enter to keep: " if cfg.get("github_token") else ": ")).strip()
+        if not tok and cfg.get("github_token"):
+            break
+        try:
+            login = gh(tok, "/user")["login"]
+            gh(tok, f"/repos/{REPO}/contents/content?ref=main")
+        except urllib.error.HTTPError as e:
+            print(f"  GitHub refused that token ({e.code}). Check it is for {REPO} with Contents: Read and write.")
+            continue
+        except Exception as e:
+            print(f"  Could not check the token: {e}")
+            continue
+        print(f"  Token OK (GitHub user {login}).")
+        cfg["github_token"] = tok
+        break
+
+    cfg.update(username=user, repo=REPO, branch="main")
+    os.makedirs(os.path.dirname(CONFIG), exist_ok=True)
+    tmp = CONFIG + ".new"
+    fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o640)
+    with os.fdopen(fd, "w") as f:
+        json.dump(cfg, f, indent=2)
+    os.chown(tmp, 0, grp.getgrnam("posinext-cms").gr_gid)
+    os.replace(tmp, CONFIG)
+    print("\nSaved. Sign in at https://posinext.com/admin/ as " + user + ".")
+
+
+if __name__ == "__main__":
+    main()

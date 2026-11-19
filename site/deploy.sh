@@ -9,6 +9,8 @@
 # The timer (posinext-site-update.timer) checks every 10 minutes and rebuilds when the branch has a new commit (e.g. a
 # post saved in /admin/) or the India date has changed (scheduled posts go live). Force a rebuild now:
 #   sudo posinext-site-update --force
+# It also installs the blog CMS backend (site/cms/, service posinext-cms) behind /admin/api/. Set its admin login
+# and GitHub token once with: sudo posinext-cms-setup
 # Its Caddy sites (posinext.com, and www.posinext.com redirecting to it) are in /etc/caddy/posinext-site.caddy, which the
 # Caddyfile only imports, so the other hubs' sites on this server are never rewritten. If Caddy does not accept the
 # result, everything is put back as it was. If another hub's script rewrites the Caddyfile later (e.g.
@@ -64,6 +66,57 @@ rm -rf "$DIR.new"
 cp -r "$src" "$DIR.new"
 chmod -R a+rX "$DIR.new"
 
+# ---- blog CMS backend: admin login on this server, GitHub token kept here (site/cms/) ----
+id posinext-cms >/dev/null 2>&1 || useradd --system --no-create-home --home-dir /nonexistent --shell /usr/sbin/nologin posinext-cms </dev/null
+install -d -m 755 /opt/posinext-cms
+install -m 644 "$root/site/cms/cms_server.py" /opt/posinext-cms/cms_server.py
+install -m 755 "$root/site/cms/posinext-cms-setup" /usr/local/sbin/posinext-cms-setup
+install -d -m 750 -o root -g posinext-cms /etc/posinext-cms
+install -d -m 750 -o posinext-cms -g posinext-cms /var/lib/posinext-cms
+cat > /etc/systemd/system/posinext-cms.service <<'EOF'
+[Unit]
+Description=POSINEXT blog CMS backend (/admin/api)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=posinext-cms
+Group=posinext-cms
+ExecStart=/usr/bin/python3 -I /opt/posinext-cms/cms_server.py
+Restart=always
+RestartSec=2
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+ReadWritePaths=/var/lib/posinext-cms
+
+[Install]
+WantedBy=multi-user.target
+EOF
+# a CMS publish writes /var/lib/posinext-cms/rebuild; this rebuilds the site right away instead of waiting for the timer
+cat > /etc/systemd/system/posinext-site-rebuild.path <<'EOF'
+[Unit]
+Description=Rebuild posinext.com when the CMS publishes
+
+[Path]
+PathModified=/var/lib/posinext-cms/rebuild
+Unit=posinext-site-update.service
+
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl daemon-reload </dev/null
+systemctl enable posinext-cms.service posinext-site-rebuild.path </dev/null >/dev/null 2>&1 || true
+systemctl restart posinext-cms.service </dev/null
+systemctl start posinext-site-rebuild.path </dev/null || true
+
 touch "$CF"
 cp -p "$CF" "$tmp/Caddyfile.bak"
 if [ -f "$OURS" ]; then cp -p "$OURS" "$tmp/ours.bak"; fi
@@ -72,23 +125,33 @@ cat > "$OURS" <<EOF
 posinext.com {
   root * $DIR
   encode zstd gzip
-  @fonts path /fonts/*
-  header @fonts Cache-Control "public, max-age=31536000, immutable"
-  @img path /img/* /favicon.svg
-  header @img Cache-Control "public, max-age=2592000"
-  @pages not path /fonts/* /img/* /favicon.svg
-  header @pages Cache-Control "public, max-age=600"
-  # the CMS: never cached, never indexed
+  header X-Content-Type-Options nosniff
+  header Referrer-Policy strict-origin-when-cross-origin
+  # the CMS: never cached, never indexed, never framed
   @admin path /admin /admin/*
   header @admin Cache-Control "no-store"
   header @admin X-Robots-Tag "noindex, nofollow"
-  header X-Content-Type-Options nosniff
-  header Referrer-Policy strict-origin-when-cross-origin
-  # old Lovable script and style files are gone: no page needs them
-  @lovable path /assets/*
-  respond @lovable 410
-  try_files {path} {path}/index.html
-  file_server
+  header @admin X-Frame-Options DENY
+  # CMS backend (site/cms/cms_server.py): admin login, GitHub commits
+  handle /admin/api/* {
+    request_body {
+      max_size 2MB
+    }
+    reverse_proxy 127.0.0.1:8787
+  }
+  handle {
+    @fonts path /fonts/*
+    header @fonts Cache-Control "public, max-age=31536000, immutable"
+    @img path /img/* /favicon.svg
+    header @img Cache-Control "public, max-age=2592000"
+    @pages not path /fonts/* /img/* /favicon.svg /admin /admin/*
+    header @pages Cache-Control "public, max-age=600"
+    # old Lovable script and style files are gone: no page needs them
+    @lovable path /assets/*
+    respond @lovable 410
+    try_files {path} {path}/index.html
+    file_server
+  }
   # unknown addresses answer 404 with the site's 404 page (not the home page), so search engines see a real 404
   handle_errors {
     @404 expression "{err.status_code} == 404"
@@ -159,4 +222,9 @@ systemctl enable --now posinext-site-update.timer </dev/null >/dev/null 2>&1 || 
 
 echo "posinext.com is served from $DIR ($(find "$DIR" -type f | wc -l) files), built from ${SHA:0:7}."
 echo "Admin: https://posinext.com/admin/  ·  auto-update: systemctl list-timers posinext-site-update.timer"
+if [ ! -s /etc/posinext-cms/config.json ]; then
+  echo
+  echo "One more step for the blog admin: set its login and GitHub token with"
+  echo "  sudo posinext-cms-setup"
+fi
 echo "The first visit can take a minute while the HTTPS certificate is made."

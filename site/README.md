@@ -55,27 +55,21 @@ everything if Caddy does not accept the result.
 - After a deploy, submit `https://posinext.com/sitemap.xml` in Google Search Console and Bing Webmaster Tools.
 
 
-## Blog CMS (serverless)
+## Blog CMS
 
-The CMS admin interface is built from `site/src/admin.html` and is served at `/admin/`. It uses the GitHub Contents API directly:
-- Enter admin label `souvik` and a fine-grained GitHub personal access token for this repository.
-- Scope the token to `souvik992/saas-portal` only, with **Contents: Read and write**. The token remains in the browser tab's memory and is not saved to browser storage or committed.
-- Create and edit CMS posts, save drafts, publish immediately, or schedule a future date for the daily 9:00 AM India-time build.
-- Posts are JSON files in `content/posts/` at the repository root. Drafts are omitted from the public site; published posts and scheduled posts whose date has arrived are rendered into static HTML.
-- Article body markup is sanitized by `site/src/cms.py` before rendering.
-- A daily scheduled task researches and commits one post from the queue in `content/blog-plan.md`. Optional `updated_on` (YYYY-MM-DD) in a post's JSON sets its modified date in the sitemap and schema.
-- The posinext.com server (`site/deploy.sh`) rebuilds within 10 minutes of a commit and each day for scheduled posts. The GitHub Actions workflow only checks that the site builds; it deploys nothing.
-
-### Enable serverless website hosting
-
-In repository **Settings → Pages**, set the publishing source to **GitHub Actions**. The workflow `.github/workflows/site-pages.yml` builds the static site and deploys `site/public` using GitHub Pages. GitHub's workflow and domain setup guides:
-- [Configure a GitHub Pages publishing source](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
-- [Configure a custom domain and DNS](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site)
-
-Complete the custom-domain cutover in this order:
-1. In repository **Settings → Pages**, keep **GitHub Actions** as the publishing source. Under **Custom domain**, enter `posinext.com` and click **Save**. GitHub's custom-domain field must be configured even when using a custom Actions workflow.
-2. At the DNS provider for `posinext.com`, point the apex `@` to all four GitHub Pages A-record targets: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, and `185.199.111.153`. For `www`, create a CNAME pointing to `souvik992.github.io`.
-3. Remove only conflicting web-host A/AAAA/CNAME records for `@` and `www`; do not delete mail (MX), verification or other unrelated TXT records. GitHub recommends adding the custom domain in Pages before changing DNS.
-4. After DNS validates, enable **Enforce HTTPS** in Pages settings. DNS updates may take up to 24 hours.
-
-Until these GitHub Pages and DNS settings are complete, the old production host remains in control of `posinext.com`, so a successful Actions run alone does not prove that the custom domain serves the new admin page.
+The admin page (`site/src/admin.html`, served at `/admin/`) has only a username and password sign-in. GitHub is handled
+by a small backend on the posinext.com server, `site/cms/cms_server.py` (Python standard library, installed by
+`deploy.sh` as the `posinext-cms` service on 127.0.0.1:8787; Caddy proxies `/admin/api/*` to it):
+- Set or change the admin login and the GitHub token on the server: `sudo posinext-cms-setup`. The token is a
+  fine-grained token for `souvik992/saas-portal` only, with **Contents: Read and write**. It is stored in
+  `/etc/posinext-cms/config.json` (readable only by root and the service) and never reaches the browser.
+- Passwords are stored as scrypt hashes. Sessions are signed HttpOnly, Secure, SameSite=Strict cookies valid for
+  12 hours; changing the password signs out all sessions. Five wrong passwords from one IP lock it out for 15 minutes.
+- Create and edit posts, save drafts, publish now, or schedule a date. Each save is a commit to
+  `content/posts/<slug>.json`; publishing triggers a rebuild at once (`posinext-site-rebuild.path`), so posts are
+  live in about a minute. Scheduled posts go live on the first rebuild on their date (India time).
+- Drafts are omitted from the public site. Article body markup is sanitized by `site/src/cms.py` before rendering.
+- A daily scheduled task researches and commits one post from the queue in `content/blog-plan.md`. Optional
+  `updated_on` (YYYY-MM-DD) in a post's JSON sets its modified date in the sitemap and schema.
+- Logs: `journalctl -u posinext-cms` (backend), `journalctl -u posinext-site-update` (rebuilds). The GitHub Actions
+  workflow only checks that the site builds; it deploys nothing.
