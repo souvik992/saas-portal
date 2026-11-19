@@ -50,3 +50,22 @@ everything if Caddy does not accept the result.
   `HUB_DEMO_REQUEST_TO` on the server. The only email address shown anywhere is `support@posinext.com`.
 - Prices on `/pricing/` match the portal's plans (`cloud/saas-web/src/plans.ts`); change both together.
 - After a deploy, submit `https://posinext.com/sitemap.xml` in Google Search Console and Bing Webmaster Tools.
+
+
+## Blog CMS (serverless)
+
+The CMS admin interface is built from `site/src/admin.html` and is served at `/admin/`. It uses the GitHub Contents API directly:
+- Enter admin label `souvik` and a fine-grained GitHub personal access token for this repository.
+- Scope the token to `souvik992/saas-portal` only, with **Contents: Read and write**. The token remains in the browser tab's memory and is not saved to browser storage or committed.
+- Create and edit CMS posts, save drafts, publish immediately, or schedule a future date for the daily 9:00 AM India-time build.
+- Posts are JSON files in `content/posts/`. Drafts are omitted from the public site; published posts and scheduled posts whose date has arrived are rendered into static HTML.
+- Article body markup is sanitized by `site/src/cms.py` before rendering.
+- The daily GitHub Actions workflow builds and deploys the static website. No app server, database, production Caddy host or VPS is required for the CMS or deployment.
+
+### Enable serverless website hosting
+
+In repository **Settings → Pages**, set the publishing source to **GitHub Actions**. The workflow `.github/workflows/site-pages.yml` builds the static site and deploys `site/public` using GitHub Pages. GitHub's workflow and domain setup guides:
+- [Configure a GitHub Pages publishing source](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+- [Configure a custom domain and DNS](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site)
+
+The current `posinext.com` DNS must be pointed to the GitHub Pages DNS targets shown by GitHub after adding the custom domain in Pages settings. Do not switch DNS before the Pages custom domain is saved and GitHub confirms its target values. The current production host remains in place until that DNS cutover is completed.
