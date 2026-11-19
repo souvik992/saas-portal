@@ -108,7 +108,64 @@ POSTS = [
 <h2>How POSINEXT does it</h2>
 <p>POSINEXT Fine Dine has a <strong>leakage dashboard</strong> with cards for items cancelled or reduced after KOT, voids, discounts above limit, reprints, table moves, complimentary items, cash out and drawer opens, day-end difference, and food made but never paid, each with a drill-down to who, when and why. Sensitive actions need a manager's PIN, and everything is in the audit log. See <a href="/fine-dine-pos/">Fine Dine POS</a> and <a href="/features/#security">staff and security features</a>.</p>""",
      [("What is revenue leakage in a restaurant?", "Money lost through small gaps: items cancelled after KOT, voided or reprinted bills, unapproved discounts, cash taken out of the drawer and food that was made but never billed."),
-      ("How can a POS reduce leakage?", "By giving every staff member their own PIN, requiring a manager's PIN for sensitive actions, recording reasons, printing change slips to the kitchen and showing it all on a leakage dashboard and audit log.")]),
+      ("How can a POS reduce leakage?", "By giving every staff member their own PIN, requiring a manager's PIN for sensitive actions, recording reasons, printing change slips to the kitchen and showing it all on a leakage dashboard and audit log.")]),,
+
+    ("restaurant-inventory-management-india",
+     "Restaurant Inventory Management in India: A Practical Guide to Stock, Waste and Food Cost",
+     "Learn how Indian restaurants can control inventory with recipe costing, purchase records, FIFO, wastage logs and weekly stock variance checks—with practical examples.",
+     "2026-11-19",
+     """<p>A restaurant can have a full dining room and still struggle to understand where its money went. Sales reports show what guests bought; purchase bills show what the kitchen ordered. The missing link is what those sales should have consumed, what was actually used, and what happened to the difference.</p>
+<p>That is the purpose of restaurant inventory management. It is not just counting bags of rice or checking how much paneer is left. It is a repeatable operating process that connects purchasing, receiving, recipes, kitchen usage, wastage and sales.</p>
+<h2>What restaurant inventory management should tell you</h2>
+<p>At a minimum, a useful system should answer five questions:</p>
+<ul><li>What ingredients and finished goods are in stock right now?</li><li>What did we receive, from which supplier, at what quantity and price?</li><li>How much stock should each dish have consumed based on the orders sold?</li><li>What was wasted, returned, transferred or used for staff meals?</li><li>Where does actual stock differ from expected stock, and what explains the gap?</li></ul>
+<p>A spreadsheet can be a perfectly sensible starting point for a single outlet. Software becomes more useful when purchases, recipes, sales and counts are connected, especially across multiple shifts or outlets.</p>
+<h2>1. Build a clean ingredient and unit master</h2>
+<p>Start with the ingredients that matter financially and operationally: paneer, chicken, fish, cooking oil, dairy, rice, flour, packaging and high-value beverages. Give each ingredient one standard base unit—grams, millilitres or pieces—and define how supplier units convert into it.</p>
+<p>For example, if a supplier invoice records a 5 kg bag of rice but your recipe uses 180 g per portion, the system must understand that one bag equals 5,000 g. Avoid creating separate stock items such as “paneer”, “paneer 1 kg” and “paneer block” when they represent the same ingredient and can be converted consistently.</p>
+<h2>2. Record what actually arrives—not just what was ordered</h2>
+<p>A purchase order is a request; it is not proof that the full quantity arrived. At receiving time, compare the supplier bill or delivery challan with the physical quantity and quality. Record short deliveries, damaged packs, substitutions and returns before the invoice is treated as received stock.</p>
+<p>Keep the supplier, invoice number, date, item, unit, quantity, rate and tax details together. This gives the owner a trail when a price changes or the stock count does not match the books.</p>
+<h2>3. Cost recipes using measured portions</h2>
+<p>Recipe mapping connects a dish sold at the POS to the ingredients it consumes. Weigh a standard serving rather than relying on “one ladle” or “a handful”. Include sauces, garnishes and packaging where relevant, and define how variants and add-ons change the recipe.</p>
+<p><strong>Worked example:</strong> suppose one serving of paneer curry uses 180 g of paneer. If the latest recorded purchase cost is ₹360 per kg, the paneer component costs ₹64.80 before gravy, spices, oil, garnish, cooking loss and packaging. The full recipe cost must include those other components too; ₹64.80 is not the dish's total food cost.</p>
+<p>When a recipe changes, update the recipe card and effective date. Otherwise, theoretical consumption will be wrong even when the kitchen follows the new portion correctly.</p>
+<h2>4. Use FIFO and sensible storage routines</h2>
+<p>First In, First Out (FIFO) means using older stock before newer stock. Label opened and prepped containers with the received or preparation date, store ingredients in their designated locations, and follow appropriate food-safety temperature and handling requirements. FIFO helps reduce avoidable spoilage, but it does not replace food-safety checks or local compliance requirements.</p>
+<h2>5. Log wastage and non-sale usage honestly</h2>
+<p>Stock can leave the kitchen without appearing in a customer bill: trimming, spoilage, overproduction, staff meals, complimentary dishes, tasting, spills or returns. Record the quantity, reason, time and person responsible. Do not label every unexplained difference as theft; first check portion sizes, recipe versions, receiving errors, unit conversions and missed entries.</p>
+<h2>6. Compare theoretical usage with actual usage</h2>
+<p>This is the step that turns a stock register into inventory control. For each ingredient, calculate what the recipes say should have been consumed from the dishes sold, then compare that figure with stock movement.</p>
+<div class="tb"><table><thead><tr><th>Paneer example for one week</th><th>Quantity</th></tr></thead><tbody>
+<tr><td>Opening stock</td><td>8 kg</td></tr><tr><td>Purchases received</td><td>20 kg</td></tr><tr><td>Closing physical stock</td><td>9 kg</td></tr><tr><td>Actual usage (8 + 20 − 9)</td><td><strong>19 kg</strong></td></tr><tr><td>Expected usage from POS sales and recipes</td><td>17.5 kg</td></tr><tr><td>Unexplained variance before investigation</td><td><strong>1.5 kg</strong></td></tr></tbody></table></div>
+<p>At ₹360 per kg, the 1.5 kg difference is ₹540 for the week. It is a prompt to investigate—not proof of loss. Check whether the receiving weight was correct, whether the recipe is up to date, whether staff meals and wastage were recorded, and whether portions are consistent.</p>
+<h2>7. Set par levels to prevent both stockouts and over-ordering</h2>
+<p>A par level is the quantity you aim to have available to cover expected use until the next delivery, plus a reasonable buffer. Base it on recent consumption, supplier lead time, delivery days, storage capacity and demand variation—not a fixed guess made once.</p>
+<p>For example, if average paneer usage is 2.5 kg per day and the next reliable delivery is in two days, expected demand is about 5 kg before that delivery. Add a buffer based on demand swings and supplier reliability, then adjust after reviewing actual stockouts and leftovers. The right buffer differs by ingredient and outlet.</p>
+<h2>8. Run a small, repeatable stock review</h2>
+<p>Do not start by trying to count every ingredient every night. Make the routine achievable:</p>
+<ul><li><strong>Every delivery:</strong> check quantities, quality, price and invoice details.</li><li><strong>Every shift:</strong> record wastage, staff meals, complimentary items and transfers.</li><li><strong>Daily:</strong> count critical or high-value ingredients and investigate unusual movement.</li><li><strong>Weekly:</strong> compare theoretical and actual usage for priority ingredients and review supplier price changes.</li><li><strong>Monthly:</strong> complete a broader physical count and reconcile it with purchase and accounting records.</li></ul>
+<h2>9. Choose inventory software by testing the workflow</h2>
+<p>When evaluating restaurant inventory software in India, do not stop at a stock-on-hand screen. Ask the vendor to demonstrate a complete example using your menu:</p>
+<ul><li>Can a purchase entry record actual received quantity and supplier rate?</li><li>Can you define recipes with grams, millilitres, pieces, yields and add-ons?</li><li>Does a POS sale deduct the mapped ingredients as configured?</li><li>Can the team record wastage, staff meals, complimentary items and stock transfers?</li><li>Can you compare expected consumption with physical stock and drill into the variance?</li><li>Can managers review item-wise sales, purchases and stock movement by outlet and date?</li><li>Can you export the records needed by your accountant?</li></ul>
+<p>Test a real shift or sample menu during the trial. A long feature list matters less than whether kitchen staff can enter purchases and wastage consistently when service is busy.</p>
+<h2>How POSINEXT fits into the workflow</h2>
+<p>POSINEXT is designed as a restaurant operating platform spanning POS billing, orders, outlets and reporting. Review the <a href="/features/">platform features</a> and <a href="/pricing/">published plans</a>, then use a <a href="/book-a-demo/">guided demo</a> to confirm the inventory, recipe and reporting workflows you need are available for your restaurant configuration. Ask the team to demonstrate your own purchase-to-sale scenario before deciding.</p>
+<h2>A simple weekly inventory review template</h2>
+<div class="tb"><table><thead><tr><th>Ingredient</th><th>Expected use</th><th>Actual use</th><th>Variance</th><th>Next action</th></tr></thead><tbody>
+<tr><td>Paneer</td><td>17.5 kg</td><td>19 kg</td><td>+1.5 kg</td><td>Check portions, waste and receiving</td></tr>
+<tr><td>Cooking oil</td><td>Based on recipes</td><td>From stock count</td><td>Calculate</td><td>Check frying, spills and recipe units</td></tr>
+<tr><td>Chicken</td><td>Based on dishes sold</td><td>From stock count</td><td>Calculate</td><td>Check yield, trimming and portion size</td></tr></tbody></table></div>
+<p>Assign one owner to each follow-up and review whether the variance improves next week. Consistent small checks are more valuable than a perfect stock sheet that nobody updates.</p>
+<p class="note">The numbers in the paneer example are illustrative calculations, not an industry benchmark or a claim about typical restaurant performance. Food-cost targets depend on cuisine, recipe, format, location, supplier prices and accounting treatment. This guide is operational information, not food-safety, accounting or tax advice.</p>
+<h2>Further reading</h2>
+<ul><li><a href="https://nchm.gov.in/sites/default/files/2026-05/E%20book%20Advance%20Food%20%26%20Beverage%20Management%20II.pdf">National Council for Hotel Management: Advance Food &amp; Beverage Management</a> (inventory and POS operational flow)</li><li><a href="https://www.cbic.gov.in/">CBIC</a> for current GST and official tax guidance relevant to your business</li></ul>""",
+     [("What is restaurant inventory management?", "It is the process of tracking ingredients and supplies from purchasing and receiving through storage, recipe usage, wastage and sales, then comparing expected usage with physical stock."),
+      ("How do you calculate actual food usage?", "Opening stock plus purchases received minus closing physical stock equals actual usage for the period. Record transfers and non-sale usage separately so the comparison is meaningful."),
+      ("What is theoretical food consumption?", "It is the quantity of ingredients that should have been used based on POS sales multiplied by the standard recipe quantity for each dish."),
+      ("How often should a restaurant count inventory?", "Count high-value or perishable ingredients frequently, review priority ingredient variance weekly, and complete a broader physical count monthly. Adjust the schedule to your outlet's risk and volume."),
+      ("Does restaurant POS software automatically manage inventory?", "Only when the product supports the required recipe mapping, units, purchase and wastage workflows and stock deduction rules. Ask for an end-to-end demonstration using your own menu.")]),
+
 ]
 
 
