@@ -1,0 +1,61 @@
+name: Build and commit static website
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "site/src/**"
+      - "site/cms/**"
+      - "site/deploy.sh"
+      - "content/posts/**"
+      - ".github/workflows/site-build-commit.yml"
+  schedule:
+    - cron: "45 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: posinext-static-build
+  cancel-in-progress: false
+
+jobs:
+  build-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install build dependencies
+        run: python -m pip install --disable-pip-version-check pillow fonttools brotli
+      - name: Build
+        run: |
+          python site/src/build.py | tee build.log
+          test -f site/public/blog/restaurant-inventory-management-india/index.html
+          test -f site/public/blog/index.html
+          test -f site/public/sitemap.xml
+          test -f site/public/llms.txt
+          test -f site/public/llms-full.txt
+          grep -Fq "/blog/restaurant-inventory-management-india/" site/public/sitemap.xml
+          grep -Fq "/blog/restaurant-inventory-management-india/" site/public/blog/index.html
+          grep -Fq "/blog/restaurant-inventory-management-india/" site/public/llms.txt
+          grep -Fq "/blog/restaurant-inventory-management-india/" site/public/llms-full.txt
+          grep -Fq "Restaurant Inventory Management" site/public/blog/restaurant-inventory-management-india/index.html
+          if grep -q "Skipping invalid CMS post" build.log; then echo "::error::A CMS post is invalid"; exit 1; fi
+      - name: Commit generated static files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/public
+          if git diff --cached --quiet; then
+            echo "Generated output is already current."
+          else
+            git commit -m "Build static POSINEXT website"
+            git push origin main
+          fi
