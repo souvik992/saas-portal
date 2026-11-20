@@ -76,5 +76,6 @@ Allow: /
 User-agent: *
 Allow: /
 Disallow: /404.html
+Disallow: /admin/
 
 Sitemap: https://posinext.com/sitemap.xml
