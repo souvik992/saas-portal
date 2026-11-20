@@ -327,6 +327,7 @@ def extras(write, built):
         full += [f"- {t}: {strip(d)}" for _, t, d in p["features"]] + [""]
         full += [f"Q: {strip(q)}\nA: {strip(a)}\n" for q, a in p["faqs"]]
     full += ["## Plans", ""] + [f"- {n}: ₹{pr:,} per outlet per year plus GST. {a} Includes: {'; '.join(f)}." for n, pr, a, _, _, f in PLANS] + [""]
+    full += ["## Guides", ""] + [f"- [{plain(t)}]({SITE}/blog/{s}/): {plain(d)} (Published: {date})" for s, t, d, date, *_ in POSTS] + [""]
     (OUT / "llms-full.txt").write_text("\n".join(full), encoding="utf-8")
     # agent resource descriptor
     ard = {"specVersion": "0.9", "publisher": {"name": "POSINEXT", "url": SITE + "/"}, "entries": [
