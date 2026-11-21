@@ -234,6 +234,7 @@ A: Swiggy and Zomato orders on one screen (ODS) are part of the Growth plan, ₹
 
 ## Guides
 
+- [Swiggy and Zomato Commission: Real Cost and Margin per Order](https://posinext.com/blog/swiggy-zomato-commission-india/): Swiggy and Zomato commission explained for Indian restaurants: every fee, GST and TDS line, a ₹420 worked example and a formula to price your delivery menu. (Published: 2026-11-21)
 - [How to Get More Google Reviews for Your Restaurant in India](https://posinext.com/blog/get-more-google-reviews-restaurant/): Get more genuine Google reviews for your restaurant in India: review QR codes, staff scripts, replying to bad reviews, reporting fakes and rules to avoid. (Published: 2026-11-20)
 - [How to Reconcile Swiggy & Zomato Payouts: A Restaurant Owner's Checklist](https://posinext.com/blog/restaurant-aggregator-payout-reconciliation-india/): Match aggregator orders, fees, refunds and bank credits with a practical Swiggy and Zomato settlement reconciliation checklist for Indian restaurants. (Published: 2026-11-20)
 - [Restaurant Inventory Management in India: A Practical Guide to Stock, Waste and Food Cost](https://posinext.com/blog/restaurant-inventory-management-india/): Learn how Indian restaurants can control inventory with recipe costing, purchase records, FIFO, wastage logs and weekly stock variance checks—with practical examples. (Published: 2026-11-19)
