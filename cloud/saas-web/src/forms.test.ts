@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { checkCode, checkSignup, deviceName, formatSize, isMobile, toggleProduct, type SignupForm } from "./forms";
+import { checkCaptcha, checkCode, checkLogin, checkSignup, deviceName, formatSize, isMobile, toggleProduct, type SignupForm } from "./forms";
 import { productForType, productFromQuery, RESTAURANT_TYPES, restaurantTypeOf } from "./products";
 import { normalisePath } from "./router";
 
@@ -26,6 +26,27 @@ describe("sign-up checks", () => {
   it("the email code is 6 digits", () => {
     expect(checkCode(" 123456 ")).toBeNull();
     expect(checkCode("12345")).toMatch(/6-digit/);
+  });
+});
+
+describe("sign-in checks", () => {
+  it("a good email and password pass", () => {
+    expect(checkLogin(" asha@spicegarden.in ", "tandoor-2026")).toEqual({});
+  });
+  it("empty fields ask for a value", () => {
+    expect(checkLogin(" ", "")).toEqual({ email: "Enter your email.", password: "Enter your password." });
+  });
+  it("a bad email or a password no account can have is caught", () => {
+    expect(checkLogin("asha@", "short")).toEqual({ email: "Enter a valid email address.", password: "Passwords are at least 8 characters." });
+    expect(checkLogin("asha@spicegarden.in", "x".repeat(201)).password).toMatch(/at most 200/);
+  });
+});
+
+describe("captcha check", () => {
+  it("needs the 5 characters; spaces do not count", () => {
+    expect(checkCaptcha(" ab c7k ")).toBeNull();
+    expect(checkCaptcha("abc")).toMatch(/5 characters/);
+    expect(checkCaptcha("")).toMatch(/5 characters/);
   });
 });
 

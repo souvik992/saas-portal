@@ -10,7 +10,7 @@ export interface SignupForm {
   products: ProductCode[];
 }
 
-export type FieldErrors = Partial<Record<keyof SignupForm | "code" | "restaurantType", string>>;
+export type FieldErrors = Partial<Record<keyof SignupForm | "code" | "restaurantType" | "captcha", string>>;
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -30,6 +30,24 @@ export function checkSignup(f: SignupForm): FieldErrors {
   if (f.password.length < 8) e.password = "At least 8 characters.";
   else if (f.password.length > 200) e.password = "At most 200 characters.";
   return e;
+}
+
+export type LoginErrors = Partial<Record<"email" | "password" | "captcha", string>>;
+
+/** Sign-in: catch typos before they count towards the 15-minute lock for wrong passwords. Every password is 8-200 characters. */
+export function checkLogin(email: string, password: string): LoginErrors {
+  const e: LoginErrors = {};
+  if (!email.trim()) e.email = "Enter your email.";
+  else if (!EMAIL.test(email.trim())) e.email = "Enter a valid email address.";
+  if (!password) e.password = "Enter your password.";
+  else if (password.length < 8) e.password = "Passwords are at least 8 characters.";
+  else if (password.length > 200) e.password = "Passwords are at most 200 characters.";
+  return e;
+}
+
+/** The picture captcha: 5 characters (the cloud checks them; case and spaces do not matter). */
+export function checkCaptcha(answer: string): string | null {
+  return answer.replace(/\s+/g, "").length === 5 ? null : "Type the 5 characters in the picture.";
 }
 
 export function checkCode(code: string): string | null {

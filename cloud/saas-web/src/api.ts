@@ -77,13 +77,27 @@ export const support = {
   status: () => api<Status>("GET", "/v1/status"),
 };
 
+/** The picture captcha's answer, sent with sign-up and sign-in when the cloud asks for one (GET /v1/account/captcha). */
+export interface CaptchaAnswer { captchaId: string; captcha: string }
+export type CaptchaChallenge = { enabled: false } | { enabled: true; id: string; image: string };
+/** What the cloud asks of the customer website (its admin page's security checks). */
+export interface PortalChecks { captcha: boolean; otp: boolean; emailVerification: boolean; mobileVerification: boolean }
+
 export const account = {
-  signup: (b: { businessName: string; name: string; email: string; phone: string; password: string; products: ProductCode[] }) =>
+  captcha: () => api<CaptchaChallenge>("GET", "/v1/account/captcha"),
+  checks: () => api<PortalChecks>("GET", "/v1/checks?channel=portal"),
+  /** Mobile verification: after PHONE_NOT_VERIFIED (details.pending), the SMS code signs in. */
+  verifyPhone: (pending: string, code: string) => api<{ ok: true }>("POST", "/v1/account/verify-phone", { pending, code }),
+  resendPhone: (pending: string) => api<{ ok: true }>("POST", "/v1/account/resend-phone", { pending }),
+  /** Sign in with a code sent by SMS to the account's confirmed mobile. */
+  sendSignInCode: (phone: string, captcha?: CaptchaAnswer) => api<{ ok: true }>("POST", "/v1/account/code/send", { phone, ...captcha }),
+  signInWithCode: (phone: string, code: string) => api<{ ok: true }>("POST", "/v1/account/code/login", { phone, code }),
+  signup: (b: { businessName: string; name: string; email: string; phone: string; password: string; products: ProductCode[] } & Partial<CaptchaAnswer>) =>
     // verify: false when the cloud does not ask for the emailed code (HUB_SKIP_EMAIL_VERIFY): already signed in
     api<{ email: string; verify: boolean }>("POST", "/v1/account/signup", b),
   verify: (email: string, code: string) => api<{ ok: true }>("POST", "/v1/account/verify", { email, code }),
   resend: (email: string) => api<{ ok: true }>("POST", "/v1/account/resend", { email }),
-  login: (email: string, password: string) => api<{ ok: true }>("POST", "/v1/account/login", { email, password }),
+  login: (email: string, password: string, captcha?: CaptchaAnswer) => api<{ ok: true }>("POST", "/v1/account/login", { email, password, ...captcha }),
   logout: () => api<{ ok: true }>("POST", "/v1/account/logout"),
   me: () => api<Me>("GET", "/v1/account/me"),
   forgot: (email: string) => api<{ ok: true }>("POST", "/v1/account/forgot", { email }),
