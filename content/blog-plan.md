@@ -25,6 +25,9 @@ Each post goes deep on one channel or problem and links back to the pillar guide
   /app-ordering/, /food-delivery-app/, /swiggy-zomato-integration/, /features/, /pricing/, /book-a-demo/).
   Mention POSINEXT once or twice where it fits; the post must be useful even to someone who never buys.
 - 4–6 FAQs answering real follow-up questions in 1–3 sentences each.
+- Add `image_prompt` (one or two sentences describing a realistic scene for the AI cover: no text, logos or brand
+  names) and `image_alt` (a short description of that scene) to the post's JSON. Covers are made with
+  `python site/tools/blog_images.py`.
 - Allowed HTML in body_html: p h2 h3 ul ol li strong em blockquote table thead tbody tr th td a br. No h1, images,
   classes, scripts or inline styles.
 

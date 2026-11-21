@@ -105,7 +105,13 @@ def load_managed_posts(existing_slugs=None):
             updated = str(item.get("updated_on") or "")
             if updated:
                 datetime.strptime(updated, "%Y-%m-%d")
-            loaded.append((slug, title, desc, date, body, faqs, updated))
+            # category, cover image prompt and alt text, and an optional named author ({"name", "role"})
+            author = item.get("author") if isinstance(item.get("author"), dict) and str(item["author"].get("name") or "").strip() else None
+            extra = {"category": str(item.get("category") or "").strip()[:50],
+                     "image_prompt": str(item.get("image_prompt") or "").strip()[:1500],
+                     "image_alt": str(item.get("image_alt") or "").strip()[:200],
+                     "author": {"name": str(author["name"]).strip()[:80], "role": str(author.get("role") or "").strip()[:120]} if author else None}
+            loaded.append((slug, title, desc, date, body, faqs, updated, extra))
             existing.add(slug)
         except (OSError, ValueError, KeyError, TypeError, IndexError, json.JSONDecodeError) as exc:
             print(f"Skipping invalid CMS post {path.name}: {exc}")

@@ -299,7 +299,8 @@ def software(name, desc, url, extra=None):
     return d
 
 
-def page(path, title, desc, body, schema=(), og_type="website", og_img="/img/og.jpg", preload=None, noindex=False, modified=None):
+def page(path, title, desc, body, schema=(), og_type="website", og_img="/img/og.jpg", preload=None, noindex=False, modified=None,
+         preload_sizes="(min-width:1024px) 600px, calc(100vw - 2.5rem)"):
     """The full HTML document. path: '/x/' (canonical). schema: extra JSON-LD nodes."""
     url = SITE + path
     graph = [ORG, WEBSITE, {"@type": "WebPage", "@id": url + "#page", "url": url, "name": title, "description": desc,
@@ -311,7 +312,7 @@ def page(path, title, desc, body, schema=(), og_type="website", og_img="/img/og.
         key = preload
         srcset = ", ".join(f"/img/{key}-{w}.webp {w}w" for w in (480, 800, 1200))
         pre = (f'<link rel="preload" as="image" type="image/webp" imagesrcset="{srcset}" '
-               f'imagesizes="(min-width:1024px) 600px, calc(100vw - 2.5rem)" fetchpriority="high">')
+               f'imagesizes="{preload_sizes}" fetchpriority="high">')
     robots = "noindex,follow" if noindex else "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
     head = (f'<!doctype html><html lang="en-IN"><head><meta charset="utf-8">'
             f'<meta name="viewport" content="width=device-width,initial-scale=1">'

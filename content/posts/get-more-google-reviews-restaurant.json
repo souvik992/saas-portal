@@ -33,5 +33,7 @@
       "question": "Can my staff or family write Google reviews for our restaurant?",
       "answer": "No. Google treats reviews from current or former employees, family members and others with a personal or professional connection as a conflict of interest, and removes them."
     }
-  ]
+  ],
+  "image_prompt": "Happy diners finishing a meal at a table in a warm Indian family restaurant, one guest holding a smartphone over a small plain table-top card with a QR code pattern, a smiling server nearby",
+  "image_alt": "Diners at a restaurant table, one scanning a table card with a phone"
 }

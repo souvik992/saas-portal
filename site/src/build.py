@@ -132,6 +132,8 @@ def images():
     src = Path(__file__).parent / "images"
     (OUT / "img").mkdir(exist_ok=True)
     for f in sorted(src.iterdir()):
+        if f.suffix.lower() not in (".jpg", ".jpeg", ".png", ".webp"):
+            continue  # e.g. blog-covers.json
         key = f.stem
         if key == "og":
             o = OUT / "img" / "og.jpg"
@@ -140,6 +142,12 @@ def images():
                 Image.open(f).convert("RGB").resize((1200, 675), Image.LANCZOS).save(o, "JPEG", quality=80, optimize=True, progressive=True)
             continue
         im = None
+        if key.startswith("blog-"):  # blog covers: a JPEG for link previews (WhatsApp, LinkedIn, Facebook)
+            o = OUT / "img" / f"{key}-og.jpg"
+            if not o.exists() or o.stat().st_mtime < f.stat().st_mtime:
+                from PIL import Image, ImageOps
+                im = Image.open(f).convert("RGB")
+                ImageOps.fit(im, (1200, 675), Image.LANCZOS).save(o, "JPEG", quality=80, optimize=True, progressive=True)
         for w in (480, 800, 1200):
             o = OUT / "img" / f"{key}-{w}.webp"
             if o.exists() and o.stat().st_mtime >= f.stat().st_mtime:

@@ -29,5 +29,7 @@
       "question": "How do I move customers from Swiggy and Zomato to direct ordering?",
       "answer": "Make the direct channel easy and worth it: a fast ordering page or app, a small sustainable benefit such as free delivery above a threshold, and reminders on your Google profile, Instagram bio, WhatsApp and packaging, within each platform's rules."
     }
-  ]
+  ],
+  "image_prompt": "A lively street-facing Indian cafe in the early evening with string lights, customers arriving and chatting at the entrance, a blank chalkboard stand outside, warm inviting glow",
+  "image_alt": "Customers arriving at a lively street-side cafe in the evening"
 }

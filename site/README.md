@@ -73,3 +73,29 @@ by a small backend on the posinext.com server, `site/cms/cms_server.py` (Python 
   `updated_on` (YYYY-MM-DD) in a post's JSON sets its modified date in the sitemap and schema.
 - Logs: `journalctl -u posinext-cms` (backend), `journalctl -u posinext-site-update` (rebuilds). The GitHub Actions
   workflow only checks that the site builds; it deploys nothing.
+
+## Blog layout and AI cover images
+
+Blog posts show a category, the byline ("POSINEXT Editorial Team" unless a CMS post's JSON names an `author`
+`{"name", "role"}`), the date, reading time, a contents list, share links and related guides. Categories, the byline
+and the cover prompts of the posts in `src/posts.py` are in `src/blog_meta.py`; CMS posts carry `category`,
+`image_prompt` and `image_alt` in their JSON (the `/admin/` editor has fields for them).
+
+**From the admin page:** `/admin/` has a **Cover images** panel for every guide (code and CMS posts): describe the
+picture, press **Generate with AI**, then **Use this picture**; or upload your own. The CMS server makes the picture
+(the OpenAI key is in `/etc/posinext-cms/config.json`, set with `sudo posinext-cms-setup`, and never reaches the
+browser; at most 30 pictures an hour), commits `src/images/blog-<slug>.*` and `blog-covers.json`, and triggers the
+rebuild. The panel's list of guides is `public/admin/posts.json`, written by the build.
+
+**From a terminal** (the key is read from the environment only):
+
+```bash
+export OPENAI_API_KEY=sk-...                 # PowerShell: $env:OPENAI_API_KEY = "sk-..."
+python site/tools/blog_images.py --dry-run   # see the prompts
+python site/tools/blog_images.py             # make covers for posts without one
+python site/src/build.py
+```
+
+Covers are saved as `src/images/blog-<slug>.jpg` (16:9) and listed in `src/images/blog-covers.json`, so the article
+says "AI-generated illustration" under them. Commit both. A post without a cover shows a designed placeholder. To
+use your own picture instead, save it as `src/images/blog-<slug>.jpg` and leave it out of `blog-covers.json`.

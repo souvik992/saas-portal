@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Set the POSINEXT blog CMS admin login and the GitHub token it commits with. Run on the server:
+"""Set the POSINEXT blog CMS admin login, the GitHub token it commits with, and (optional) the OpenAI API key for
+AI cover images. Run on the server:
     sudo posinext-cms-setup
 Press Enter at a prompt to keep the current value. Changing the password signs out every open admin session."""
 import getpass
@@ -65,6 +66,28 @@ def main():
             continue
         print(f"  Token OK (GitHub user {login}).")
         cfg["github_token"] = tok
+        break
+
+    while True:
+        key = getpass.getpass("OpenAI API key for AI cover images (optional; Enter to "
+                              + ("keep, 'none' to remove): " if cfg.get("openai_api_key") else "skip): ")).strip()
+        if not key:
+            break
+        if key.lower() == "none":
+            cfg.pop("openai_api_key", None)
+            print("  Removed: the admin page cannot make AI pictures.")
+            break
+        try:
+            req = urllib.request.Request("https://api.openai.com/v1/models", headers={"Authorization": "Bearer " + key})
+            urllib.request.urlopen(req, timeout=20).read()
+        except urllib.error.HTTPError as e:
+            print(f"  OpenAI refused that key ({e.code}).")
+            continue
+        except Exception as e:
+            print(f"  Could not check the key: {e}")
+            continue
+        print("  Key OK.")
+        cfg["openai_api_key"] = key
         break
 
     cfg.update(username=user, repo=REPO, branch="main")

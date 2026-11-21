@@ -1,6 +1,14 @@
-"""Blog: guides for restaurant owners. Each post: (slug, title, description, date, body html, faqs)."""
-from kit import PORTAL, EMAIL, SITE, cards, faq, ico
+"""Blog: guides for restaurant owners. Each post: (slug, title, description, date, body html, faqs).
+Categories, cover-image prompts and the byline are in blog_meta.py; AI covers are made by site/tools/blog_images.py."""
+import html as _html
+import json
+import re
+from datetime import datetime
+from pathlib import Path
+from urllib.parse import quote
+from kit import PORTAL, EMAIL, SITE, faq, ico, esc, page, crumbs, cta_band
 from cms import load_managed_posts
+from blog_meta import AUTHOR, CODE_POSTS, IMAGE_STYLE
 
 D = "2026-11-13"
 
@@ -170,8 +178,105 @@ POSTS = [
 ]
 
 
-ALL = []        # every post on the site (code + CMS), newest first; filled by build() for llms.txt
+ALL = []        # every post on the site (code + CMS), newest first, as (slug, title, desc, date, ...); for llms.txt
 LASTMOD = {}    # '/blog/<slug>/' -> last-modified date, for sitemap.xml
+
+IMAGES = Path(__file__).parent / "images"
+COVERS = IMAGES / "blog-covers.json"   # written by tools/blog_images.py: the covers that are AI-generated
+ICON = {"Restaurant Marketing": "users", "Restaurant Operations": "chart", "Online Orders": "bike",
+        "GST & Compliance": "receipt", "Restaurant Technology": "monitor"}
+COVER_SIZES = "(min-width:1280px) 1232px, calc(100vw - 2.5rem)"
+
+
+def nice(d):
+    return datetime.strptime(d, "%Y-%m-%d").strftime("%d %B %Y").lstrip("0")
+
+
+def short(d):
+    return datetime.strptime(d, "%Y-%m-%d").strftime("%d %b %Y").lstrip("0")
+
+
+def minutes(body):
+    return max(1, round(len(re.sub(r"<[^>]+>", " ", body).split()) / 200))
+
+
+def anchor(text):
+    return re.sub(r"[^a-z0-9]+", "-", _html.unescape(re.sub(r"<[^>]+>", "", text)).lower()).strip("-")[:60] or "part"
+
+
+def with_ids(body):
+    """Gives each <h2> an id for the contents list; returns (body, [(id, heading text)])."""
+    toc, seen = [], set()
+
+    def one(m):
+        a = base = anchor(m.group(1))
+        n = 2
+        while a in seen:
+            a, n = f"{base}-{n}", n + 1
+        seen.add(a)
+        toc.append((a, re.sub(r"<[^>]+>", "", m.group(1))))
+        return f'<h2 id="{a}">{m.group(1)}</h2>'
+    return re.sub(r"<h2>(.*?)</h2>", one, body, flags=re.S), toc
+
+
+def normalise(t, ai):
+    slug, title, desc, date, body, faqs, *rest = t
+    updated = rest[0] if rest and rest[0] else ""
+    extra = rest[1] if len(rest) > 1 and isinstance(rest[1], dict) else {}
+    code = CODE_POSTS.get(slug)
+    image = next((f"blog-{slug}" for ext in (".jpg", ".png", ".webp") if (IMAGES / f"blog-{slug}{ext}").exists()), None)
+    return {"slug": slug, "title": title, "desc": desc, "date": date, "updated": updated if updated != date else "",
+            "body": body, "faqs": faqs, "category": extra.get("category") or (code[0] if code else "") or "Guides",
+            "alt": extra.get("image_alt") or (code[2] if code else "") or title, "image": image, "ai": slug in ai,
+            "author": extra.get("author") or AUTHOR, "minutes": minutes(body)}
+
+
+def cover(p, eager=False, sizes="(min-width:1024px) 400px, (min-width:768px) 50vw, calc(100vw - 2.5rem)"):
+    """The post's cover (WebP at 480/800/1200 from src/images/blog-<slug>.*), or a designed placeholder until there is one."""
+    if p["image"]:
+        key = p["image"]
+        srcset = ", ".join(f"/img/{key}-{w}.webp {w}w" for w in (480, 800, 1200))
+        load = 'fetchpriority="high"' if eager else 'loading="lazy"'
+        return (f'<img class="cv" src="/img/{key}-800.webp" srcset="{srcset}" sizes="{sizes}" width="1200" height="675" '
+                f'alt="{esc(p["alt"])}" {load} decoding="async">')
+    t = sum(map(ord, p["category"])) % 4
+    return f'<div class="cv cv{t}" aria-hidden="true">{ico(ICON.get(p["category"], "book"))}</div>'
+
+
+def avatar(a):
+    if a is AUTHOR:  # the team: the logo mark
+        return ('<span class="av"><svg viewBox="0 0 32 24" aria-hidden="true"><path class="a" d="M2 2 L12 12 L2 22 H8 L18 12 L8 2 Z"/>'
+                '<path class="b" d="M14 2 L24 12 L14 22 H20 L30 12 L20 2 Z"/></svg></span>')
+    return f'<span class="av av-t" aria-hidden="true">{esc("".join(w[0] for w in a["name"].split()[:2]).upper())}</span>'
+
+
+def byline(p):
+    upd = f' · Updated <time datetime="{p["updated"]}">{nice(p["updated"])}</time>' if p["updated"] else ""
+    return (f'<div class="by">{avatar(p["author"])}<div><b>{esc(p["author"]["name"])}</b><span><time datetime="{p["date"]}">'
+            f'{nice(p["date"])}</time>{upd} · {p["minutes"]} min read</span></div></div>')
+
+
+def card(p, featured=False):
+    img = cover(p, eager=True, sizes="(min-width:1024px) 680px, calc(100vw - 2.5rem)") if featured else cover(p)
+    h = "h2" if featured else "h3"
+    meta = f'<p class="bm"><time datetime="{p["date"]}">{short(p["date"])}</time> · {p["minutes"]} min read</p>'
+    return (f'<a class="{"bl-f" if featured else "bcard"}" href="/blog/{p["slug"]}/">{img}<div class="bl-t">'
+            f'<span class="cat">{esc(p["category"])}</span><{h}>{p["title"]}</{h}><p>{p["desc"]}</p>{meta}</div></a>')
+
+
+def share(p):
+    u = quote(f"{SITE}/blog/{p['slug']}/", safe="")
+    t = quote(_html.unescape(p["title"]), safe="")
+    links = [("WhatsApp", f"https://wa.me/?text={t}%20{u}"), ("LinkedIn", f"https://www.linkedin.com/sharing/share-offsite/?url={u}"),
+             ("X", f"https://twitter.com/intent/tweet?url={u}&amp;text={t}"), ("Facebook", f"https://www.facebook.com/sharer/sharer.php?u={u}")]
+    return ('<div class="share"><span>Share this guide</span>'
+            + "".join(f'<a href="{h}" target="_blank" rel="noopener">{n}</a>' for n, h in links) + "</div>")
+
+
+def author_box(p):
+    a = p["author"]
+    return (f'<div class="abox">{avatar(a)}<div><span class="ey">Written by</span><b>{esc(a["name"])}</b>'
+            f'<p>{esc(a.get("bio") or a.get("role") or "")}</p></div></div>')
 
 
 def build(simple, write):
@@ -182,31 +287,87 @@ def build(simple, write):
     all_posts.extend(load_managed_posts(existing_slugs))
     all_posts.sort(key=lambda p: p[3], reverse=True)
     ALL[:] = all_posts
-    for s, _, _, d, *rest in all_posts:
-        LASTMOD[f"/blog/{s}/"] = rest[2] if len(rest) > 2 and rest[2] else d
-    if all_posts:
+    try:
+        ai = set(json.loads(COVERS.read_text(encoding="utf-8")))
+    except (OSError, ValueError):
+        ai = set()
+    posts = [normalise(t, ai) for t in all_posts]
+    for p in posts:
+        LASTMOD[f"/blog/{p['slug']}/"] = p["updated"] or p["date"]
+    if posts:
         LASTMOD["/blog/"] = max(LASTMOD.values())
-    lst = cards([("file", t, d, f"/blog/{s}/") for s, t, d, *_ in all_posts], "cards c2")
-    simple("/blog/", "Restaurant POS Blog: Guides for Restaurant Owners | POSINEXT",
+
+    # ---- the blog page: the newest post large, the topics, then the rest in a grid
+    cats = sorted({p["category"] for p in posts})
+    lst = ""
+    if posts:
+        lst = card(posts[0], featured=True)
+        if len(cats) > 1:
+            lst += '<div class="bl-c"><span>Topics</span>' + "".join(f'<span class="cat">{esc(c)}</span>' for c in cats) + "</div>"
+        if len(posts) > 1:
+            lst += '<div class="bl-g">' + "".join(card(p) for p in posts[1:]) + "</div>"
+    # a compact header: the breadcrumb already says "Blog", so no eyebrow, and less space before the posts
+    bc, bc_schema = crumbs([("Blog", "/blog/")])
+    index = (f'{bc}<section class="ph ph-c"><div class="w"><h1>Guides for restaurant owners</h1>'
+             '<p class="lead">Practical, no-fluff guides on billing, GST, inventory, food cost, online orders and running a tighter restaurant.</p>'
+             f'</div></section><section class="sec-s"><div class="w">{lst}</div></section>{cta_band()}')
+    write("/blog/", page("/blog/", "Restaurant POS Blog: Guides for Restaurant Owners | POSINEXT",
            "Practical restaurant management guides for India: POS software, GST billing, inventory, food cost, online orders and operational control.",
-           "Blog", "Guides for restaurant owners", "Practical, no-fluff guides on billing, GST, inventory, food cost, online orders and running a tighter restaurant.",
-           f'<section class="sec-s"><div class="w">{lst}</div></section>', [("Blog", "/blog/")],
-           [{"@type": "Blog", "name": "POSINEXT Blog", "url": SITE + "/blog/", "publisher": {"@id": SITE + "/#org"},
-             "blogPost": [{"@type": "BlogPosting", "headline": t, "url": f"{SITE}/blog/{s}/", "datePublished": d} for s, t, _, d, *_ in all_posts]}],
-           priority="0.8")
-    for slug, title, desc, date, body, faqs, *extra in all_posts:
-        modified = extra[0] if extra and extra[0] else date
+           index, [bc_schema, {"@type": "Blog", "name": "POSINEXT Blog", "url": SITE + "/blog/", "publisher": {"@id": SITE + "/#org"},
+             "blogPost": [{"@type": "BlogPosting", "headline": _html.unescape(p["title"]), "url": f"{SITE}/blog/{p['slug']}/",
+                           "datePublished": p["date"], **({"image": f"{SITE}/img/{p['image']}-og.jpg"} if p["image"] else {})}
+                          for p in posts]}], modified=LASTMOD.get("/blog/")), "0.8")
+
+    # ---- each article
+    for p in posts:
+        slug, title, desc, body, faqs = p["slug"], p["title"], p["desc"], p["body"], p["faqs"]
         if "<table>" in body and '<div class="tb">' not in body:  # CMS tables: scroll sideways on phones
             body = body.replace("<table>", '<div class="tb"><table>').replace("</table>", "</table></div>")
+        body, toc = with_ids(body)
         fh, fschema = faq(faqs) if faqs else ("", None)
-        others = [p for p in all_posts if p[0] != slug][:3]
-        more = ('<h2>More guides</h2><ul>' + "".join(f'<li><a href="/blog/{s}/">{t}</a></li>' for s, t, *_ in others) + "</ul>")
-        fh = fh.replace('<div class="fq">', '<div class="fq" style="margin-left:0;max-width:46rem">', 1)
-        inner = (f'<section class="sec-s"><div class="w"><article class="pr"><p class="meta">By the POSINEXT team · '
-                 f'<time datetime="{date}">{__import__("datetime").datetime.strptime(date, "%Y-%m-%d").strftime("%d %B %Y")}</time></p>{body}{"<h2>Frequently asked questions</h2>" if faqs else ""}</article>'
-                 f'{fh}<div class="pr">{more}</div></div></section>')
-        art = {"@type": "BlogPosting", "headline": title, "description": desc, "datePublished": date, "dateModified": modified,
-               "author": {"@type": "Organization", "name": "POSINEXT", "url": SITE + "/"}, "publisher": {"@id": SITE + "/#org"},
-               "image": SITE + "/img/og.jpg", "mainEntityOfPage": f"{SITE}/blog/{slug}/", "inLanguage": "en-IN"}
-        simple(f"/blog/{slug}/", title, desc, "Guide", title.split(":")[0] if ":" in title and len(title) > 70 else title, desc,
-               inner, [("Blog", "/blog/"), (title.split(":")[0], f"/blog/{slug}/")], [art] + ([fschema] if fschema else []), priority="0.7")
+        if faqs:
+            fh = '<h2 id="faq">Frequently asked questions</h2>' + fh.replace('<div class="fq">', '<div class="fq" style="margin-left:0;max-width:46rem">', 1)
+            toc.append(("faq", "Frequently asked questions"))
+        others = [q for q in posts if q["slug"] != slug]   # newest first
+        related = ([q for q in others if q["category"] == p["category"]] + [q for q in others if q["category"] != p["category"]])[:3]
+        toc_html = ('<aside class="toc" aria-label="On this page"><b>On this page</b><ol>'
+                    + "".join(f'<li><a href="#{a}">{t}</a></li>' for a, t in toc) + "</ol></aside>") if len(toc) >= 3 else ""
+        caption = "<figcaption>AI-generated illustration</figcaption>" if p["image"] and p["ai"] else ""
+        bc, bc_schema = crumbs([("Blog", "/blog/"), (title.split(":")[0], f"/blog/{slug}/")])
+        art = (f'{bc}<article class="bp"><header class="w bp-h"><div class="bp-hi"><span class="cat">{esc(p["category"])}</span>'
+               f'<h1>{title}</h1><p class="lead">{desc}</p>{byline(p)}</div></header>'
+               f'<figure class="w bp-cover">{cover(p, eager=True, sizes=COVER_SIZES)}{caption}</figure>'
+               f'<div class="w bp-g"><div class="pr bp-body">{body}{fh}{share(p)}{author_box(p)}</div>{toc_html}</div></article>')
+        if related:
+            art += ('<section class="sec-s bs"><div class="w"><span class="ey">Keep reading</span>'
+                    '<h2 class="bl-h">More guides for restaurant owners</h2><div class="bl-g">'
+                    + "".join(card(q) for q in related) + "</div></div></section>")
+        art += cta_band()
+        a = p["author"]
+        author = ({"@type": "Organization", "name": a["name"], "url": SITE + "/about/"} if a is AUTHOR
+                  else {"@type": "Person", "name": a["name"], **({"jobTitle": a["role"]} if a.get("role") else {})})
+        og = f"/img/{p['image']}-og.jpg" if p["image"] else "/img/og.jpg"
+        schema = {"@type": "BlogPosting", "headline": _html.unescape(title), "description": _html.unescape(desc),
+                  "datePublished": p["date"], "dateModified": p["updated"] or p["date"], "author": author,
+                  "publisher": {"@id": SITE + "/#org"}, "image": SITE + og, "articleSection": p["category"],
+                  "mainEntityOfPage": f"{SITE}/blog/{slug}/", "inLanguage": "en-IN"}
+        doc = page(f"/blog/{slug}/", title, desc, art, [bc_schema, schema] + ([fschema] if fschema else []), og_type="article",
+                   og_img=og, preload=p["image"], preload_sizes=COVER_SIZES, modified=p["updated"] or p["date"])
+        doc = doc.replace('<meta property="og:locale"', f'<meta property="article:published_time" content="{p["date"]}">'
+                          f'<meta property="article:section" content="{esc(p["category"])}"><meta property="og:locale"', 1)
+        write(f"/blog/{slug}/", doc, "0.7")
+
+    # ---- for the /admin/ cover panel: every published post (code and CMS), its cover prompt and whether it has a cover
+    out = Path(__file__).resolve().parent.parent / "public" / "admin"
+    out.mkdir(parents=True, exist_ok=True)
+    managed = {}
+    for f in (Path(__file__).resolve().parents[2] / "content" / "posts").glob("*.json"):
+        try:
+            managed[f.stem] = json.loads(f.read_text(encoding="utf-8")).get("image_prompt") or ""
+        except (OSError, ValueError):
+            pass
+    listing = [{"slug": p["slug"], "title": _html.unescape(p["title"]), "category": p["category"], "date": p["date"],
+                "prompt": (CODE_POSTS[p["slug"]][1] if p["slug"] in CODE_POSTS else managed.get(p["slug"], "")),
+                "cover": f"/img/{p['image']}-800.webp" if p["image"] else None, "ai": p["ai"], "cms": p["slug"] not in CODE_POSTS}
+               for p in posts]
+    (out / "posts.json").write_text(json.dumps({"style": IMAGE_STYLE, "posts": listing}, ensure_ascii=False), encoding="utf-8")
