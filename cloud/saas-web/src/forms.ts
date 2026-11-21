@@ -20,7 +20,17 @@ export function isMobile(value: string): boolean {
   return /^[6-9]\d{9}$/.test(digits);
 }
 
-/** "test" anywhere in an email or password (any case): this is the real portal, not a place to try things out. */
+/**
+ * What a mobile field keeps as you type: digits only, at most 10. A pasted "+91 98765 43210" or "098765 43210" loses
+ * its 91 / 0 prefix first, so it still fits.
+ */
+export function mobileDigits(value: string): string {
+  let d = value.replace(/\D/g, "");
+  if (d.length > 10) d = d.replace(/^(0091|91|0)/, "");
+  return d.slice(0, 10);
+}
+
+/** "test" anywhere in a name, email or password (any case): this is the real portal, not a place to try things out. */
 export const NOT_TESTING = "😠 This is not your testing environment.";
 const looksLikeTest = (v: string) => /test/i.test(v);
 
@@ -28,7 +38,9 @@ export function checkSignup(f: SignupForm): FieldErrors {
   const e: FieldErrors = {};
   if (f.products.length === 0) e.products = "Choose QSR, Fine Dine or both.";
   if (!f.businessName.trim()) e.businessName = "Enter your business name.";
+  else if (looksLikeTest(f.businessName)) e.businessName = NOT_TESTING;
   if (!f.name.trim()) e.name = "Enter your name.";
+  else if (looksLikeTest(f.name)) e.name = NOT_TESTING;
   if (looksLikeTest(f.email)) e.email = NOT_TESTING;
   else if (!EMAIL.test(f.email.trim())) e.email = "Enter a valid email address.";
   if (!isMobile(f.phone)) e.phone = "Enter a 10-digit mobile number.";

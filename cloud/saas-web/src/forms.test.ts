@@ -1,17 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { checkCaptcha, checkCode, checkLogin, checkSignup, NOT_TESTING, deviceName, formatSize, isMobile, toggleProduct, type SignupForm } from "./forms";
+import { checkCaptcha, checkCode, checkLogin, checkSignup, mobileDigits, NOT_TESTING, deviceName, formatSize, isMobile, toggleProduct, type SignupForm } from "./forms";
 import { productForType, productFromQuery, RESTAURANT_TYPES, restaurantTypeOf } from "./products";
 import { normalisePath } from "./router";
 
 const ok: SignupForm = { businessName: "Spice Garden", name: "Asha Rao", email: "asha@spicegarden.in", phone: "98765 43210", password: "tandoor-2026", products: ["fine_dine"] };
 
 describe("no testing on the real portal", () => {
-  it("an email or password with \"test\" in it (any case) gets the angry message, on sign-in and sign-up", () => {
+  it("a name, email or password with \"test\" in it (any case) gets the angry message, on sign-in and sign-up", () => {
     expect(NOT_TESTING).toBe("😠 This is not your testing environment.");
     expect(checkLogin("test@example.com", "Tandoor-2026")).toEqual({ email: NOT_TESTING });
     expect(checkLogin("asha@spicegarden.in", "MyTEST123")).toEqual({ password: NOT_TESTING });
     expect(checkSignup({ ...ok, email: "qa.Test@x.in", password: "testing-123" })).toEqual({ email: NOT_TESTING, password: NOT_TESTING });
     expect(checkLogin("asha@spicegarden.in", "tandoor-2026")).toEqual({});
+    expect(checkSignup({ ...ok, name: "Test User", businessName: "My TEST Cafe" })).toEqual({ name: NOT_TESTING, businessName: NOT_TESTING });
   });
 });
 
@@ -32,6 +33,14 @@ describe("sign-up checks", () => {
   it("Indian mobile numbers with or without +91, 0 and spaces", () => {
     for (const m of ["9876543210", "+91 98765 43210", "098765-43210", "0091 9876543210"]) expect(isMobile(m)).toBe(true);
     for (const m of ["5876543210", "987654321", "98765432100", "phone"]) expect(isMobile(m)).toBe(false);
+  });
+  it("a mobile field keeps 10 digits; a pasted +91 / 0 prefix is dropped", () => {
+    expect(mobileDigits("98765 43210")).toBe("9876543210");
+    expect(mobileDigits("+91 98765 43210")).toBe("9876543210");
+    expect(mobileDigits("098765-43210")).toBe("9876543210");
+    expect(mobileDigits("0091 9876543210")).toBe("9876543210");
+    expect(mobileDigits("98765432109999")).toBe("9876543210");
+    expect(mobileDigits("98a7")).toBe("987");
   });
   it("the email code is 6 digits", () => {
     expect(checkCode(" 123456 ")).toBeNull();

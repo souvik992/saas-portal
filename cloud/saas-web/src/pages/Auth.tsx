@@ -3,7 +3,7 @@ import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { account, ApiError, type PortalChecks, type ProductCode } from "../api";
 import { CaptchaField, useCaptcha } from "../components/Captcha";
 import { Notice } from "../components/Layout";
-import { checkCode, checkLogin, checkSignup, toggleProduct, type FieldErrors, type LoginErrors, type SignupForm } from "../forms";
+import { checkCode, checkLogin, checkSignup, mobileDigits, toggleProduct, type FieldErrors, type LoginErrors, type SignupForm } from "../forms";
 import { PRODUCT_COPY, PRODUCT_ORDER, productForType, productFromQuery, RESTAURANT_TYPES, restaurantTypeOf, type RestaurantType } from "../products";
 import { Link, navigate, useLocation } from "../router";
 import { useSession } from "../session";
@@ -146,7 +146,7 @@ function CodeSignIn({ onDone, onPassword }: { onDone: () => void; onPassword: ()
         <p className="muted">We send a 6-digit code by SMS to your account&rsquo;s mobile number.</p>
       </div>
       <Notice>{error}</Notice>
-      <Field label="Mobile"><input className="input" value={phone} onChange={(e) => setPhone(e.target.value)} inputMode="tel" autoComplete="tel" placeholder="98765 43210" autoFocus /></Field>
+      <Field label="Mobile"><input className="input" value={phone} onChange={(e) => setPhone(mobileDigits(e.target.value))} inputMode="numeric" autoComplete="tel-national" placeholder="9876543210" autoFocus /></Field>
       <CaptchaField captcha={captcha} error={captchaError} onType={() => setCaptchaError(undefined)} />
       <button className="btn btn-primary btn-lg btn-block" disabled={busy}>{busy ? "Sending…" : "Send code"}</button>
       <div className="links"><button type="button" className="btn btn-ghost" onClick={onPassword}>Sign in with password</button></div>
@@ -288,7 +288,7 @@ export function Register() {
         <Field label="Business name" error={errors.businessName}><input className="input" value={form.businessName} onChange={set("businessName")} autoComplete="organization" aria-invalid={!!errors.businessName} /></Field>
         <div className="grid-2">
           <Field label="Your name" error={errors.name}><input className="input" value={form.name} onChange={set("name")} autoComplete="name" aria-invalid={!!errors.name} /></Field>
-          <Field label="Mobile" error={errors.phone}><input className="input" value={form.phone} onChange={set("phone")} inputMode="tel" autoComplete="tel" placeholder="98765 43210" aria-invalid={!!errors.phone} /></Field>
+          <Field label="Mobile" error={errors.phone}><input className="input" value={form.phone} onChange={(e) => set("phone")({ target: { value: mobileDigits(e.target.value) } })} inputMode="numeric" autoComplete="tel-national" placeholder="9876543210" aria-invalid={!!errors.phone} /></Field>
         </div>
         <Field label="Email" error={errors.email}><input className="input" value={form.email} onChange={set("email")} type="email" autoComplete="email" aria-invalid={!!errors.email} /></Field>
         <Field label="Password" error={errors.password} hint="At least 8 characters. You also use it to sign in on your PC."><input className="input" value={form.password} onChange={set("password")} type="password" autoComplete="new-password" aria-invalid={!!errors.password} /></Field>
