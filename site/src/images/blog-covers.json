@@ -1,0 +1,17 @@
+{
+ "restaurant-aggregator-payout-reconciliation-india": {
+  "model": "ChatGPT image generation",
+  "quality": "",
+  "prompt": "Packed delivery orders in kraft bags and boxes on a wooden restaurant counter beside a printed receipt, a calculator and a notebook, with a cook working in the kitchen behind"
+ },
+ "get-more-google-reviews-restaurant": {
+  "model": "ChatGPT image generation",
+  "quality": "",
+  "prompt": "A restaurant owner in an apron sitting at a wooden table in his restaurant, thoughtfully looking at a laptop, with takeaway bags and boxes, a calculator and a notebook beside him and a cook in the kitchen behind"
+ },
+ "swiggy-zomato-commission-india": {
+  "model": "ChatGPT image generation",
+  "quality": "",
+  "prompt": "A restaurant owner in an apron at a table reading a printed statement, with a calculator, a notebook, a laptop and packed takeaway boxes beside him and cooks working in the kitchen behind"
+ }
+}
