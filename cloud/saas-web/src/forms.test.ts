@@ -1,9 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { checkCaptcha, checkCode, checkLogin, checkSignup, deviceName, formatSize, isMobile, toggleProduct, type SignupForm } from "./forms";
+import { checkCaptcha, checkCode, checkLogin, checkSignup, NOT_TESTING, deviceName, formatSize, isMobile, toggleProduct, type SignupForm } from "./forms";
 import { productForType, productFromQuery, RESTAURANT_TYPES, restaurantTypeOf } from "./products";
 import { normalisePath } from "./router";
 
 const ok: SignupForm = { businessName: "Spice Garden", name: "Asha Rao", email: "asha@spicegarden.in", phone: "98765 43210", password: "tandoor-2026", products: ["fine_dine"] };
+
+describe("no testing on the real portal", () => {
+  it("an email or password with \"test\" in it (any case) gets the angry message, on sign-in and sign-up", () => {
+    expect(NOT_TESTING).toBe("😠 This is not your testing environment.");
+    expect(checkLogin("test@example.com", "Tandoor-2026")).toEqual({ email: NOT_TESTING });
+    expect(checkLogin("asha@spicegarden.in", "MyTEST123")).toEqual({ password: NOT_TESTING });
+    expect(checkSignup({ ...ok, email: "qa.Test@x.in", password: "testing-123" })).toEqual({ email: NOT_TESTING, password: NOT_TESTING });
+    expect(checkLogin("asha@spicegarden.in", "tandoor-2026")).toEqual({});
+  });
+});
 
 describe("sign-up checks", () => {
   it("a complete form has no errors", () => {

@@ -1,4 +1,4 @@
-import { Check, CheckCircle2 } from "lucide-react";
+import { Check, CheckCircle2, X } from "lucide-react";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { account, ApiError, type PortalChecks, type ProductCode } from "../api";
 import { CaptchaField, useCaptcha } from "../components/Captcha";
@@ -31,8 +31,9 @@ const PHOTOS = {
 function AuthPage({ side, photo = "signin", frame = "fit", children }: { side: ReactNode; photo?: keyof typeof PHOTOS; frame?: "fit" | "grow"; children: ReactNode }) {
   const p = PHOTOS[photo];
   return (
-    <div className="wrap auth-frame-wrap">
-      <div className={frame === "grow" ? "card auth-frame auth-frame-grow" : "card auth-frame"}>
+    <div className="auth-frame-wrap">
+      <div className={frame === "grow" ? "auth-frame auth-frame-grow" : "auth-frame"}>
+        <a className="auth-close" href="https://posinext.com" aria-label="Close and go to posinext.com" title="Back to posinext.com"><X size={20} /></a>
         <div className={frame === "grow" ? "auth-side auth-photo" : "auth-side auth-photo auth-photo-bottom"}>
           <img src={p.src} alt={p.alt} style={{ objectPosition: p.position }} />
           <div className="auth-photo-text">{side}</div>

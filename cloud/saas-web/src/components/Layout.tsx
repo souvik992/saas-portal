@@ -15,15 +15,16 @@ export function Brand() {
   );
 }
 
-/** Sign in, sign up and forgot password show no top bar: the page is just the photo and the form. */
-const NO_TOPBAR = new Set(["/", "/login", "/register", "/signup", "/forgot"]);
+/** Sign in, sign up and forgot password show no top bar and no footer: the page is just the photo and the form. */
+const AUTH_PAGES = new Set(["/", "/login", "/register", "/signup", "/forgot"]);
 
 export function Layout({ children }: { children: ReactNode }) {
   const { me, signOut } = useSession();
   const { path } = useLocation();
+  const bare = AUTH_PAGES.has(path);
   return (
     <>
-      {NO_TOPBAR.has(path) ? null : <header className="topbar">
+      {bare ? null : <header className="topbar">
         <div className="wrap">
           <Brand />
           <span className="spacer" />
@@ -45,14 +46,14 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
       </header>}
       <main>{children}</main>
-      <footer className="footer">
+      {bare ? null : <footer className="footer">
         <div className="wrap">
           <span>© {new Date().getFullYear()} posinext</span>
           <span className="spacer" />
           <Link to="/app/support">Support</Link>
           <a href="mailto:support@posinext.com">support@posinext.com</a>
         </div>
-      </footer>
+      </footer>}
     </>
   );
 }

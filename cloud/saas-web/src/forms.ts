@@ -20,14 +20,20 @@ export function isMobile(value: string): boolean {
   return /^[6-9]\d{9}$/.test(digits);
 }
 
+/** "test" anywhere in an email or password (any case): this is the real portal, not a place to try things out. */
+export const NOT_TESTING = "😠 This is not your testing environment.";
+const looksLikeTest = (v: string) => /test/i.test(v);
+
 export function checkSignup(f: SignupForm): FieldErrors {
   const e: FieldErrors = {};
   if (f.products.length === 0) e.products = "Choose QSR, Fine Dine or both.";
   if (!f.businessName.trim()) e.businessName = "Enter your business name.";
   if (!f.name.trim()) e.name = "Enter your name.";
-  if (!EMAIL.test(f.email.trim())) e.email = "Enter a valid email address.";
+  if (looksLikeTest(f.email)) e.email = NOT_TESTING;
+  else if (!EMAIL.test(f.email.trim())) e.email = "Enter a valid email address.";
   if (!isMobile(f.phone)) e.phone = "Enter a 10-digit mobile number.";
-  if (f.password.length < 8) e.password = "At least 8 characters.";
+  if (looksLikeTest(f.password)) e.password = NOT_TESTING;
+  else if (f.password.length < 8) e.password = "At least 8 characters.";
   else if (f.password.length > 200) e.password = "At most 200 characters.";
   return e;
 }
@@ -38,8 +44,10 @@ export type LoginErrors = Partial<Record<"email" | "password" | "captcha", strin
 export function checkLogin(email: string, password: string): LoginErrors {
   const e: LoginErrors = {};
   if (!email.trim()) e.email = "Enter your email.";
+  else if (looksLikeTest(email)) e.email = NOT_TESTING;
   else if (!EMAIL.test(email.trim())) e.email = "Enter a valid email address.";
   if (!password) e.password = "Enter your password.";
+  else if (looksLikeTest(password)) e.password = NOT_TESTING;
   else if (password.length < 8) e.password = "Passwords are at least 8 characters.";
   else if (password.length > 200) e.password = "Passwords are at most 200 characters.";
   return e;

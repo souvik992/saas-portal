@@ -119,17 +119,21 @@ textarea.input { height: auto; min-height: 120px; padding: 12px 16px; resize: ve
 .auth-photo .ticks svg { color: #7ee2a8; }
 .auth-card { align-self: center; }
 /* sign in: photo + form in one card sized to the screen (no page scroll), message at the bottom of the photo */
-.auth-frame-wrap { padding-block: 20px; min-height: calc(100dvh - 66px); display: grid; align-content: center; }
-main:has(.auth-frame-wrap) + .footer, main:has(.auth) + .footer { margin-top: 0; } /* sign in / sign up: no gap above the footer */
-.auth-frame { display: grid; grid-template-columns: 1.1fr 1fr; height: clamp(480px, calc(100dvh - 110px), 780px); overflow: hidden; border-radius: 24px; box-shadow: 0 24px 60px -30px rgb(0 0 0 / .3); }
+/* sign in / sign up / forgot: the whole window, the photo from top to bottom, the form beside it (scrolls on its own) */
+.auth-frame-wrap { min-height: 100dvh; display: grid; }
+.auth-frame { position: relative; display: grid; grid-template-columns: 1.1fr 1fr; height: 100dvh; overflow: hidden; background: var(--card); }
+.auth-close { position: absolute; top: 16px; right: 16px; z-index: 2; width: 40px; height: 40px; border-radius: 999px; display: grid; place-items: center; background: var(--card); border: 1px solid var(--border); color: var(--foreground); box-shadow: 0 4px 14px -6px rgb(0 0 0 / .25); }
+.auth-close:hover { background: var(--muted); text-decoration: none; }
 .auth-frame .auth-photo { min-height: 0; border-radius: 0; box-shadow: none; }
 .auth-frame .auth-photo > img { inset: auto 0 0 0; height: 114%; } /* larger and anchored to the bottom: trims the empty wall above the head */
-.auth-frame-grow { grid-template-columns: 1fr 1fr; height: auto; }
+.auth-frame-grow { grid-template-columns: 1fr 1fr; height: auto; min-height: 100dvh; }
+.auth-frame-grow .auth-photo { position: sticky; top: 0; height: 100dvh; } /* long sign-up form: the photo stays in view while it scrolls */
 .auth-frame-grow .auth-frame-form { justify-content: flex-start; overflow: visible; }
 .auth-photo-bottom { justify-content: flex-end; }
 .auth-photo-bottom::after { background: linear-gradient(180deg, rgb(0 0 0 / 0) 40%, rgb(12 9 7 / .55) 65%, rgb(12 9 7 / .9) 100%); }
 .auth-frame .auth-side h1 { font-size: clamp(32px, 3.6vw, 44px); margin: 12px 0 10px; }
-.auth-frame-form { display: flex; flex-direction: column; justify-content: center; padding: 40px 48px; overflow-y: auto; }
+.auth-frame-form { display: flex; flex-direction: column; justify-content: safe center; padding: 64px 48px 40px; overflow-y: auto; }
+.auth-frame-form > form { width: 100%; max-width: 440px; margin-inline: auto; }
 .auth-frame-form h2 { font-size: 28px; margin-bottom: 6px; }
 .select { appearance: none; padding-right: 40px; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23777' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
 .select:invalid, .select option[value=""] { color: var(--muted-foreground); }
@@ -301,7 +305,9 @@ select.an-small { padding-right: 34px; background-position: right 10px center; b
   .auth, .dash-hero { grid-template-columns: 1fr; gap: 28px; }
   .auth { padding-block: 16px 32px; }
   .auth-photo { order: 2; min-height: 600px; }
-  .auth-frame { grid-template-columns: 1fr; grid-template-rows: 200px auto; height: auto; }
+  .auth-frame, .auth-frame-grow { grid-template-columns: 1fr; grid-template-rows: 200px auto; height: auto; min-height: 100dvh; }
+  .auth-frame-grow .auth-photo { position: relative; height: auto; }
+  .auth-frame-form { overflow: visible; }
   .auth-frame .auth-photo { order: 0; }
   .auth-frame .auth-photo > img { height: 100%; inset: 0; object-position: 42% 30% !important; }
   .auth-frame .auth-side h1 { font-size: 30px; margin: 8px 0 0; }
@@ -317,7 +323,7 @@ select.an-small { padding-right: 34px; background-position: right 10px center; b
   .area { padding-top: 24px; }
   .grid-2, .choice-grid, .products, .dash-groups { grid-template-columns: 1fr; }
   .pad, .auth-card, .auth-frame-form { padding: 20px; }
-  .auth-frame-wrap { padding-block: 16px; }
+  .auth-frame-form { padding-top: 28px; }
   .dash-hero { padding: 24px; }
   .dash-hero h1 { font-size: 34px; }
   .dash-groups { gap: 24px; margin-top: 28px; }
