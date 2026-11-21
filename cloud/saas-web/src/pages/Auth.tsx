@@ -1,8 +1,9 @@
 import { Check, CheckCircle2 } from "lucide-react";
-import { useState, type FormEvent, type ReactNode } from "react";
-import { account, ApiError, type ProductCode } from "../api";
+import { useEffect, useState, type FormEvent, type ReactNode } from "react";
+import { account, ApiError, type PortalChecks, type ProductCode } from "../api";
+import { CaptchaField, useCaptcha } from "../components/Captcha";
 import { Notice } from "../components/Layout";
-import { checkCode, checkSignup, toggleProduct, type FieldErrors, type SignupForm } from "../forms";
+import { checkCode, checkLogin, checkSignup, toggleProduct, type FieldErrors, type LoginErrors, type SignupForm } from "../forms";
 import { PRODUCT_COPY, PRODUCT_ORDER, productForType, productFromQuery, RESTAURANT_TYPES, restaurantTypeOf, type RestaurantType } from "../products";
 import { Link, navigate, useLocation } from "../router";
 import { useSession } from "../session";
@@ -44,8 +45,116 @@ function AuthPage({ side, photo = "signin", frame = "fit", children }: { side: R
 
 const message = (e: unknown) => (e instanceof ApiError ? e.message : "Something went wrong. Please try again.");
 
+/** Mobile verification (cloud security check): the password or email code was right, now the SMS code. */
+interface PhoneStep { pending: string; phone: string }
+const phoneStepOf = (e: unknown): PhoneStep | null =>
+  e instanceof ApiError && e.code === "PHONE_NOT_VERIFIED" ? { pending: String(e.details.pending ?? ""), phone: String(e.details.phone ?? "your mobile") } : null;
+
+/** The customer website's security checks; null until known (or when the cloud is older and has none). */
+function usePortalChecks(): PortalChecks | null {
+  const [checks, setChecks] = useState<PortalChecks | null>(null);
+  useEffect(() => { account.checks().then(setChecks, () => setChecks(null)); }, []);
+  return checks;
+}
+
+/** The 6-digit SMS code that confirms the account's mobile number, then signs in. */
+function VerifyPhone({ step, onDone }: { step: PhoneStep; onDone: () => void }) {
+  const [code, setCode] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    const bad = checkCode(code);
+    if (bad) { setError(bad.replace("email", "SMS")); return; }
+    setBusy(true); setError(null);
+    try { await account.verifyPhone(step.pending, code.trim()); onDone(); } catch (err) { setError(message(err)); } finally { setBusy(false); }
+  };
+  const resend = async () => {
+    setError(null);
+    try { await account.resendPhone(step.pending); setInfo("We have sent a new code."); } catch (err) { setError(message(err)); }
+  };
+  return (
+    <form className="stack" onSubmit={(e) => void submit(e)} noValidate>
+      <div>
+        <h2>Confirm your mobile</h2>
+        <p className="muted">We sent a 6-digit code by SMS to <b>{step.phone}</b>. It works for 10 minutes.</p>
+      </div>
+      <Notice>{error}</Notice>
+      <Notice kind="ok">{info}</Notice>
+      <Field label="Code">
+        <input className="input input-code" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code} autoFocus
+          onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))} aria-label="6-digit code" />
+      </Field>
+      <button className="btn btn-primary btn-lg btn-block" disabled={busy}>{busy ? "Checking…" : "Confirm mobile"}</button>
+      <div className="links"><span className="muted">No SMS?</span><button type="button" className="btn btn-ghost" onClick={() => void resend()}>send a new code</button></div>
+    </form>
+  );
+}
+
+/** Sign in with a code: an SMS code to the account's confirmed mobile (cloud security check "OTP"). */
+function CodeSignIn({ onDone, onPassword }: { onDone: () => void; onPassword: () => void }) {
+  const captcha = useCaptcha();
+  const [phone, setPhone] = useState("");
+  const [sent, setSent] = useState(false);
+  const [code, setCode] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [captchaError, setCaptchaError] = useState<string | undefined>(undefined);
+  const [busy, setBusy] = useState(false);
+  const send = async (e?: FormEvent) => {
+    e?.preventDefault();
+    if (!phone.trim()) { setError("Enter your mobile number."); return; }
+    const pic = captcha.check();
+    if (pic) { setCaptchaError(pic); return; }
+    setBusy(true); setError(null);
+    try { await account.sendSignInCode(phone.trim(), captcha.payload()); setSent(true); setCode(""); }
+    catch (err) { if (err instanceof ApiError && err.code === "CAPTCHA_WRONG") setCaptchaError(err.message); else setError(message(err)); }
+    finally { setBusy(false); void captcha.renew(); }
+  };
+  const signIn = async (e: FormEvent) => {
+    e.preventDefault();
+    const bad = checkCode(code);
+    if (bad) { setError(bad.replace("email", "SMS")); return; }
+    setBusy(true); setError(null);
+    try { await account.signInWithCode(phone.trim(), code.trim()); onDone(); } catch (err) { setError(message(err)); } finally { setBusy(false); }
+  };
+  if (sent) {
+    return (
+      <form className="stack" onSubmit={(e) => void signIn(e)} noValidate>
+        <div>
+          <h2>Enter the code</h2>
+          <p className="muted">If <b>{phone.trim()}</b> is the confirmed mobile of an account, a code is on its way by SMS.</p>
+        </div>
+        <Notice>{error}</Notice>
+        <Field label="Code">
+          <input className="input input-code" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code} autoFocus
+            onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))} aria-label="6-digit code" />
+        </Field>
+        <button className="btn btn-primary btn-lg btn-block" disabled={busy}>{busy ? "Signing in…" : "Sign in"}</button>
+        <div className="links">
+          <button type="button" className="btn btn-ghost" onClick={() => { setSent(false); setError(null); }}>Use another number</button>
+          <button type="button" className="btn btn-ghost" onClick={onPassword}>Sign in with password</button>
+        </div>
+      </form>
+    );
+  }
+  return (
+    <form className="stack" onSubmit={(e) => void send(e)} noValidate>
+      <div>
+        <h2>Sign in with a code</h2>
+        <p className="muted">We send a 6-digit code by SMS to your account&rsquo;s mobile number.</p>
+      </div>
+      <Notice>{error}</Notice>
+      <Field label="Mobile"><input className="input" value={phone} onChange={(e) => setPhone(e.target.value)} inputMode="tel" autoComplete="tel" placeholder="98765 43210" autoFocus /></Field>
+      <CaptchaField captcha={captcha} error={captchaError} onType={() => setCaptchaError(undefined)} />
+      <button className="btn btn-primary btn-lg btn-block" disabled={busy}>{busy ? "Sending…" : "Send code"}</button>
+      <div className="links"><button type="button" className="btn btn-ghost" onClick={onPassword}>Sign in with password</button></div>
+    </form>
+  );
+}
+
 /** The 6-digit email code: after sign-up, or when signing in before the email was confirmed. */
-function VerifyCode({ email, onDone }: { email: string; onDone: () => void }) {
+function VerifyCode({ email, onDone, onPhone }: { email: string; onDone: () => void; onPhone: (s: PhoneStep) => void }) {
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
@@ -55,7 +164,7 @@ function VerifyCode({ email, onDone }: { email: string; onDone: () => void }) {
     const bad = checkCode(code);
     if (bad) { setError(bad); return; }
     setBusy(true); setError(null);
-    try { await account.verify(email, code.trim()); onDone(); } catch (err) { setError(message(err)); } finally { setBusy(false); }
+    try { await account.verify(email, code.trim()); onDone(); } catch (err) { const ps = phoneStepOf(err); if (ps) onPhone(ps); else setError(message(err)); } finally { setBusy(false); }
   };
   const resend = async () => {
     setError(null);
@@ -97,20 +206,26 @@ export function Register() {
   const [busy, setBusy] = useState(false);
   const [verifying, setVerifying] = useState<string | null>(null);
   const [type, setType] = useState<RestaurantType | null>(first === "fine_dine" ? "fine_dine" : null);
+  const [phoneStep, setPhoneStep] = useState<PhoneStep | null>(null);
+  const captcha = useCaptcha();
   // typing in a field clears that field's message
   const clear = (k: keyof FieldErrors) => setErrors((prev) => { const { [k]: _gone, ...rest } = prev; return rest; });
   const set = (k: keyof Omit<SignupForm, "products">) => (e: { target: { value: string } }) => { setForm({ ...form, [k]: e.target.value }); clear(k); };
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
-    const bad: FieldErrors = { ...(type ? {} : { restaurantType: "Choose your restaurant type." }), ...checkSignup(form) };
+    const pic = captcha.check();
+    const bad: FieldErrors = { ...(type ? {} : { restaurantType: "Choose your restaurant type." }), ...checkSignup(form), ...(pic ? { captcha: pic } : {}) };
     setErrors(bad);
     if (Object.keys(bad).length) return;
     setBusy(true); setError(null);
     try {
-      const r = await account.signup({ ...form, email: form.email.trim() });
+      const r = await account.signup({ ...form, email: form.email.trim(), ...captcha.payload() });
       if (r.verify) setVerifying(r.email); else { await reload(); navigate("/app?welcome=1"); }
     } catch (err) {
+      void captcha.renew(); // each picture is good for one try
+      const ps = phoneStepOf(err); // email verification off, mobile verification on: the account is made, the SMS code is next
+      if (ps) { setPhoneStep(ps); return; }
       if (err instanceof ApiError && Object.keys(err.fields).length) setErrors(err.fields as FieldErrors);
       setError(err instanceof ApiError && err.code === "EMAIL_TAKEN" ? null : message(err));
       if (err instanceof ApiError && err.code === "EMAIL_TAKEN") setErrors({ email: err.message });
@@ -126,8 +241,10 @@ export function Register() {
     </>
   );
 
+  const welcome = () => void reload().then(() => navigate("/app?welcome=1"));
+  if (phoneStep) return <AuthPage side={side} photo="register" frame="grow"><VerifyPhone step={phoneStep} onDone={welcome} /></AuthPage>;
   if (verifying) {
-    return <AuthPage side={side} photo="register" frame="grow"><VerifyCode email={verifying} onDone={() => void reload().then(() => navigate("/app?welcome=1"))} /></AuthPage>;
+    return <AuthPage side={side} photo="register" frame="grow"><VerifyCode email={verifying} onDone={welcome} onPhone={setPhoneStep} /></AuthPage>;
   }
   return (
     <AuthPage side={side} photo="register" frame="grow">
@@ -174,6 +291,7 @@ export function Register() {
         </div>
         <Field label="Email" error={errors.email}><input className="input" value={form.email} onChange={set("email")} type="email" autoComplete="email" aria-invalid={!!errors.email} /></Field>
         <Field label="Password" error={errors.password} hint="At least 8 characters. You also use it to sign in on your PC."><input className="input" value={form.password} onChange={set("password")} type="password" autoComplete="new-password" aria-invalid={!!errors.password} /></Field>
+        <CaptchaField captcha={captcha} error={errors.captcha} onType={() => clear("captcha")} />
         <button className="btn btn-primary btn-lg btn-block" disabled={busy}>{busy ? "Creating…" : "Create account"}</button>
         <p className="muted small">One free trial per product for each business, PC and mobile number.</p>
       </form>
@@ -187,20 +305,32 @@ export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<LoginErrors>({});
+  const captcha = useCaptcha();
   const [busy, setBusy] = useState(false);
   const [verifying, setVerifying] = useState<string | null>(null);
+  const [phoneStep, setPhoneStep] = useState<PhoneStep | null>(null);
+  const [withCode, setWithCode] = useState(false);
+  const checks = usePortalChecks();
   const next = query.get("next")?.startsWith("/app") ? query.get("next")! : "/app";
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!email.trim() || !password) { setError("Enter your email and password."); return; }
+    const pic = captcha.check();
+    const bad: LoginErrors = { ...checkLogin(email, password), ...(pic ? { captcha: pic } : {}) };
+    setErrors(bad);
+    if (Object.keys(bad).length) { setError(null); return; }
     setBusy(true); setError(null);
     try {
-      await account.login(email.trim(), password);
+      await account.login(email.trim(), password, captcha.payload());
       await reload();
       navigate(next);
     } catch (err) {
-      if (err instanceof ApiError && err.code === "EMAIL_NOT_VERIFIED") setVerifying(String(err.details.email ?? email.trim().toLowerCase()));
+      void captcha.renew(); // each picture is good for one try
+      const ps = phoneStepOf(err);
+      if (ps) setPhoneStep(ps);
+      else if (err instanceof ApiError && err.code === "CAPTCHA_WRONG") setErrors({ captcha: err.message });
+      else if (err instanceof ApiError && err.code === "EMAIL_NOT_VERIFIED") setVerifying(String(err.details.email ?? email.trim().toLowerCase()));
       else setError(message(err));
     } finally { setBusy(false); }
   };
@@ -212,7 +342,10 @@ export function Login() {
       <p className="muted">Downloads, licences, add-ons and support for your outlets.</p>
     </>
   );
-  if (verifying) return <AuthPage side={side}><VerifyCode email={verifying} onDone={() => void reload().then(() => navigate(next))} /></AuthPage>;
+  const done = () => void reload().then(() => navigate(next));
+  if (phoneStep) return <AuthPage side={side}><VerifyPhone step={phoneStep} onDone={done} /></AuthPage>;
+  if (verifying) return <AuthPage side={side}><VerifyCode email={verifying} onDone={done} onPhone={setPhoneStep} /></AuthPage>;
+  if (withCode && checks?.otp) return <AuthPage side={side}><CodeSignIn onDone={done} onPassword={() => setWithCode(false)} /></AuthPage>;
   return (
     <AuthPage side={side}>
       <form className="stack" onSubmit={(e) => void submit(e)} noValidate>
@@ -221,10 +354,14 @@ export function Login() {
           <p className="muted">New here? <Link to="/register">Create an account</Link></p>
         </div>
         <Notice>{error}</Notice>
-        <Field label="Email"><input className="input" value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="email" autoFocus /></Field>
-        <Field label="Password"><input className="input" value={password} onChange={(e) => setPassword(e.target.value)} type="password" autoComplete="current-password" /></Field>
+        <Field label="Email" error={errors.email}><input className="input" value={email} onChange={(e) => { setEmail(e.target.value); setErrors(({ email: _gone, ...rest }) => rest); }} type="email" autoComplete="email" autoFocus aria-invalid={!!errors.email} /></Field>
+        <Field label="Password" error={errors.password}><input className="input" value={password} onChange={(e) => { setPassword(e.target.value); setErrors(({ password: _gone, ...rest }) => rest); }} type="password" autoComplete="current-password" aria-invalid={!!errors.password} /></Field>
+        <CaptchaField captcha={captcha} error={errors.captcha} onType={() => setErrors(({ captcha: _gone, ...rest }) => rest)} />
         <button className="btn btn-primary btn-lg btn-block" disabled={busy}>{busy ? "Signing in…" : "Sign in"}</button>
-        <div className="links"><Link to="/forgot">Forgot your password?</Link></div>
+        <div className="links">
+          <Link to="/forgot">Forgot your password?</Link>
+          {checks?.otp ? <button type="button" className="btn btn-ghost" onClick={() => setWithCode(true)}>Sign in with a code instead</button> : null}
+        </div>
       </form>
     </AuthPage>
   );
@@ -238,6 +375,7 @@ export function Forgot() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [phoneStep, setPhoneStep] = useState<PhoneStep | null>(null);
 
   const ask = async (e: FormEvent) => {
     e.preventDefault();
@@ -250,7 +388,9 @@ export function Forgot() {
     const bad = checkCode(code) ?? (password.length < 8 ? "The new password needs at least 8 characters." : null);
     if (bad) { setError(bad); return; }
     setBusy(true); setError(null);
-    try { await account.reset(email.trim(), code.trim(), password); await reload(); navigate("/app"); } catch (err) { setError(message(err)); } finally { setBusy(false); }
+    try { await account.reset(email.trim(), code.trim(), password); await reload(); navigate("/app"); }
+    catch (err) { const ps = phoneStepOf(err); if (ps) setPhoneStep(ps); else setError(message(err)); } // the password is changed; the mobile is next
+    finally { setBusy(false); }
   };
 
   const side = (
@@ -260,6 +400,7 @@ export function Forgot() {
       <p className="muted">We email you a code. Every other sign-in is ended when the password changes.</p>
     </>
   );
+  if (phoneStep) return <AuthPage side={side}><VerifyPhone step={phoneStep} onDone={() => void reload().then(() => navigate("/app"))} /></AuthPage>;
   return (
     <AuthPage side={side}>
       {!sent ? (
