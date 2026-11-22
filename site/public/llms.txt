@@ -30,6 +30,7 @@ Prices: Base ₹10,800, Growth ₹18,000, Scale ₹27,000 per outlet per year pl
 
 ## Guides
 
+- [Direct Online Ordering for Restaurants: Website vs App vs Swiggy](https://posinext.com/blog/direct-online-ordering-restaurants-india/): Direct online ordering for restaurants in India: compare an ordering website, your own app and Swiggy/Zomato on cost, data and reach, with a ₹ example.
 - [Swiggy and Zomato Commission: Real Cost and Margin per Order](https://posinext.com/blog/swiggy-zomato-commission-india/): Swiggy and Zomato commission explained for Indian restaurants: every fee, GST and TDS line, a ₹420 worked example and a formula to price your delivery menu.
 - [How to Get More Google Reviews for Your Restaurant in India](https://posinext.com/blog/get-more-google-reviews-restaurant/): Get more genuine Google reviews for your restaurant in India: review QR codes, staff scripts, replying to bad reviews, reporting fakes and rules to avoid.
 - [How to Reconcile Swiggy & Zomato Payouts: A Restaurant Owner's Checklist](https://posinext.com/blog/restaurant-aggregator-payout-reconciliation-india/): Match aggregator orders, fees, refunds and bank credits with a practical Swiggy and Zomato settlement reconciliation checklist for Indian restaurants.
