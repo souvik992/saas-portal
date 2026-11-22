@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Link, navigate, useLocation } from "../router";
+import { Link, useLocation } from "../router";
 import { useSession } from "../session";
 
 /** The POSINEXT logo, as on posinext.com: two chevrons (orange and dark) and the name. */
@@ -32,7 +32,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <>
               <Link to="/app" className="navlink nav-wide">Dashboard</Link>
               <Link to="/app/analytics" className="navlink">Analytics</Link>
-              <button className="navlink" onClick={() => void signOut().then(() => navigate("/"))}>Sign out</button>
+              <button className="navlink" onClick={() => void signOut()}>Sign out</button>
               <Link to="/app/account" className="avatar" aria-label={`My account (${me.user.name})`} title={me.user.name}>
                 {(me.user.name.trim()[0] ?? "?").toUpperCase()}
               </Link>

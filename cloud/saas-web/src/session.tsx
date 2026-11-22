@@ -28,9 +28,16 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     }
   }, []);
+  /**
+   * Signs out and leaves nothing of the account in this browser tab: the cloud ends the session, clears the cookie and
+   * (Clear-Site-Data) the cache and storage; this also clears storage itself and reloads the page, so nothing loaded
+   * for the account (downloads, analytics, licences) stays in memory for the next person on a shared PC.
+   */
   const signOut = useCallback(async () => {
     await account.logout().catch(() => undefined);
     setMe(null);
+    try { localStorage.clear(); sessionStorage.clear(); } catch { /* storage off */ }
+    window.location.replace("/");
   }, []);
   useEffect(() => { void reload(); }, [reload]);
   return <Ctx.Provider value={{ me, loading, reload, signOut }}>{children}</Ctx.Provider>;

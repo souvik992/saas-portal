@@ -207,6 +207,9 @@ DEMO_JS = ("(()=>{const d=document.getElementById('demo');"
            "else{const j=await r.json().catch(()=>null);m=j&&j.error&&j.error.message||''}}catch(x){}"
            "if(!f.hidden){er.textContent=(m?m+'. ':'Something went wrong. ')+'Please try again, or email " + EMAIL + ".';er.hidden=false}"
            "b.disabled=false;b.textContent='Request demo'}))})();")
+# served as its own file (build.py writes it), so the site's Content-Security-Policy can refuse every inline script;
+# the query changes with the script, so a cached copy is never used after it changes
+DEMO_JS_URL = "/js/site.js?v=" + __import__("hashlib").sha256(DEMO_JS.encode()).hexdigest()[:10]
 
 
 # ---- components ----
@@ -333,5 +336,5 @@ def page(path, title, desc, body, schema=(), og_type="website", og_img="/img/og.
             f'<script type="application/ld+json">{ld}</script></head>')
     dlg = "" if 'class="fm dm"' in body else DEMO_DIALOG
     main = f'<a class="skip" href="#main">Skip to content</a>{header(path)}<main id="main">{body}</main>{footer()}{dlg}'
-    doc = f"{head}<body>{sprite(main)}{main}<script>{DEMO_JS}</script></body></html>"
+    doc = f"{head}<body>{sprite(main)}{main}<script src=\"{DEMO_JS_URL}\" defer></script></body></html>"
     return re.sub(r">\s+<", "><", doc)

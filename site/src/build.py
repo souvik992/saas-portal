@@ -160,6 +160,9 @@ def images():
 
 def main():
     images()
+    from kit import DEMO_JS
+    (OUT / "js").mkdir(parents=True, exist_ok=True)
+    (OUT / "js" / "site.js").write_text(DEMO_JS, encoding="utf-8")
     home()
     for p in P:
         product(p)

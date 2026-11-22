@@ -127,11 +127,22 @@ posinext.com {
   encode zstd gzip
   header X-Content-Type-Options nosniff
   header Referrer-Policy strict-origin-when-cross-origin
-  # the CMS: never cached, never indexed, never framed
+  # browsers use https only for this site for a year (no downgrade to http, no cookie sent in the clear)
+  header Strict-Transport-Security "max-age=31536000"
+  # never inside another site's frame (clickjacking); no camera, microphone, location or payment APIs
+  header X-Frame-Options DENY
+  header Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+  header Cross-Origin-Opener-Policy same-origin
+  header -Server
+  # the pages: scripts only from this site (no inline script can run, so injected code cannot either); the Book a
+  # Demo form posts to the portal's /v1/demo-requests
+  @site not path /admin /admin/*
+  header @site Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://portal.posinext.com; form-action 'self' https://portal.posinext.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
+  # the CMS: never cached, never indexed, never framed; its page has its own inline script
   @admin path /admin /admin/*
   header @admin Cache-Control "no-store"
   header @admin X-Robots-Tag "noindex, nofollow"
-  header @admin X-Frame-Options DENY
+  header @admin Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
   # CMS backend (site/cms/cms_server.py): admin login, GitHub commits
   handle /admin/api/* {
     request_body {
