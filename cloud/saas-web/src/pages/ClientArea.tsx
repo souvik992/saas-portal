@@ -174,6 +174,7 @@ function AreaHome({ me }: { me: Me }) {
     const seen = readSeen();
     support.announcements().then((r) => setFresh(r.announcements.filter((a) => a.publishedAt > seen && (a.product === null || products.includes(a.product))).length), () => setFresh(0));
     support.status().then((s) => setStatus(s), () => setStatus({ ok: false }));
+    if (!downloadsCache) loadDownloads().catch(() => { /* the Downloads page says so */ });
   }, [products]);
   const summary = licences ? licenceSummary(licences, products) : null;
   const badges: Record<string, string | null> = {
@@ -242,39 +243,133 @@ function AreaHome({ me }: { me: Me }) {
   );
 }
 
+/**
+ * The downloads list, kept for this visit: Downloads and Add-ons share it, so moving between them (or coming back) shows
+ * the list at once while a fresh copy loads behind it. The dashboard starts loading it early.
+ */
+let downloadsCache: Download[] | null = null;
+let downloadsLoading: Promise<Download[]> | null = null;
+function loadDownloads(): Promise<Download[]> {
+  downloadsLoading ??= account.downloads().then(
+    (r) => { downloadsCache = r.downloads; return r.downloads; },
+  ).finally(() => { downloadsLoading = null; });
+  return downloadsLoading;
+}
+
+type Os = "windows" | "mac" | "android";
+const OS_NAME: Record<Os, string> = { windows: "Windows", mac: "Mac", android: "Android" };
+/** Which system a download is for, from its file (or its id while no build is out). */
+function osOf(d: Download): Os {
+  const f = (d.fileName ?? "").toLowerCase();
+  if (f.endsWith(".apk") || f.endsWith(".tiffinaddon")) return "android";
+  if (f.endsWith(".dmg")) return "mac";
+  if (f.endsWith(".exe")) return "windows";
+  if (/android|captain/.test(d.id)) return "android";
+  if (/mac/.test(d.id)) return "mac";
+  return "windows";
+}
+
+function OsLogo({ os, size = 28 }: { os: Os; size?: number }) {
+  const p = { width: size, height: size, viewBox: "0 0 24 24", "aria-hidden": true } as const;
+  if (os === "windows") {
+    return (
+      <svg {...p} className="os-logo os-windows">
+        <rect x="2" y="2" width="9.5" height="9.5" /><rect x="12.5" y="2" width="9.5" height="9.5" />
+        <rect x="2" y="12.5" width="9.5" height="9.5" /><rect x="12.5" y="12.5" width="9.5" height="9.5" />
+      </svg>
+    );
+  }
+  if (os === "mac") {
+    return (
+      <svg {...p} className="os-logo os-mac">
+        <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701" />
+      </svg>
+    );
+  }
+  return (
+    <svg {...p} className="os-logo os-android">
+      <path d="M2.5 19a9.5 9.5 0 0 1 19 0z" />
+      <path d="M6.2 7.6 4.6 5M17.8 7.6 19.4 5" strokeWidth="1.6" strokeLinecap="round" fill="none" stroke="currentColor" />
+      <circle cx="8.3" cy="14.6" r="1.1" className="os-eye" /><circle cx="15.7" cy="14.6" r="1.1" className="os-eye" />
+    </svg>
+  );
+}
+
 function DownloadsPage({ me, kind }: { me: Me; kind: "app" | "addon" }) {
-  const { data, error } = useData(() => account.downloads());
-  const mine = (data?.downloads ?? []).filter((d) => d.kind === kind && me.account.products.includes(d.product));
+  const [list, setList] = useState<Download[] | null>(downloadsCache);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    let live = true;
+    loadDownloads().then((d) => { if (live) { setList(d); setError(null); } }, (e: unknown) => {
+      if (live && !downloadsCache) setError(e instanceof ApiError ? e.message : "Could not load this page.");
+    });
+    return () => { live = false; };
+  }, []);
+  const mine = (list ?? []).filter((d) => d.kind === kind && me.account.products.includes(d.product));
+  // one section per product, in the catalogue's order (each product's app first)
+  const sections: Array<{ product: ProductCode; app: string; productName: string; items: Download[] }> = [];
+  for (const d of mine) {
+    const s = sections.find((x) => x.product === d.product);
+    if (s) s.items.push(d); else sections.push({ product: d.product, app: d.app, productName: d.productName, items: [d] });
+  }
   const title = TITLES[kind === "app" ? "/app/downloads" : "/app/addons"]!;
   return (
     <AreaPage title={title}>
       <Notice>{error}</Notice>
-      <p className="muted" style={{ marginBottom: 16 }}>
+      <p className="muted" style={{ marginBottom: 8 }}>
         {kind === "app"
-          ? "Install on the outlet's main PC (Windows 10 or 11), then sign in inside the app with your account to start the 30-day trial."
-          : "Add-ons work with the app on the main PC: Table QR installs on that PC, the kitchen display on a kitchen PC, and the Captain app on waiters' Android phones (the APK; allow \"Install unknown apps\" when asked). They are included in your trial."}
+          ? "Pick your system. Install on the outlet's main device, then sign in inside the app with your account to start the 30-day trial."
+          : "Add-ons work with the app on the main device. They are included in your trial. For an Android APK, allow \"Install unknown apps\" when asked."}
         {" "}Not seeing a product? <Link to="/app/account">Change your products</Link>.
       </p>
-      <div className="card">
-        {data && mine.length === 0 ? <div className="empty">Nothing here for your products yet.</div> : null}
-        {!data && !error ? <div className="empty">Loading…</div> : null}
-        {mine.map((d) => <DownloadRow key={d.id} d={d} />)}
-      </div>
-      {kind === "app" ? <p className="muted small" style={{ marginTop: 12 }}>Windows may say the publisher is unknown: choose <i>More info › Run anyway</i>. Code signing is on its way.</p> : null}
+      {list === null && !error ? (
+        <section className="dl-section" aria-busy="true">
+          <div className="dl-head"><span className="skel" style={{ width: 160, height: 24 }} /></div>
+          <div className="dl-grid">{[0, 1, 2].map((i) => <div key={i} className="card dl-block skel-block" />)}</div>
+        </section>
+      ) : null}
+      {list !== null && sections.length === 0 ? <div className="card empty">Nothing here for your products yet.</div> : null}
+      {sections.map((s) => (
+        <section key={s.product} className="dl-section">
+          <div className="dl-head">
+            <h2>{kind === "app" ? s.app : `${s.app} add-ons`}</h2>
+            <span className="pill pill-primary">{s.productName}</span>
+            {kind === "app" ? (
+              <span className="dl-oses" aria-label="Available for">
+                {[...new Set(s.items.map(osOf))].map((os) => <span key={os} className="pill"><OsLogo os={os} size={12} />{OS_NAME[os]}</span>)}
+              </span>
+            ) : null}
+          </div>
+          <div className="dl-grid">{s.items.map((d) => <DownloadBlock key={d.id} d={d} />)}</div>
+        </section>
+      ))}
+      {kind === "app" && sections.some((s) => s.items.some((d) => osOf(d) === "windows")) ? (
+        <p className="muted small" style={{ marginTop: 16 }}>Windows may say the publisher is unknown: choose <i>More info › Run anyway</i>. Code signing is on its way.</p>
+      ) : null}
     </AreaPage>
   );
 }
 
-function DownloadRow({ d }: { d: Download }) {
+function DownloadBlock({ d }: { d: Download }) {
+  const os = osOf(d);
+  // "quickPOS for Mac (Apple chip)" -> "Mac (Apple chip)": the section already names the app
+  const variant = d.kind === "app" ? d.name.replace(/^.*?\bfor\s+/i, "") : d.name;
   return (
-    <div className="download">
-      <span className="tile-icon">{d.kind === "app" ? <DownloadIcon size={22} /> : d.id === "dinepos-captain" ? <Smartphone size={22} /> : <Puzzle size={22} />}</span>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div className="row"><b>{d.name}</b><span className="pill pill-primary">{d.productName}</span></div>
-        <div className="small">{d.description}</div>
-        <div className="meta">{d.available ? `Version ${d.version} · ${formatSize(d.size)} · ${date(d.publishedAt!)}` : "Not available yet: the first build is on its way."}</div>
+    <div className="card dl-block">
+      <div className="dl-top">
+        {d.kind === "app"
+          ? <span className="dl-logo"><OsLogo os={os} /></span>
+          : <span className="tile-icon">{d.id === "dinepos-captain" ? <Smartphone size={22} /> : <Puzzle size={22} />}</span>}
+        {d.kind === "addon" ? <span className="pill"><OsLogo os={os} size={12} />{OS_NAME[os]}</span> : null}
       </div>
-      {d.available ? <a className="btn btn-primary" href={downloadHref(d.id)}>Download</a> : <button className="btn" disabled>Download</button>}
+      <h3>{variant}</h3>
+      <p className="small muted">{d.description}</p>
+      <div className="dl-foot">
+        <div className="meta">{d.available ? `Version ${d.version} · ${formatSize(d.size)} · ${date(d.publishedAt!)}` : "Coming soon: the first build is on its way."}</div>
+        {d.available
+          ? <a className="btn btn-primary btn-block" href={downloadHref(d.id)}><DownloadIcon size={16} /> Download</a>
+          : <button className="btn btn-block" disabled>Not available yet</button>}
+      </div>
     </div>
   );
 }

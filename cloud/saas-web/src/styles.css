@@ -166,6 +166,29 @@ textarea.input { height: auto; min-height: 120px; padding: 12px 16px; resize: ve
 .download { display: flex; gap: 16px; align-items: center; padding: 16px 20px; }
 .download + .download { border-top: 1px solid var(--border); }
 .download .meta { font-size: 14px; color: var(--muted-foreground); }
+/* Downloads and Add-ons: one section per product, a block per system or add-on */
+.dl-section { margin-top: 28px; }
+.dl-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.dl-head h2 { font-size: 22px; }
+.dl-oses { display: inline-flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+.dl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+.dl-block { display: flex; flex-direction: column; gap: 8px; padding: 20px; transition: border-color .15s, box-shadow .15s; }
+.dl-block:hover { border-color: color-mix(in oklch, var(--primary) 35%, var(--border)); box-shadow: 0 6px 18px -10px rgb(0 0 0 / .25); }
+.dl-block h3 { font-size: 17px; margin-top: 4px; }
+.dl-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.dl-logo { display: grid; place-items: center; width: 52px; height: 52px; border-radius: var(--radius-card); background: var(--muted); }
+.dl-foot { margin-top: auto; padding-top: 8px; display: grid; gap: 10px; }
+.dl-foot .meta { font-size: 13px; color: var(--muted-foreground); }
+.os-logo { flex: none; fill: currentColor; }
+.os-windows { color: #0078d4; }
+.os-mac { color: var(--foreground); }
+.os-android { color: #3ddc84; }
+.os-android .os-eye { fill: var(--card); }
+.pill .os-android .os-eye { fill: var(--muted); }
+.skel { display: inline-block; border-radius: var(--radius); background: var(--muted); animation: skel 1.2s ease-in-out infinite alternate; }
+.skel-block { min-height: 220px; background: var(--muted); animation: skel 1.2s ease-in-out infinite alternate; }
+@keyframes skel { from { opacity: 1; } to { opacity: .55; } }
+@media (max-width: 560px) { .dl-oses { margin-left: 0; } .dl-grid { grid-template-columns: 1fr; } }
 .key { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: 12px; word-break: break-all; background: var(--muted); border-radius: var(--radius); padding: 8px 10px; }
 .empty { padding: 40px 20px; text-align: center; color: var(--muted-foreground); }
 
