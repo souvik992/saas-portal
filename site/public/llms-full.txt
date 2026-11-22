@@ -2,7 +2,7 @@
 
 > POSINEXT is restaurant POS software for fine dine restaurants, quick service restaurants (QSR), cafés and cloud kitchens in India: GST billing, KOTs, table management, Table QR ordering, a captain app, kitchen display, online ordering website, app ordering, Swiggy and Zomato integration, inventory and reports. It runs on Windows at the outlet and works offline.
 
-Prices: Base ₹10,800, Growth ₹18,000, Scale ₹27,000 per outlet per year plus GST (10% below Petpooja's published prices). 30-day free trial, no setup fees.
+Prices: Free plan ₹0 (every feature on one billing PC, no limits on bills or menu items, for as long as you use it); Base ₹10,800, Growth ₹18,000, Scale ₹27,000 per outlet per year plus GST (10% below Petpooja's published prices). 30-day trial first, no setup fees.
 
 ## Fine Dine — https://posinext.com/fine-dine-pos/
 
@@ -28,7 +28,7 @@ Q: Does it handle table reservations?
 A: Yes. Bookings hold their tables ahead of time, and a waitlist lets you seat walk-ins in order.
 
 Q: How much does the fine dine POS cost?
-A: Plans start at ₹10,800 per outlet per year plus GST, with a 30-day free trial. See pricing for what each plan includes.
+A: The Free plan is ₹0 on one billing PC with every feature; paid plans for more PCs and support start at ₹10,800 per outlet per year plus GST. See pricing for what each plan includes.
 
 ## QSR — https://posinext.com/qsr-pos/
 
@@ -54,7 +54,7 @@ Q: Which printers work?
 A: 58 mm and 80 mm thermal receipt printers by USB, LAN or Wi-Fi. A USB printer can be set up from the billing screen in one tap.
 
 Q: How much does it cost?
-A: From ₹10,800 per outlet per year plus GST, after a 30-day free trial. See pricing.
+A: Free on one billing PC with every feature (the Free plan). Paid plans for more PCs and support start at ₹10,800 per outlet per year plus GST. See pricing.
 
 ## Table QR — https://posinext.com/table-qr-ordering/
 
@@ -228,8 +228,8 @@ A: Swiggy and Zomato orders on one screen (ODS) are part of the Growth plan, ₹
 
 ## Plans
 
-- Base: ₹10,800 per outlet per year plus GST. Billing, menu, stock and reports for one outlet. Includes: Fine Dine (DinePOS) or QSR (Tiffin POS); Billing with GST and UPI, works offline; Menu management, stock and recipes; Reports and automatic backups; Online installation and training; Support by ticket and email.
-- Growth: ₹18,000 per outlet per year plus GST. Add-ons for busier floors and kitchens. Includes: Captain app for waiters' phones; Kitchen display; Table QR ordering and waiter calling; ODS: website, app, Swiggy and Zomato orders on one screen; Installation and training: 1 visit.
+- Base: ₹10,800 per outlet per year plus GST. More PCs, and we set it up and train your team. Includes: More billing PCs, captain phones and kitchen screens; Online installation and training; Support by ticket and email.
+- Growth: ₹18,000 per outlet per year plus GST. For busier floors, kitchens and online orders. Includes: Captain app, kitchen display and Table QR on every device you need; ODS: website, app, Swiggy and Zomato orders on one screen; Installation and training: 1 visit.
 - Scale: ₹27,000 per outlet per year plus GST. For high-volume outlets that want us on site. Includes: Installation and training: 2 visits; Priority support.
 
 ## Guides

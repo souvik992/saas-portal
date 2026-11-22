@@ -17,6 +17,12 @@ describe("licenceSummary", () => {
     expect(licenceSummary([lic({}), lic({ kind: "paid", expiresAt: now + 300 * DAY })], ["fine_dine"], now)).toMatchObject({ kind: "licensed", daysLeft: 300 });
     expect(licenceSummary([lic({ kind: "paid", revoked: true }), lic({ kind: "demo" })], ["fine_dine"], now).kind).toBe("none");
   });
+  it("the Free plan wins over a trial; a paid licence wins over the Free plan", () => {
+    const free = lic({ kind: "free", expiresAt: now + 365 * DAY });
+    expect(licenceSummary([lic({}), free], ["fine_dine"], now)).toMatchObject({ kind: "free", daysLeft: 365 });
+    expect(licenceSummary([free, lic({ kind: "paid", expiresAt: now + 100 * DAY })], ["fine_dine"], now)).toMatchObject({ kind: "licensed", daysLeft: 100 });
+    expect(licenceSummary([lic({ kind: "free", expiresAt: now - DAY })], ["fine_dine"], now).kind).toBe("ended");
+  });
   it("a trial that ran out: ended, 0 days", () => {
     expect(licenceSummary([lic({ expiresAt: now - DAY })], ["fine_dine"], now)).toMatchObject({ kind: "ended", daysLeft: 0 });
   });

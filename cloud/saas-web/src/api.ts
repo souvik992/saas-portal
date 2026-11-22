@@ -52,7 +52,7 @@ export interface Download {
 }
 
 export interface Licence {
-  id: string; product: ProductCode; kind: "trial" | "paid" | "manual" | "demo"; hardwareId: string; outlet: string; licensee: string;
+  id: string; product: ProductCode; kind: "trial" | "paid" | "manual" | "demo" | "free"; hardwareId: string; outlet: string; licensee: string;
   seats: { terminals: number; captains: number; kds: number }; issuedAt: number; expiresAt: number; revoked: boolean; key: string;
 }
 

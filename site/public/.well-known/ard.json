@@ -49,12 +49,14 @@
     },
     {
       "identifier": "urn:air:posinext.com:portal:register",
-      "displayName": "POSINEXT free trial",
+      "displayName": "POSINEXT free sign-up",
       "type": "text/html",
       "url": "https://portal.posinext.com/register",
       "representativeQueries": [
         "Start a POSINEXT free trial",
-        "Download POSINEXT for Windows"
+        "Download POSINEXT for Windows",
+        "Free restaurant POS",
+        "Free restaurant billing software"
       ]
     },
     {

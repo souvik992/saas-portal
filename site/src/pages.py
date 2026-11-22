@@ -5,12 +5,10 @@ from kit import PORTAL, EMAIL, SITE, demo_form, UPDATED, ico, check_list, cards,
 from products import P
 
 PLANS = [
-    ("Base", 10800, "Billing, menu, stock and reports for one outlet.", False, None,
-     ["Fine Dine (DinePOS) or QSR (Tiffin POS)", "Billing with GST and UPI, works offline", "Menu management, stock and recipes",
-      "Reports and automatic backups", "Online installation and training", "Support by ticket and email"]),
-    ("Growth", 18000, "Add-ons for busier floors and kitchens.", True, "Base",
-     ["Captain app for waiters' phones", "Kitchen display", "Table QR ordering and waiter calling",
-      "ODS: website, app, Swiggy and Zomato orders on one screen", "Installation and training: 1 visit"]),
+    ("Base", 10800, "More PCs, and we set it up and train your team.", False, None,
+     ["More billing PCs, captain phones and kitchen screens", "Online installation and training", "Support by ticket and email"]),
+    ("Growth", 18000, "For busier floors, kitchens and online orders.", True, "Base",
+     ["Captain app, kitchen display and Table QR on every device you need", "ODS: website, app, Swiggy and Zomato orders on one screen", "Installation and training: 1 visit"]),
     ("Scale", 27000, "For high-volume outlets that want us on site.", False, "Growth",
      ["Installation and training: 2 visits", "Priority support"]),
 ]
@@ -62,19 +60,27 @@ def build(simple, write):
            inner, [("Features", "/features/")], ctas=[("Book a Demo", "/book-a-demo/"), ("See pricing", "/pricing/")], priority="0.9")
 
     # ---------- Pricing ----------
-    cardsh = ""
+    cardsh = ('<div class="pp"><span class="bdg" style="background:var(--ok)">Free forever</span><h3>Free</h3>'
+              '<p class="mc mt2">Every feature on one billing PC, for as long as you use it.</p>'
+              '<p class="pr-a">₹0 <small>/ outlet / year</small></p>'
+              + check_list(["Fine Dine (DinePOS) or QSR (quickPOS)", "GST billing, KOT and UPI, works offline", "Kitchen display and captain app (1 each)",
+                            "Table QR, website, app, Swiggy and Zomato orders", "Stock, recipes, reports and backups", "No limit on bills, menu items or sales",
+                            "Help centre and email support"])
+              + f'<a class="btn btn-o" href="{PORTAL}/register">Sign up free</a></div>')
     for name, price, about, pop, prev, feats in PLANS:
-        lead_ = [f"<strong>Everything in {prev}, plus:</strong>"] if prev else []
+        lead_ = [f"<strong>Everything in {prev or 'Free'}, plus:</strong>"]
         cardsh += (f'<div class="pp{" pop" if pop else ""}">' + ('<span class="bdg">Most popular</span>' if pop else "")
                    + f'<h3>{name}</h3><p class="mc mt2">{about}</p><p class="pr-a">{rupees(price)} <small>/ outlet / year + GST</small></p>'
-                   + check_list(lead_ + feats) + f'<a class="btn {"btn-p" if pop else "btn-o"}" href="{PORTAL}/register">Start 30-day free trial</a></div>')
-    rows = [("Fine Dine or QSR POS, works offline", "✓", "✓", "✓"), ("GST billing, UPI, stock, recipes, reports", "✓", "✓", "✓"),
-            ("Automatic and online backups", "✓", "✓", "✓"), ("Captain app", "—", "✓", "✓"), ("Kitchen display", "—", "✓", "✓"),
-            ("Table QR ordering and waiter calling", "—", "✓", "✓"), ("ODS: website, app, Swiggy and Zomato orders", "—", "✓", "✓"),
-            ("Installation and training", "Online", "1 visit", "2 visits"), ("Support", "Ticket and email", "Ticket and email", "Priority")]
-    table = ('<div class="tb"><table><thead><tr><th>What is included</th><th>Base</th><th>Growth</th><th>Scale</th></tr></thead><tbody>'
-             + "".join(f"<tr><td>{a}</td><td>{b}</td><td>{c}</td><td>{d}</td></tr>" for a, b, c, d in rows) + "</tbody></table></div>")
-    pfaq = [("Is there a free trial?", f'Yes. Every plan starts with a 30-day free trial, no card needed. <a href="{PORTAL}/register">Create an account</a>, download the POS and start billing.'),
+                   + check_list(lead_ + feats) + f'<a class="btn {"btn-p" if pop else "btn-o"}" href="{PORTAL}/register">Start free</a></div>')
+    rows = [("Price per outlet per year", "₹0", "₹10,800", "₹18,000", "₹27,000"), ("Billing PCs", "1", "More, as you need", "More, as you need", "More, as you need"),
+            ("Fine Dine or QSR POS, works offline", "✓", "✓", "✓", "✓"), ("GST billing, UPI, stock, recipes, reports", "✓", "✓", "✓", "✓"),
+            ("Automatic and online backups", "✓", "✓", "✓", "✓"), ("Captain app", "1 phone", "More phones", "More phones", "More phones"), ("Kitchen display", "1 screen", "More screens", "More screens", "More screens"),
+            ("Table QR ordering and waiter calling", "✓", "✓", "✓", "✓"), ("ODS: website, app, Swiggy and Zomato orders", "✓", "✓", "✓", "✓"),
+            ("Installation and training", "Self-service", "Online", "1 visit", "2 visits"), ("Support", "Help centre and email", "Ticket and email", "Ticket and email", "Priority")]
+    table = ('<div class="tb"><table><thead><tr><th>What is included</th><th>Free</th><th>Base</th><th>Growth</th><th>Scale</th></tr></thead><tbody>'
+             + "".join(f"<tr><td>{a}</td><td>{b}</td><td>{c}</td><td>{d}</td><td>{e}</td></tr>" for a, b, c, d, e in rows) + "</tbody></table></div>")
+    pfaq = [("Is there a free plan?", f'Yes. The Free plan costs ₹0 for as long as you use it: every feature on one billing PC, with no limit on bills, menu items or sales. Everyone starts with a 30-day trial and then stays on the Free plan by itself. <a href="/free-restaurant-pos/">About the free restaurant POS</a>.'),
+            ("Is there a free trial?", f'Yes, 30 days with no card. <a href="{PORTAL}/register">Create an account</a>, download the POS and start billing; after the trial you keep the Free plan.'),
             ("Is the price per outlet?", "Yes. Prices are per outlet, per year, before GST."),
             ("Are there setup fees?", "No setup fees. Online installation and training are included in every plan; Growth and Scale include visits."),
             ("Can I change plans later?", f'Yes. Write to <a href="mailto:{EMAIL}">{EMAIL}</a> or open a ticket in the customer portal.'),
@@ -83,19 +89,21 @@ def build(simple, write):
     fq, fq_schema = faq_section(pfaq, "Pricing FAQ")
     offers = {"@type": "Product", "name": "POSINEXT Restaurant POS", "brand": {"@type": "Brand", "name": "POSINEXT"},
               "description": "Restaurant POS software for fine dine, QSR and cloud kitchens in India.", "image": SITE + "/img/og.jpg",
-              "offers": [{"@type": "Offer", "name": n, "price": str(pr), "priceCurrency": "INR", "url": SITE + "/pricing/",
+              "offers": [{"@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "INR", "url": SITE + "/free-restaurant-pos/", "availability": "https://schema.org/InStock"}]
+                        + [{"@type": "Offer", "name": n, "price": str(pr), "priceCurrency": "INR", "url": SITE + "/pricing/",
                           "availability": "https://schema.org/InStock",
                           "priceSpecification": {"@type": "UnitPriceSpecification", "price": str(pr), "priceCurrency": "INR",
                                                  "unitText": "outlet per year", "valueAddedTaxIncluded": False}} for n, pr, *_ in PLANS]}
-    simple("/pricing/", "Restaurant POS Pricing in India: Plans from ₹10,800/year | POSINEXT",
-           "POSINEXT restaurant POS pricing: Base ₹10,800, Growth ₹18,000 and Scale ₹27,000 per outlet per year plus GST. No setup fees, 30-day free trial, 10% below Petpooja.",
-           "Pricing", "Simple pricing, per outlet, per year", "Three plans, no setup fees and a 30-day free trial. Prices are set 10% below Petpooja's published rate card.",
-           W(f'<div class="pg">{cardsh}</div><p class="c mc mt8">Prices in Indian rupees, per outlet per year, before GST.</p>')
+    simple("/pricing/", "Restaurant POS Pricing in India: Free Plan, Paid from ₹10,800 | POSINEXT",
+           "POSINEXT restaurant POS pricing: a Free plan with every feature on one PC, then Base ₹10,800, Growth ₹18,000 and Scale ₹27,000 per outlet per year plus GST. 10% below Petpooja.",
+           "Pricing", "Start free. Pay only to grow.", "A Free plan with every feature on one PC, and three paid plans for more PCs, setup and support. Paid prices are set 10% below Petpooja's published rate card.",
+           W(f'<div class="pg pg4">{cardsh}</div><p class="c mc mt8">Prices in Indian rupees, per outlet per year, before GST. <a class="pc" href="/free-restaurant-pos/">More about the free restaurant POS</a>.</p>')
            + W(sec_head("Compare plans", "What each plan includes") + table, "sec bs") + fq,
            [("Pricing", "/pricing/")], [offers, fq_schema], priority="0.9")
 
     # ---------- Changelog ----------
     log = [
+        ("2026-11-22", "Free plan", ["A Free plan for Fine Dine and QSR: every feature on one billing PC, no limit on bills, menu items or sales, at no cost.", "After the 30-day trial the POS moves to the Free plan by itself instead of locking."]),
         ("2026-11-12", "PosiNext Cloud", ["DinePOS Cloud and the Tiffin order hub merged into one service, PosiNext Cloud, for both products."]),
         ("2026-11-10", "Never miss an online order", ["The online-order chime now repeats every 3 seconds on every screen until no order is waiting.", "The customer's order note prints on the KOT.", "Preparation clock and late alarm on accepted online orders.", "Print alarm on every screen when a ticket could not print, with retry.", "Captain app for Android available as a download in the customer portal.", "DinePOS Server starts quietly in the tray."]),
         ("2026-11-09", "Portal and kitchen display", ["Kitchen display (DinePOS Kitchen) offered as a Fine Dine add-on download.", "Portal sign-ins stay while used; signed-in devices are listed and can be signed out.", "Book a Demo requests from posinext.com reach the team by email."]),
@@ -311,12 +319,12 @@ def extras(write, built):
     strip = lambda s: plain(re.sub(r"<[^>]+>", "", s))
     lines = ["# POSINEXT", "",
              "> POSINEXT is restaurant POS software for fine dine restaurants, quick service restaurants (QSR), cafés and cloud kitchens in India: GST billing, KOTs, table management, Table QR ordering, a captain app, kitchen display, online ordering website, app ordering, Swiggy and Zomato integration, inventory and reports. It runs on Windows at the outlet and works offline.", "",
-             "Prices: Base ₹10,800, Growth ₹18,000, Scale ₹27,000 per outlet per year plus GST (10% below Petpooja's published prices). 30-day free trial, no setup fees.", "",
+             "Prices: Free plan ₹0 (every feature on one billing PC, no limits on bills or menu items, for as long as you use it); Base ₹10,800, Growth ₹18,000, Scale ₹27,000 per outlet per year plus GST (10% below Petpooja's published prices). 30-day trial first, no setup fees.", "",
              "## Products", ""] + [f'- [{plain(p["name"])}]({SITE}/{p["slug"]}/): {strip(p["lead"])}' for p in P] + [
              "", "## Pages", "",
              f"- [Features]({SITE}/features/)", f"- [Pricing]({SITE}/pricing/)", f"- [POSINEXT vs Petpooja]({SITE}/compare/petpooja-alternative/)",
              f"- [Documentation]({SITE}/docs/)", f"- [Help Center]({SITE}/help/)", f"- [Changelog]({SITE}/changelog/)", f"- [Book a demo]({SITE}/book-a-demo/)",
-             f"- [Customer portal (sign in, free trial)]({PORTAL}/register)", f"- [Full details for language models]({SITE}/llms-full.txt)",
+             f"- [Free restaurant POS (Free plan)]({SITE}/free-restaurant-pos/)", f"- [Customer portal (sign up free)]({PORTAL}/register)", f"- [Full details for language models]({SITE}/llms-full.txt)",
              "", "## Guides", ""] + [f'- [{t}]({SITE}/blog/{s}/): {d}' for s, t, d, *_ in POSTS] + [
              "", "## Contact", "", f"- Email: {EMAIL}", f"- Book a demo: {SITE}/book-a-demo/", "",
              "## Policies", "", f"- [Privacy]({SITE}/privacy/)", f"- [Terms]({SITE}/terms/)", f"- [Security]({SITE}/security/)", ""]
@@ -339,8 +347,8 @@ def extras(write, built):
          "representativeQueries": ["How much does POSINEXT cost?", "Restaurant POS price India", "Petpooja alternative cheaper"]},
         {"identifier": "urn:air:posinext.com:site:home", "displayName": "POSINEXT restaurant POS software", "type": "text/html", "url": SITE + "/",
          "representativeQueries": ["Book a demo of POSINEXT", "POS with Table QR ordering", "Swiggy Zomato POS integration"]},
-        {"identifier": "urn:air:posinext.com:portal:register", "displayName": "POSINEXT free trial", "type": "text/html", "url": PORTAL + "/register",
-         "representativeQueries": ["Start a POSINEXT free trial", "Download POSINEXT for Windows"]},
+        {"identifier": "urn:air:posinext.com:portal:register", "displayName": "POSINEXT free sign-up", "type": "text/html", "url": PORTAL + "/register",
+         "representativeQueries": ["Start a POSINEXT free trial", "Download POSINEXT for Windows", "Free restaurant POS", "Free restaurant billing software"]},
         {"identifier": "urn:air:posinext.com:site:sitemap", "displayName": "POSINEXT sitemap", "type": "application/xml", "url": SITE + "/sitemap.xml",
          "representativeQueries": ["POSINEXT pages"]}]}
     (OUT / ".well-known").mkdir(exist_ok=True)

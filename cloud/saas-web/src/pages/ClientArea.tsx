@@ -5,7 +5,7 @@ import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { account, ApiError, downloadHref, support, type Download, type Licence, type Me, type ProductCode, type SignIn } from "../api";
 import { Notice } from "../components/Layout";
 import { deviceName, formatSize, toggleProduct } from "../forms";
-import { PLANS, rupees } from "../plans";
+import { FREE_PLAN, PLANS, rupees } from "../plans";
 import { PRODUCT_ORDER, productCopy } from "../products";
 import { Link, navigate, useLocation } from "../router";
 import { useSession } from "../session";
@@ -22,7 +22,7 @@ const GROUPS: Array<{ name: string; tiles: Tile[] }> = [
     { to: "/app/inventory", icon: Boxes, title: "Purchases & stock", about: "Stock value, low stock and suppliers" },
     { to: "/app/account", icon: UserRound, title: "My account", about: "Business, products and password" },
     { to: "/app/licences", icon: KeyRound, title: "Licences", about: "PCs, trials and licence keys" },
-    { to: "/app/plans", icon: CreditCard, title: "Plans & billing", about: "Pick a plan before your trial ends" },
+    { to: "/app/plans", icon: CreditCard, title: "Plans & billing", about: "Free plan, or more PCs with a paid plan" },
   ] },
   { name: "Software", tiles: [
     { to: "/app/downloads", icon: DownloadIcon, title: "Downloads", about: "The Windows app for your products" },
@@ -116,6 +116,16 @@ const ADDON_NAMES: Partial<Record<ProductCode, string[]>> = { fine_dine: ["Table
 function LicenceCard({ licences, products }: { licences: Licence[] | null; products: ProductCode[] }) {
   if (licences === null) return <div className="trial" aria-busy="true"><p className="label">Free trial</p><p className="big">&nbsp;</p><div className="bar" /></div>;
   const s = licenceSummary(licences, products);
+  if (s.kind === "free") {
+    return (
+      <div className="trial">
+        <p className="label">Free plan</p>
+        <p className="big">Active</p>
+        <p className="note">Every feature on one PC, at no cost · renews on its own while your PC is online</p>
+        <Link to="/app/plans" className="btn btn-primary">More PCs and support <ArrowRight size={16} /></Link>
+      </div>
+    );
+  }
   if (s.kind === "licensed") {
     return (
       <div className="trial">
@@ -131,7 +141,7 @@ function LicenceCard({ licences, products }: { licences: Licence[] | null; produ
       <div className="trial">
         <p className="label">Free trial</p>
         <p className="big">{TRIAL_DAYS} days</p>
-        <p className="note">Starts when you sign in inside the app on your outlet&rsquo;s PC.</p>
+        <p className="note">Starts when you sign in inside the app on your outlet&rsquo;s PC. Then the Free plan: every feature on one PC, at no cost.</p>
         <Link to="/app/downloads" className="btn btn-primary">Download the app <ArrowRight size={16} /></Link>
       </div>
     );
@@ -144,7 +154,8 @@ function LicenceCard({ licences, products }: { licences: Licence[] | null; produ
       <div className="bar" role="progressbar" aria-label="Trial days left" aria-valuemin={0} aria-valuemax={TRIAL_DAYS} aria-valuenow={left}>
         <span style={{ width: `${Math.min(100, Math.round((left / TRIAL_DAYS) * 100))}%` }} />
       </div>
-      <Link to="/app/plans" className="btn btn-primary">Choose a plan <ArrowRight size={16} /></Link>
+      <p className="note">{s.kind === "ended" ? "Choose a plan to keep billing." : "Then the Free plan keeps every feature on one PC, at no cost."}</p>
+      <Link to="/app/plans" className="btn btn-primary">{s.kind === "ended" ? "Choose a plan" : "See the plans"} <ArrowRight size={16} /></Link>
     </div>
   );
 }
@@ -166,7 +177,7 @@ function AreaHome({ me }: { me: Me }) {
   }, [products]);
   const summary = licences ? licenceSummary(licences, products) : null;
   const badges: Record<string, string | null> = {
-    "/app/plans": summary && (summary.kind === "trial" || summary.kind === "ended") ? "Action needed" : null,
+    "/app/plans": summary && summary.kind === "ended" ? "Action needed" : null,
     "/app/announcements": fresh > 0 ? `${fresh} new` : null,
   };
   const about: Record<string, string> = {
@@ -275,7 +286,7 @@ function LicencesPage() {
     if (l.revoked) return <span className="pill pill-danger">Revoked</span>;
     const left = daysLeft(l.expiresAt);
     if (left <= 0) return <span className="pill pill-danger">Ended</span>;
-    return <span className={`pill ${left <= 7 ? "pill-warn" : "pill-ok"}`}>{l.kind === "trial" ? "Trial" : "Active"} · {left} day{left === 1 ? "" : "s"} left</span>;
+    return <span className={`pill ${left <= 7 ? "pill-warn" : "pill-ok"}`}>{l.kind === "trial" ? "Trial" : l.kind === "free" ? "Free plan" : "Active"} · {left} day{left === 1 ? "" : "s"} left</span>;
   };
   return (
     <AreaPage title="Licences">
@@ -402,15 +413,22 @@ function SignedInDevices() {
 function PlansPage() {
   return (
     <AreaPage title="Plans and billing">
-      <p className="muted" style={{ marginBottom: 16 }}>Prices are per outlet, per year, plus GST. Your {TRIAL_DAYS}-day trial includes everything; choose a plan before it ends and we will set up your licence.</p>
+      <p className="muted" style={{ marginBottom: 16 }}>After your {TRIAL_DAYS}-day trial you keep the Free plan: every feature on one PC, at no cost, renewed by itself. Paid plans add more PCs, setup and training, and support. Prices are per outlet, per year, plus GST.</p>
       <div className="plans">
+        <section className="card plan">
+          <div className="row"><h2>{FREE_PLAN.name}</h2><span className="pill pill-ok">Free forever</span></div>
+          <p className="muted small">{FREE_PLAN.about}</p>
+          <p className="plan-price">{rupees(0)}<span className="muted small"> / outlet / year</span></p>
+          <ul className="ticks">{FREE_PLAN.features.map((f) => <li key={f}><Check size={16} aria-hidden />{f}</li>)}</ul>
+          <Link to="/app/downloads" className="btn btn-block">Download the app</Link>
+        </section>
         {PLANS.map((p, i) => (
           <section key={p.code} className={`card plan${p.popular ? " plan-popular" : ""}`}>
             <div className="row"><h2>{p.name}</h2>{p.popular ? <span className="pill pill-primary">Most popular</span> : null}</div>
             <p className="muted small">{p.about}</p>
             <p className="plan-price">{rupees(p.price)}<span className="muted small"> / outlet / year + GST</span></p>
             <ul className="ticks">
-              {i > 0 ? <li><Check size={16} aria-hidden /><b>Everything in {PLANS[i - 1]!.name}</b></li> : null}
+              <li><Check size={16} aria-hidden /><b>Everything in {i > 0 ? PLANS[i - 1]!.name : FREE_PLAN.name}</b></li>
               {p.features.map((f) => <li key={f}><Check size={16} aria-hidden />{f}</li>)}
             </ul>
             <Link to={`/app/support/new?plan=${p.code}`} className={`btn btn-block${p.popular ? " btn-primary" : ""}`}>Choose {p.name}</Link>

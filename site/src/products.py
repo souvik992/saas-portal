@@ -11,7 +11,7 @@ P = [
                  "One-tap KOTs routed straight to the right kitchen station",
                  "Split bills, discounts, taxes and service charges handled automatically"],
         title="Fine Dine POS Software for Restaurants in India | POSINEXT",
-        desc="Fine dine restaurant POS with a live floor plan, station-wise KOTs, captain app, split bills, GST billing and offline mode. 30-day free trial, from ₹10,800 a year.",
+        desc="Fine dine restaurant POS with a live floor plan, station-wise KOTs, captain app, split bills, GST billing and offline mode. Free plan on one PC; paid plans from ₹10,800 a year.",
         h1="Fine dine restaurant POS that keeps every table moving",
         lead="POSINEXT Fine Dine (DinePOS) runs on your outlet's Windows PC and keeps billing even when the internet is down. See every table live, fire KOTs to the right kitchen station, split bills any way guests ask and close the day with a Z-report.",
         features=[
@@ -30,7 +30,7 @@ P = [
               ("Which printers does it support?", "58 mm and 80 mm thermal printers that use ESC/POS, on your network (LAN or Wi-Fi) or by USB through Windows. Each kitchen station can have its own printer."),
               ("Can guests split the bill?", "Yes: equally, by item (including one dish shared between guests) or by share. Each part is rounded so the parts always add up to the bill total, and each part is paid on its own."),
               ("Does it handle table reservations?", "Yes. Bookings hold their tables ahead of time, and a waitlist lets you seat walk-ins in order."),
-              ("How much does the fine dine POS cost?", 'Plans start at ₹10,800 per outlet per year plus GST, with a 30-day free trial. See <a href="/pricing/">pricing</a> for what each plan includes.')],
+              ("How much does the fine dine POS cost?", 'The Free plan is ₹0 on one billing PC with every feature; paid plans for more PCs and support start at ₹10,800 per outlet per year plus GST. See <a href="/pricing/">pricing</a> for what each plan includes.')],
         related=["captain-app", "table-qr-ordering", "swiggy-zomato-integration"],
         kw="fine dine POS, restaurant POS software, table management, KOT software, restaurant billing software India"),
     dict(
@@ -42,7 +42,7 @@ P = [
                  "One-tap add, held bills and quick splits to keep the queue moving",
                  "Cash, UPI and card in one panel, with KOTs fired straight to the kitchen"],
         title="QSR Billing Software for Quick Service Restaurants | POSINEXT",
-        desc="Fast counter billing for QSRs, cafés, bakeries and tiffin centres: photo menu, held bills, GST, UPI, KOTs and kitchen display. Works offline. 30-day free trial.",
+        desc="Fast counter billing for QSRs, cafés, bakeries and tiffin centres: photo menu, held bills, GST, UPI, KOTs and kitchen display. Works offline. Free plan.",
         h1="QSR billing software built for counter speed",
         lead="POSINEXT QSR (Tiffin POS) is a Windows billing app for quick-service restaurants, cafés, bakeries, tiffin centres and cloud kitchens. A photo-first menu, one-tap add and cash, UPI and card in one panel keep the queue moving, online or offline.",
         features=[
@@ -53,7 +53,7 @@ P = [
             ("package", "Stock and recipes", "Raw materials, purchases and wastage, with recipes that use up stock as you sell."),
             ("database", "Offline, with backups", "No server and no internet needed to bill. Reports and automatic backups are built in."),
         ],
-        steps=[("Start your free trial", "Create an account in the customer portal and choose QSR. The 30-day trial needs no card."),
+        steps=[("Sign up free", "Create an account in the customer portal and choose QSR. No card: a 30-day trial, then the Free plan on one PC."),
                ("Install Tiffin POS", "Download the Windows installer and install it on the counter PC. No server, no setup visit needed."),
                ("Add menu and printers", "Add categories, dishes and photos, then plug in or add your receipt and kitchen printers."),
                ("Start billing", "Ring up orders, take cash, UPI or card, and send KOTs to the kitchen.")],
@@ -61,7 +61,7 @@ P = [
               ("Is it right for a café, bakery or tiffin centre?", "Yes. QSR is made for counter service of any kind: quick-service restaurants, cafés, bakeries, tiffin centres, food courts and cloud kitchens."),
               ("Can I take Swiggy and Zomato orders?", 'Yes, with the ODS screen: website, app, Swiggy and Zomato orders appear on one screen and KOTs print automatically. See <a href="/swiggy-zomato-integration/">Swiggy &amp; Zomato integration</a>.'),
               ("Which printers work?", "58 mm and 80 mm thermal receipt printers by USB, LAN or Wi-Fi. A USB printer can be set up from the billing screen in one tap."),
-              ("How much does it cost?", 'From ₹10,800 per outlet per year plus GST, after a 30-day free trial. See <a href="/pricing/">pricing</a>.')],
+              ("How much does it cost?", 'Free on one billing PC with every feature (the Free plan). Paid plans for more PCs and support start at ₹10,800 per outlet per year plus GST. See <a href="/pricing/">pricing</a>.')],
         related=["swiggy-zomato-integration", "online-ordering-website", "cloud-kitchen-software"],
         kw="QSR POS, quick service restaurant billing software, cafe billing software, tiffin centre billing, counter billing software"),
     dict(

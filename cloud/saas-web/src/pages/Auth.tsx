@@ -294,7 +294,7 @@ export function Register() {
         <Field label="Password" error={errors.password} hint="At least 8 characters. You also use it to sign in on your PC."><input className="input" value={form.password} onChange={set("password")} type="password" autoComplete="new-password" aria-invalid={!!errors.password} /></Field>
         <CaptchaField captcha={captcha} error={errors.captcha} onType={() => clear("captcha")} />
         <button className="btn btn-primary btn-lg btn-block" disabled={busy}>{busy ? "Creating…" : "Create account"}</button>
-        <p className="muted small">One free trial per product for each business, PC and mobile number.</p>
+        <p className="muted small">One free trial per product for each business, PC and mobile number. After it you keep the Free plan: every feature on one PC, at no cost.</p>
       </form>
     </AuthPage>
   );

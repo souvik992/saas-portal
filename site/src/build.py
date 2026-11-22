@@ -7,6 +7,7 @@ from kit import (PORTAL, EMAIL, SITE, UPDATED, esc, ico, img, page, check_list, 
                  faq_section, cta_band, crumbs, software)
 from products import P, BY_SLUG
 import pages
+import free_page
 import posts
 
 OUT = Path(__file__).resolve().parent.parent / "public"
@@ -45,8 +46,8 @@ def platform_strip():
 HOME_FAQ = [
     ("What is POSINEXT?", "POSINEXT is restaurant POS software made for India: billing, KOTs, table management, Table QR ordering, a captain app, kitchen display, online ordering (website, app, Swiggy and Zomato) and reports, for fine dine restaurants, QSRs, cafés and cloud kitchens."),
     ("Does POSINEXT work without internet?", "Yes. The POS runs on your outlet's Windows PC, so billing, KOTs, the captain app and kitchen screens keep working on your local network when the internet is down. Online orders and backups catch up when it is back."),
-    ("How much does POSINEXT cost?", 'Plans are ₹10,800, ₹18,000 and ₹27,000 per outlet per year plus GST, with a 30-day free trial. See <a href="/pricing/">pricing</a>.'),
-    ("Is there a free trial?", f'Yes, 30 days, with no card. <a href="{PORTAL}/register">Create an account</a>, download the POS and start billing.'),
+    ("How much does POSINEXT cost?", 'The Free plan is ₹0: every feature on one billing PC, for as long as you use it. Paid plans for more PCs, setup and support are ₹10,800, ₹18,000 and ₹27,000 per outlet per year plus GST. See <a href="/pricing/">pricing</a>.'),
+    ("Is there a free restaurant POS?", f'Yes. <a href="{PORTAL}/register">Sign up free</a>, download the POS and start billing: 30 days of trial, then the <a href="/free-restaurant-pos/">Free plan</a> with no limit on bills or menu items, no card needed.'),
     ("Does POSINEXT integrate with Swiggy and Zomato?", 'Yes. Swiggy and Zomato orders arrive in the POS, are accepted automatically and print as KOTs. See <a href="/swiggy-zomato-integration/">Swiggy &amp; Zomato integration</a>.'),
     ("What hardware do I need?", 'A Windows 10 or 11 PC and a 58 or 80 mm thermal printer. Captains use Android phones; kitchen screens can be any PC or screen on the network. See the <a href="/docs/">documentation</a>.'),
 ]
@@ -57,7 +58,7 @@ def home():
             f'<h1>The POS built for <span class="pc">modern restaurants</span></h1>'
             f'<p class="lead">From dine-in to delivery, POSINEXT connects every touchpoint — POS, Table QR, Captain App, Cloud Kitchen and your own delivery channels — in one unified platform.</p>'
             + btns(("Book a Demo", "/book-a-demo/"), ("Explore products", "#products"))
-            + ticks(["No setup fees", "Free onboarding", "24/7 support"])
+            + ticks(["Free plan, every feature", "No setup fees", "Works offline"])
             + f'</div><div class="rel"><div class="fr"><div class="dots"><i></i><i></i><i></i></div>'
             f'{img("core-pos", "POSINEXT restaurant POS dashboard showing live tables and an open order", eager=True)}</div>'
             f'<div class="fl fl-h"><span class="ib">{ico("trend")}</span><div><small>Revenue today</small><b>₹1,84,250 <em>↑ 18%</em></b></div></div></div></div></section>')
@@ -84,7 +85,7 @@ def home():
                 + "</div></div></section>")
     fq, fq_schema = faq_section(HOME_FAQ, "Restaurant POS questions, answered")
     body = hero + stats + products + analytics + platform + fq + cta_band(cls="big")
-    desc = "Restaurant POS & billing software for fine dine, QSR, cafés and cloud kitchens in India. KOT, Table QR, captain app, Swiggy & Zomato. Works offline. Free trial."
+    desc = "Restaurant POS & billing software for fine dine, QSR, cafés and cloud kitchens in India. KOT, Table QR, captain app, Swiggy & Zomato. Works offline. Free plan."
     schema = [software("POSINEXT Restaurant POS", desc, SITE + "/",
                        ["GST billing", "KOT printing by kitchen station", "Table management", "Table QR ordering", "Captain app",
                         "Kitchen display", "Swiggy and Zomato integration", "Online ordering website", "Inventory and recipes",
@@ -99,8 +100,8 @@ def product(p):
     bc, bc_schema = crumbs([("Products", "/features/"), (p["name"], f'/{p["slug"]}/')])
     hero = (f'{bc}<section class="hero sm"><div class="w"><div class="rel"><span class="ey ey-h">{p["num"]} · {p["group"]}</span>'
             f'<h1>{p["h1"]}</h1><p class="lead">{p["lead"]}</p>'
-            + btns(("Book a Demo", "/book-a-demo/"), ("Start free trial", PORTAL + "/register"))
-            + ticks(["30-day free trial", "Works offline", "Made for India"])
+            + btns(("Book a Demo", "/book-a-demo/"), ("Start free", PORTAL + "/register"))
+            + ticks(["Free plan on 1 PC", "Works offline", "Made for India"])
             + f'</div><div class="rel"><div class="fr">{img(p["img"], p["alt"], eager=True)}</div>'
             f'<div class="fl fs fs-l"><span class="dot"></span><div><b>{p["stat"]}</b><small>{p["statl"]}</small></div></div></div></div></section>')
     feats = (f'<section class="sec bs"><div class="w">' + sec_head("What you get", f'{p["name"]} features')
@@ -163,6 +164,7 @@ def main():
     for p in P:
         product(p)
     pages.build(simple, write)
+    free_page.build(write)
     posts.build(simple, write)
     pages.extras(write, BUILT)
     # Keep the browser-only CMS available on the static site; it is deliberately

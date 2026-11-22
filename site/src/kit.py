@@ -131,7 +131,7 @@ def img(key, alt, eager=False, sizes="(min-width:1024px) 600px, calc(100vw - 2.5
 # ---- navigation and footer ----
 NAV = [("Products", "/#products"), ("Analytics", "/#analytics"), ("Platform", "/#platform"), ("Pricing", "/pricing/")]
 FOOTER = [
-    ("Product", [("Fine Dine", "/fine-dine-pos/"), ("QSR", "/qsr-pos/"), ("Features", "/features/"), ("Pricing", "/pricing/"),
+    ("Product", [("Fine Dine", "/fine-dine-pos/"), ("QSR", "/qsr-pos/"), ("Features", "/features/"), ("Pricing", "/pricing/"), ("Free POS", "/free-restaurant-pos/"),
                  ("Changelog", "/changelog/"), ("Compare", "/compare/petpooja-alternative/")]),
     ("Add-ons", [("Table QR", "/table-qr-ordering/"), ("Captain App", "/captain-app/"), ("Cloud Kitchen", "/cloud-kitchen-software/"),
                  ("Food Delivery App", "/food-delivery-app/"), ("Website Ordering", "/online-ordering-website/"),
@@ -261,7 +261,7 @@ def faq_section(items, title="Frequently asked questions", eyebrow="FAQ", bg="")
 def cta_band(title="Ready to modernise your restaurant?",
              text="Join 500+ restaurants already running on POSINEXT. Get set up in a day, not a week.", cls="sec-s"):
     return (f'<section class="cta {cls}"><div class="w"><div class="bx"><h2>{title}</h2><p>{text}</p>'
-            + btns(("Start your free trial", PORTAL + "/register"), ("Book a demo", "/book-a-demo/"), light=True)
+            + btns(("Sign up free", PORTAL + "/register"), ("Book a demo", "/book-a-demo/"), light=True)
             + "</div></div></section>")
 
 
@@ -285,7 +285,7 @@ ORG = {"@type": "Organization", "@id": SITE + "/#org", "name": "POSINEXT", "alte
                         {"@type": "ContactPoint", "contactType": "sales", "url": SITE + "/book-a-demo/", "areaServed": "IN"}]}
 WEBSITE = {"@type": "WebSite", "@id": SITE + "/#website", "name": "POSINEXT", "alternateName": ["PosiNext", "Posi Next", "posinext.com"], "url": SITE + "/",
            "inLanguage": "en-IN", "publisher": {"@id": SITE + "/#org"}}
-OFFERS = {"@type": "AggregateOffer", "priceCurrency": "INR", "lowPrice": "10800", "highPrice": "27000", "offerCount": "3",
+OFFERS = {"@type": "AggregateOffer", "priceCurrency": "INR", "lowPrice": "0", "highPrice": "27000", "offerCount": "4",
           "url": SITE + "/pricing/"}
 
 

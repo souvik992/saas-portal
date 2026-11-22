@@ -19,27 +19,41 @@ export interface Plan {
   popular?: boolean;
 }
 
+/**
+ * The Free plan (2026-11-22): every feature on one billing PC per product (Fine Dine: plus 1 captain phone and 1
+ * kitchen screen; QSR: plus 1 kitchen screen), no bill or menu limits, for as long as the shop uses it. Every account
+ * moves to it after the 30-day trial; PosiNext Cloud renews its key by itself (posinext-cloud hub/src/licences.ts).
+ */
+export const FREE_PLAN = {
+  name: "Free",
+  about: "Every feature on one billing PC, free for as long as you use it.",
+  features: [
+    "Fine Dine (DinePOS) or QSR (quickPOS), or both",
+    "Billing with GST, KOT and UPI, works offline",
+    "Captain app and kitchen display (1 each)",
+    "Table QR ordering, website and app orders, Swiggy and Zomato",
+    "Menu, stock, recipes, reports and backups",
+    "No limit on bills, menu items or sales",
+    "Help centre and email support",
+  ],
+} as const;
+
 /** 10% off, rounded to the rupee. */
 export const priceFrom = (reference: number) => Math.round(reference * (1 - DISCOUNT));
 
 export const PLANS: Plan[] = [
   {
-    code: "base", name: "Base", about: "Billing, menu, stock and reports for one outlet.", price: priceFrom(REFERENCE_PRICES.base),
+    code: "base", name: "Base", about: "More PCs, and we set it up and train your team.", price: priceFrom(REFERENCE_PRICES.base),
     features: [
-      "Fine Dine (DinePOS) or QSR (Tiffin POS)",
-      "Billing with GST and UPI, works offline",
-      "Menu management, stock and recipes",
-      "Reports and automatic backups",
+      "More billing PCs, captain phones and kitchen screens",
       "Online installation and training",
       "Support by ticket and email",
     ],
   },
   {
-    code: "growth", name: "Growth", about: "Add-ons for busier floors and kitchens.", price: priceFrom(REFERENCE_PRICES.growth), popular: true,
+    code: "growth", name: "Growth", about: "For busier floors, kitchens and online orders.", price: priceFrom(REFERENCE_PRICES.growth), popular: true,
     features: [
-      "Captain app for waiters' phones",
-      "Kitchen display",
-      "Table QR ordering and waiter calling",
+      "Captain app, kitchen display and Table QR on every device you need",
       "ODS: website, app, Swiggy and Zomato orders on one screen",
       "Installation and training: 1 visit",
     ],
