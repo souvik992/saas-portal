@@ -38,7 +38,7 @@ Each post goes deep on one channel or problem and links back to the pillar guide
 - [x] How to get more Google reviews for your restaurant (and reply to bad ones) without breaking the rules — get-more-google-reviews-restaurant (2026-11-20)
 - [x] Swiggy and Zomato commission explained: calculate your real cost and margin per order — swiggy-zomato-commission-india (2026-11-21)
 - [x] Direct online ordering for restaurants in India: website vs app vs aggregator — direct-online-ordering-restaurants-india (2026-11-22)
-- [ ] WhatsApp ordering and marketing for restaurants: opt-ins, broadcasts and reorders
+- [x] WhatsApp ordering and marketing for restaurants: opt-ins, broadcasts and reorders — whatsapp-ordering-marketing-restaurants (2026-11-23)
 - [ ] ONDC for restaurants: how to join, costs, and what results to expect
 - [ ] Instagram and reels marketing for restaurants and cafés in India
 - [ ] Working with local food influencers and creators: briefs, pricing and tracking
@@ -78,3 +78,4 @@ questions restaurant owners search for) before writing.
 - 2026-11-20 get-more-google-reviews-restaurant — review QR/link, staff script, reply templates, reporting and appeals, review rules and IS 19000, sourced from Google help/policy pages and PIB
 - 2026-11-21 swiggy-zomato-commission-india — fee buckets, reported rates and new fees, GST/TDS treatment, ₹420 illustrative margin example, pricing formula and weekly check, sourced from CBIC, Business Standard, Inc42 and others
 - 2026-11-22 direct-online-ordering-restaurants-india — website vs app vs aggregator comparison table, ₹450 illustrative cost-per-order example, ways to move regulars direct and a 30-day plan, sourced from Redseer/Business Today, Business Standard, YourStory, Inc42, ONDC, Razorpay, Apple, Google Play and Shiprocket
+- 2026-11-23 whatsapp-ordering-marketing-restaurants — Business app vs Platform table, India per-message rates from Oct 2026, 7-step ordering setup, opt-in rules (WhatsApp policy, DPDP Rules) with sample wording, ₹ cost-per-reorder example and 30-day plan, sourced from Meta developer docs, WhatsApp policy, FPJ, IBTimes, TechCrunch, PIB and India Briefing
