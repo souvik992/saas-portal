@@ -34,6 +34,18 @@ jobs:
           python-version: "3.12"
       - name: Install build dependencies
         run: python -m pip install --disable-pip-version-check pillow fonttools brotli
+      - name: Make missing blog covers (Cloudflare Workers AI, free daily allowance)
+        # Needs the repository secrets CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN (Workers AI permission).
+        # Without them, or if the image service fails, the site still builds and the post goes out without a cover.
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$CLOUDFLARE_ACCOUNT_ID" ] || [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "Cloudflare secrets not set; skipping blog covers."
+          else
+            python site/tools/blog_images.py --provider cloudflare --limit 10 || echo "::warning::Blog cover generation failed; publishing without new covers."
+          fi
       - name: Build
         run: |
           python site/src/build.py | tee build.log
@@ -52,7 +64,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add site/public
+          git add site/public site/src/images
           if git diff --cached --quiet; then
             echo "Generated output is already current."
           else
