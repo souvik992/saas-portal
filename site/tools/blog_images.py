@@ -33,7 +33,7 @@ from pathlib import Path
 
 SRC = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(SRC))
-from blog_meta import CODE_POSTS, IMAGE_STYLE  # noqa: E402
+from blog_meta import CODE_POSTS, IMAGE_STYLE, IMAGE_STYLE_FLUX  # noqa: E402
 
 CONTENT = Path(__file__).resolve().parents[2] / "content" / "posts"
 IMAGES = SRC / "images"
@@ -147,8 +147,9 @@ def main():
         ledger = json.loads(LEDGER.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         ledger = {}
+    style = IMAGE_STYLE_FLUX if provider == "cloudflare" else IMAGE_STYLE
     for i, (slug, title, subject) in enumerate(todo, 1):
-        prompt = f"{subject}. {IMAGE_STYLE}"
+        prompt = f"{subject}. {style}"
         print(f"[{i}/{len(todo)}] {slug}")
         if a.dry_run:
             print(f"    {prompt}\n")

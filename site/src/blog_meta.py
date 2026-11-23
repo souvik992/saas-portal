@@ -18,6 +18,13 @@ IMAGE_STYLE = ("Editorial photograph for a restaurant business blog cover. Reali
                "accent, calm uncluttered composition. Absolutely no text, letters, numbers, signage, logos, brand names, "
                "app screens with readable content, or watermarks. Wide landscape 16:9 framing.")
 
+# The same house style for FLUX (Cloudflare Workers AI). FLUX ignores "no ..." instructions and naming text, signs or
+# logos tends to add them, so this says only what to show. Subjects for it should avoid paper bills, menus, signboards,
+# storefronts and screens facing the camera, which it fills with garbled lettering.
+IMAGE_STYLE_FLUX = ("Realistic editorial photograph for a restaurant business blog. Natural warm light, shallow depth of "
+                    "field, 35mm lens, set in India with Indian people, warm tones with a subtle orange accent, calm "
+                    "uncluttered composition, plain unmarked surfaces and packaging, wide landscape 16:9 framing.")
+
 # Posts written in posts.py (code). slug -> (category, image prompt subject, image alt text)
 CODE_POSTS = {
     "how-to-choose-restaurant-pos-software-india": (
@@ -27,13 +34,13 @@ CODE_POSTS = {
         "A restaurant owner using a POS touchscreen at the billing counter"),
     "gst-on-restaurant-bills-india": (
         "GST & Compliance",
-        "Close-up of a printed restaurant bill folded on a small steel tray next to a calculator, a pen and a cup of "
-        "masala chai on a wooden table, the printed lines blurred so nothing is readable",
+        "A smiling cashier at the wooden billing counter of an Indian restaurant handing change to a customer, a small "
+        "receipt printer beside them, warm evening light, diners softly blurred behind",
         "A printed restaurant bill on a tray beside a calculator and a cup of chai"),
     "swiggy-zomato-pos-integration-guide": (
         "Online Orders",
-        "Sealed food delivery bags and boxes lined up on a restaurant pass counter next to a kitchen ticket printer "
-        "pushing out a ticket, a delivery rider in a plain helmet blurred in the doorway, no branding anywhere",
+        "Plain kraft paper delivery bags lined up on a restaurant pass counter while a cook places one more bag, a "
+        "delivery rider in a plain helmet waiting softly blurred in the doorway",
         "Packed delivery orders waiting on a restaurant counter beside a ticket printer"),
     "reduce-restaurant-revenue-leakage": (
         "Restaurant Operations",
