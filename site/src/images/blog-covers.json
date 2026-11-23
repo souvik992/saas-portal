@@ -13,5 +13,50 @@
   "model": "ChatGPT image generation",
   "quality": "",
   "prompt": "A restaurant owner in an apron at a table reading a printed statement, with a calculator, a notebook, a laptop and packed takeaway boxes beside him and cooks working in the kitchen behind"
+ },
+ "how-to-choose-restaurant-pos-software-india": {
+  "model": "@cf/black-forest-labs/flux-1-schnell",
+  "quality": "8 steps",
+  "prompt": "A restaurant owner standing at the billing counter of a busy Indian casual-dining restaurant, touching a modern POS touchscreen terminal beside a small receipt printer, warm evening light, diners softly blurred behind. Editorial photograph for a restaurant business blog cover. Realistic, natural light, shallow depth of field, 35mm lens, set in India with Indian people where people appear, warm tones with a subtle orange accent, calm uncluttered composition. Absolutely no text, letters, numbers, signage, logos, brand names, app screens with readable content, or watermarks. Wide landscape 16:9 framing."
+ },
+ "gst-on-restaurant-bills-india": {
+  "model": "@cf/black-forest-labs/flux-1-schnell",
+  "quality": "8 steps",
+  "prompt": "Close-up of a printed restaurant bill folded on a small steel tray next to a calculator, a pen and a cup of masala chai on a wooden table, the printed lines blurred so nothing is readable. Editorial photograph for a restaurant business blog cover. Realistic, natural light, shallow depth of field, 35mm lens, set in India with Indian people where people appear, warm tones with a subtle orange accent, calm uncluttered composition. Absolutely no text, letters, numbers, signage, logos, brand names, app screens with readable content, or watermarks. Wide landscape 16:9 framing."
+ },
+ "swiggy-zomato-pos-integration-guide": {
+  "model": "@cf/black-forest-labs/flux-1-schnell",
+  "quality": "8 steps",
+  "prompt": "Sealed food delivery bags and boxes lined up on a restaurant pass counter next to a kitchen ticket printer pushing out a ticket, a delivery rider in a plain helmet blurred in the doorway, no branding anywhere. Editorial photograph for a restaurant business blog cover. Realistic, natural light, shallow depth of field, 35mm lens, set in India with Indian people where people appear, warm tones with a subtle orange accent, calm uncluttered composition. Absolutely no text, letters, numbers, signage, logos, brand names, app screens with readable content, or watermarks. Wide landscape 16:9 framing."
+ },
+ "reduce-restaurant-revenue-leakage": {
+  "model": "@cf/black-forest-labs/flux-1-schnell",
+  "quality": "8 steps",
+  "prompt": "A restaurant manager after closing time reviewing the day on a tablet at the cash counter, an open cash drawer, a neat stack of receipts and a small desk lamp, empty dining room softly lit behind. Editorial photograph for a restaurant business blog cover. Realistic, natural light, shallow depth of field, 35mm lens, set in India with Indian people where people appear, warm tones with a subtle orange accent, calm uncluttered composition. Absolutely no text, letters, numbers, signage, logos, brand names, app screens with readable content, or watermarks. Wide landscape 16:9 framing."
+ },
+ "restaurant-inventory-management-india": {
+  "model": "@cf/black-forest-labs/flux-1-schnell",
+  "quality": "8 steps",
+  "prompt": "An organised restaurant storeroom with steel shelves of labelled-but-unreadable containers of rice, lentils, spices and fresh paneer, a kitchen staff member in an apron counting stock with a clipboard. Editorial photograph for a restaurant business blog cover. Realistic, natural light, shallow depth of field, 35mm lens, set in India with Indian people where people appear, warm tones with a subtle orange accent, calm uncluttered composition. Absolutely no text, letters, numbers, signage, logos, brand names, app screens with readable content, or watermarks. Wide landscape 16:9 framing."
+ },
+ "direct-online-ordering-restaurants-india": {
+  "model": "@cf/black-forest-labs/flux-1-schnell",
+  "quality": "8 steps",
+  "prompt": "A young woman at a small Indian café counter scanning a QR code on a takeaway bag with her phone while a staff member packs a paper delivery bag, warm evening light. Editorial photograph for a restaurant business blog cover. Realistic, natural light, shallow depth of field, 35mm lens, set in India with Indian people where people appear, warm tones with a subtle orange accent, calm uncluttered composition. Absolutely no text, letters, numbers, signage, logos, brand names, app screens with readable content, or watermarks. Wide landscape 16:9 framing."
+ },
+ "google-business-profile-for-restaurants-india": {
+  "model": "@cf/black-forest-labs/flux-1-schnell",
+  "quality": "8 steps",
+  "prompt": "A hand holding a smartphone in the foreground showing a simple map with a single location pin (no readable text), the warmly lit entrance of a neighbourhood Indian restaurant softly blurred behind at dusk. Editorial photograph for a restaurant business blog cover. Realistic, natural light, shallow depth of field, 35mm lens, set in India with Indian people where people appear, warm tones with a subtle orange accent, calm uncluttered composition. Absolutely no text, letters, numbers, signage, logos, brand names, app screens with readable content, or watermarks. Wide landscape 16:9 framing."
+ },
+ "restaurant-marketing-channels-india": {
+  "model": "@cf/black-forest-labs/flux-1-schnell",
+  "quality": "8 steps",
+  "prompt": "A lively street-facing Indian cafe in the early evening with string lights, customers arriving and chatting at the entrance, a blank chalkboard stand outside, warm inviting glow. Editorial photograph for a restaurant business blog cover. Realistic, natural light, shallow depth of field, 35mm lens, set in India with Indian people where people appear, warm tones with a subtle orange accent, calm uncluttered composition. Absolutely no text, letters, numbers, signage, logos, brand names, app screens with readable content, or watermarks. Wide landscape 16:9 framing."
+ },
+ "whatsapp-ordering-marketing-restaurants": {
+  "model": "@cf/black-forest-labs/flux-1-schnell",
+  "quality": "8 steps",
+  "prompt": "A café owner in an Indian neighbourhood café checking customer orders on a smartphone at the counter while a staff member packs a takeaway order, warm daylight. Editorial photograph for a restaurant business blog cover. Realistic, natural light, shallow depth of field, 35mm lens, set in India with Indian people where people appear, warm tones with a subtle orange accent, calm uncluttered composition. Absolutely no text, letters, numbers, signage, logos, brand names, app screens with readable content, or watermarks. Wide landscape 16:9 framing."
  }
 }
