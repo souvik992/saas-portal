@@ -58,5 +58,10 @@
   "model": "@cf/black-forest-labs/flux-1-schnell",
   "quality": "8 steps",
   "prompt": "A café owner in an Indian neighbourhood café checking customer orders on a smartphone at the counter while a staff member packs a takeaway order, warm daylight. Editorial photograph for a restaurant business blog cover. Realistic, natural light, shallow depth of field, 35mm lens, set in India with Indian people where people appear, warm tones with a subtle orange accent, calm uncluttered composition. Absolutely no text, letters, numbers, signage, logos, brand names, app screens with readable content, or watermarks. Wide landscape 16:9 framing."
+ },
+ "ondc-for-restaurants-india": {
+  "model": "@cf/black-forest-labs/flux-1-schnell",
+  "quality": "8 steps",
+  "prompt": "A cook in a small Indian restaurant kitchen handing a sealed brown paper delivery bag to a delivery rider in a helmet across a steel counter, steam rising from pots in the background, warm afternoon light. Realistic editorial photograph for a restaurant business blog. Natural warm light, shallow depth of field, 35mm lens, set in India with Indian people, warm tones with a subtle orange accent, calm uncluttered composition, plain unmarked surfaces and packaging, wide landscape 16:9 framing."
  }
 }
