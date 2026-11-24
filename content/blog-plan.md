@@ -41,7 +41,7 @@ Each post goes deep on one channel or problem and links back to the pillar guide
 - [x] Swiggy and Zomato commission explained: calculate your real cost and margin per order — swiggy-zomato-commission-india (2026-11-21)
 - [x] Direct online ordering for restaurants in India: website vs app vs aggregator — direct-online-ordering-restaurants-india (2026-11-22)
 - [x] WhatsApp ordering and marketing for restaurants: opt-ins, broadcasts and reorders — whatsapp-ordering-marketing-restaurants (2026-11-23)
-- [ ] ONDC for restaurants: how to join, costs, and what results to expect
+- [x] ONDC for restaurants: how to join, costs, and what results to expect — ondc-for-restaurants-india (2026-11-24)
 - [ ] Instagram and reels marketing for restaurants and cafés in India
 - [ ] Working with local food influencers and creators: briefs, pricing and tracking
 - [ ] Restaurant loyalty programs that work in India (points, cashback, memberships)
@@ -81,3 +81,4 @@ questions restaurant owners search for) before writing.
 - 2026-11-21 swiggy-zomato-commission-india — fee buckets, reported rates and new fees, GST/TDS treatment, ₹420 illustrative margin example, pricing formula and weekly check, sourced from CBIC, Business Standard, Inc42 and others
 - 2026-11-22 direct-online-ordering-restaurants-india — website vs app vs aggregator comparison table, ₹450 illustrative cost-per-order example, ways to move regulars direct and a 30-day plan, sourced from Redseer/Business Today, Business Standard, YourStory, Inc42, ONDC, Razorpay, Apple, Google Play and Shiprocket
 - 2026-11-23 whatsapp-ordering-marketing-restaurants — Business app vs Platform table, India per-message rates from Oct 2026, 7-step ordering setup, opt-in rules (WhatsApp policy, DPDP Rules) with sample wording, ₹ cost-per-reorder example and 30-day plan, sourced from Meta developer docs, WhatsApp policy, FPJ, IBTimes, TechCrunch, PIB and India Briefing
+- 2026-11-24 ondc-for-restaurants-india — how ONDC works, 6-step seller-app joining route and question checklist, cost table, ₹400 illustrative order (aggregator vs ONDC with/without restaurant-paid delivery), 2026 status (Flipkart, Ownly) and 30-day tracking, sourced from ONDC, PIB, state EoDB guides, Inc42, Business Standard, Business Today, Outlook Business and TechCrunch
