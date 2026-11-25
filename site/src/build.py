@@ -60,7 +60,7 @@ def home():
             + btns(("Book a Demo", "/book-a-demo/"), ("Explore products", "#products"))
             + ticks(["Free plan, every feature", "No setup fees", "Works offline"])
             + f'</div><div class="rel"><div class="fr"><div class="dots"><i></i><i></i><i></i></div>'
-            f'{img("core-pos", "POSINEXT restaurant POS dashboard showing live tables and an open order", eager=True)}</div>'
+            f'{img("core-pos", "POSINEXT restaurant POS floor showing live tables and open takeaway and delivery orders", eager=True)}</div>'
             f'<div class="fl fl-h"><span class="ib">{ico("trend")}</span><div><small>Revenue today</small><b>₹1,84,250 <em>↑ 18%</em></b></div></div></div></div></section>')
     stats = ('<section class="st"><div class="w">' + "".join(f"<div><b>{a}</b><span>{b}</span></div>" for a, b in [
         ("500+", "Restaurants"), ("9", "Integrated products"), ("99.9%", "Uptime SLA"), ("2M+", "Orders processed")]) + "</div></section>")

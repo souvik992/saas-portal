@@ -322,7 +322,7 @@ def page(path, title, desc, body, schema=(), og_type="website", og_img="/img/og.
             f"<title>{esc(title)}</title><meta name=\"description\" content=\"{esc(desc)}\">"
             f'<link rel="canonical" href="{url}"><meta name="robots" content="{robots}">'
             f'{FONT_PRELOAD}<style>{CSS_MIN}</style>{pre}'
-            f'<link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#f15b00">'
+            f'<link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#d42a2f">'
             f'<link rel="alternate" hreflang="en-IN" href="{url}"><link rel="alternate" hreflang="x-default" href="{url}">'
             f'<meta name="author" content="POSINEXT"><meta name="geo.region" content="IN">'
             f'<meta property="og:type" content="{og_type}"><meta property="og:site_name" content="POSINEXT">'
