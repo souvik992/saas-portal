@@ -1,22 +1,22 @@
-/* The POSINEXT client area look: Rubik, cool neutrals, orange primary, white cards with hairline borders. */
+/* The POSINEXT client area look: Rubik, near-white neutrals, red primary (the DinePOS palette, 2026-11-25), white cards with hairline borders. */
 @font-face { font-family: "Rubik"; font-style: normal; font-weight: 400 700; font-display: swap; src: url("/fonts/rubik-latin.woff2") format("woff2"); }
 
 :root {
   --radius: 8px;
   --radius-card: 12px;
-  --background: oklch(98.5% .002 90);
-  --foreground: oklch(20% .02 260);
+  --background: oklch(97.8% .003 20);
+  --foreground: oklch(23% .02 20);
   --card: oklch(100% 0 0);
-  --primary: oklch(66% .2 42);
-  --primary-strong: oklch(60% .2 42);
-  --primary-soft: oklch(96% .035 50);
+  --primary: oklch(56% .215 26);
+  --primary-strong: oklch(48% .2 26);
+  --primary-soft: oklch(95.5% .025 18);
   --primary-foreground: oklch(100% 0 0);
   --secondary: oklch(96% .003 260);
   --muted: oklch(96% .003 260);
   --muted-foreground: oklch(48% .015 260);
   --border: oklch(92% .004 260);
-  --ring: oklch(66% .2 42);
-  --danger: oklch(55% .22 27);
+  --ring: oklch(56% .215 26);
+  --danger: oklch(48% .2 27);
   --danger-soft: oklch(96% .03 27);
   --ok: oklch(62% .15 150);
   --ok-soft: oklch(96% .04 150);
@@ -45,7 +45,16 @@ p { margin: 0; }
 .spacer { flex: 1; }
 
 /* top bar and footer */
-.topbar { position: sticky; top: 0; z-index: 10; background: color-mix(in oklch, var(--background) 80%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+/* the red top bar, as on the DinePOS screens: white name and links, the logo's first chevron white */
+.topbar { position: sticky; top: 0; z-index: 10; background: var(--primary); color: var(--primary-foreground); }
+.topbar .brand { color: var(--primary-foreground); }
+.topbar .brand-mark-a { fill: var(--primary-foreground); }
+.topbar .brand-mark-b { fill: #0a1326; }
+.topbar .navlink { color: rgb(255 255 255 / .88); }
+.topbar .navlink:hover { background: rgb(255 255 255 / .16); color: var(--primary-foreground); }
+.topbar .avatar { background: var(--primary-foreground); color: var(--primary); }
+.topbar .avatar:hover { background: rgb(255 255 255 / .88); }
+.topbar .btn-primary { background: var(--primary-foreground); color: var(--primary); }
 .topbar .wrap { height: 68px; display: flex; align-items: center; gap: 4px; }
 .brand { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; flex: none; color: var(--foreground); font: 700 18px var(--font-sans); }
 .brand:hover { text-decoration: none; }

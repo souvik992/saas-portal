@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Link, useLocation } from "../router";
 import { useSession } from "../session";
 
-/** The POSINEXT logo, as on posinext.com: two chevrons (orange and dark) and the name. */
+/** The POSINEXT logo, as on posinext.com: two chevrons (brand red and dark; white and dark on the red top bar) and the name. */
 export function Brand() {
   return (
     <Link to="/" className="brand" aria-label="POSINEXT home">
