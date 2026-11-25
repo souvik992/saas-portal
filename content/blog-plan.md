@@ -42,7 +42,7 @@ Each post goes deep on one channel or problem and links back to the pillar guide
 - [x] Direct online ordering for restaurants in India: website vs app vs aggregator — direct-online-ordering-restaurants-india (2026-11-22)
 - [x] WhatsApp ordering and marketing for restaurants: opt-ins, broadcasts and reorders — whatsapp-ordering-marketing-restaurants (2026-11-23)
 - [x] ONDC for restaurants: how to join, costs, and what results to expect — ondc-for-restaurants-india (2026-11-24)
-- [ ] Instagram and reels marketing for restaurants and cafés in India
+- [x] Instagram and reels marketing for restaurants and cafés in India — instagram-marketing-restaurants-india (2026-11-25)
 - [ ] Working with local food influencers and creators: briefs, pricing and tracking
 - [ ] Restaurant loyalty programs that work in India (points, cashback, memberships)
 - [ ] Table QR ordering: does it increase average order value and table turns?
@@ -82,3 +82,4 @@ questions restaurant owners search for) before writing.
 - 2026-11-22 direct-online-ordering-restaurants-india — website vs app vs aggregator comparison table, ₹450 illustrative cost-per-order example, ways to move regulars direct and a 30-day plan, sourced from Redseer/Business Today, Business Standard, YourStory, Inc42, ONDC, Razorpay, Apple, Google Play and Shiprocket
 - 2026-11-23 whatsapp-ordering-marketing-restaurants — Business app vs Platform table, India per-message rates from Oct 2026, 7-step ordering setup, opt-in rules (WhatsApp policy, DPDP Rules) with sample wording, ₹ cost-per-reorder example and 30-day plan, sourced from Meta developer docs, WhatsApp policy, FPJ, IBTimes, TechCrunch, PIB and India Briefing
 - 2026-11-24 ondc-for-restaurants-india — how ONDC works, 6-step seller-app joining route and question checklist, cost table, ₹400 illustrative order (aggregator vs ONDC with/without restaurant-paid delivery), 2026 status (Flipkart, Ownly) and 30-day tracking, sourced from ONDC, PIB, state EoDB guides, Inc42, Business Standard, Business Today, Outlook Business and TechCrunch
+- 2026-11-25 instagram-marketing-restaurants-india — what Instagram ranks (watch time, likes, sends, originality, trial reels), profile setup, reels content table, ASCI creator disclosure rules, ₹3,000 illustrative boost example and POS code tracking, sourced from NapoleonCat, Meta Newsroom, Social Media Today, SEJ, TechCrunch and ASCI
