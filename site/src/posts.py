@@ -6,7 +6,7 @@ import re
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import quote
-from kit import PORTAL, EMAIL, SITE, faq, ico, esc, page, crumbs, cta_band
+from kit import PORTAL, EMAIL, SITE, faq, ico, esc, page, crumbs, cta_band, isrc, isrcset
 from cms import load_managed_posts
 from blog_meta import AUTHOR, CODE_POSTS, IMAGE_STYLE
 
@@ -235,9 +235,9 @@ def cover(p, eager=False, sizes="(min-width:1024px) 400px, (min-width:768px) 50v
     """The post's cover (WebP at 480/800/1200 from src/images/blog-<slug>.*), or a designed placeholder until there is one."""
     if p["image"]:
         key = p["image"]
-        srcset = ", ".join(f"/img/{key}-{w}.webp {w}w" for w in (480, 800, 1200))
+        srcset = isrcset(key)
         load = 'fetchpriority="high"' if eager else 'loading="lazy"'
-        return (f'<img class="cv" src="/img/{key}-800.webp" srcset="{srcset}" sizes="{sizes}" width="1200" height="675" '
+        return (f'<img class="cv" src="{isrc(key, 800)}" srcset="{srcset}" sizes="{sizes}" width="1200" height="675" '
                 f'alt="{esc(p["alt"])}" {load} decoding="async">')
     t = sum(map(ord, p["category"])) % 4
     return f'<div class="cv cv{t}" aria-hidden="true">{ico(ICON.get(p["category"], "book"))}</div>'
@@ -346,7 +346,7 @@ def build(simple, write):
         a = p["author"]
         author = ({"@type": "Organization", "name": a["name"], "url": SITE + "/about/"} if a is AUTHOR
                   else {"@type": "Person", "name": a["name"], **({"jobTitle": a["role"]} if a.get("role") else {})})
-        og = f"/img/{p['image']}-og.jpg" if p["image"] else "/img/og.jpg"
+        og = isrc(p["image"] or "og", "og")
         schema = {"@type": "BlogPosting", "headline": _html.unescape(title), "description": _html.unescape(desc),
                   "datePublished": p["date"], "dateModified": p["updated"] or p["date"], "author": author,
                   "publisher": {"@id": SITE + "/#org"}, "image": SITE + og, "articleSection": p["category"],

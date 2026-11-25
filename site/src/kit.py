@@ -119,12 +119,37 @@ LOGO = ('<span class="logo"><svg viewBox="0 0 32 24" aria-hidden="true"><path cl
 WIDE = {"qsr-billing", "ods-online-orders"}
 
 
+# Images are cached by browsers for 30 days, so each URL carries a short hash of its original: a changed picture gets a
+# new URL and visitors see it at once.
+IMAGES = Path(__file__).parent / "images"
+_VER = {}
+
+
+def iver(key):
+    if key not in _VER:
+        import hashlib
+        src = next((f for f in sorted(IMAGES.glob(key + ".*")) if f.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp")), None)
+        _VER[key] = "?v=" + hashlib.md5(src.read_bytes()).hexdigest()[:8] if src else ""
+    return _VER[key]
+
+
+def isrc(key, w):
+    """URL of one generated size: /img/<key>-<w>.webp (w=480/800/1200) or /img/<key>-og.jpg / /img/og.jpg (w='og')."""
+    if w == "og":
+        return ("/img/og.jpg" if key == "og" else f"/img/{key}-og.jpg") + iver(key)
+    return f"/img/{key}-{w}.webp" + iver(key)
+
+
+def isrcset(key):
+    return ", ".join(f"{isrc(key, w)} {w}w" for w in (480, 800, 1200))
+
+
 def img(key, alt, eager=False, sizes="(min-width:1024px) 600px, calc(100vw - 2.5rem)"):
     h = 406 if key in WIDE else 504
     cls = ' class="wide"' if key in WIDE else ""
-    srcset = ", ".join(f"/img/{key}-{w}.webp {w}w" for w in (480, 800, 1200))
+    srcset = isrcset(key)
     load = 'fetchpriority="high"' if eager else 'loading="lazy"'
-    return (f'<img src="/img/{key}-800.webp" srcset="{srcset}" sizes="{sizes}" width="800" height="{h}" '
+    return (f'<img src="{isrc(key, 800)}" srcset="{srcset}" sizes="{sizes}" width="800" height="{h}" '
             f'alt="{esc(alt)}"{cls} {load} decoding="async">')
 
 
@@ -302,10 +327,11 @@ def software(name, desc, url, extra=None):
     return d
 
 
-def page(path, title, desc, body, schema=(), og_type="website", og_img="/img/og.jpg", preload=None, noindex=False, modified=None,
+def page(path, title, desc, body, schema=(), og_type="website", og_img=None, preload=None, noindex=False, modified=None,
          preload_sizes="(min-width:1024px) 600px, calc(100vw - 2.5rem)"):
     """The full HTML document. path: '/x/' (canonical). schema: extra JSON-LD nodes."""
     url = SITE + path
+    og_img = og_img or isrc("og", "og")
     graph = [ORG, WEBSITE, {"@type": "WebPage", "@id": url + "#page", "url": url, "name": title, "description": desc,
                             "inLanguage": "en-IN", "isPartOf": {"@id": SITE + "/#website"},
                             "dateModified": modified or UPDATED}] + list(schema)
@@ -313,7 +339,7 @@ def page(path, title, desc, body, schema=(), og_type="website", og_img="/img/og.
     pre = ""
     if preload:
         key = preload
-        srcset = ", ".join(f"/img/{key}-{w}.webp {w}w" for w in (480, 800, 1200))
+        srcset = isrcset(key)
         pre = (f'<link rel="preload" as="image" type="image/webp" imagesrcset="{srcset}" '
                f'imagesizes="{preload_sizes}" fetchpriority="high">')
     robots = "noindex,follow" if noindex else "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"

@@ -49,7 +49,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .ctas{display:flex;flex-wrap:wrap;gap:.75rem}
 .ln{display:inline-flex;align-items:center;gap:.375rem;font-size:.875rem;font-weight:600;color:var(--p)}.ln:hover .i{transform:translateX(2px)}.ln .i{transition:transform .15s}
 /* hero */
-.hero .w{display:grid;gap:3.5rem;align-items:center;padding-top:4rem;padding-bottom:5rem}
+.hero .w{display:grid;gap:3.5rem;align-items:center;padding-top:2rem;padding-bottom:5rem}
 .hero h1{margin-top:1.5rem;font-size:2.25rem;line-height:1.05;font-weight:700}
 .hero .lead{margin-top:1.5rem;max-width:32rem}
 .hero .ctas{margin-top:2rem}
@@ -208,7 +208,7 @@ a.cd:hover h3{color:var(--p)}
 @media (min-width:1200px){.pg4{grid-template-columns:repeat(4,1fr)}}
 @media (min-width:1024px){
  .w{padding:0 2rem}
- .hero .w{grid-template-columns:1fr 1.15fr;padding-top:6rem;padding-bottom:7rem}
+ .hero .w{grid-template-columns:1fr 1.15fr;padding-top:2.5rem;padding-bottom:7rem}
  .hero h1{font-size:3.75rem}.hero.sm h1{font-size:3.25rem}.hero.sm .w{padding-top:2.5rem;padding-bottom:4.5rem}.ph h1{font-size:3.5rem}.ph{padding-top:3.5rem;padding-bottom:3rem}
  .st .w{grid-template-columns:repeat(4,1fr)}.st div div:nth-child(n+3){border-top:0}.st div div+div{border-left:1px solid var(--b)}
  .sec{padding:4rem 0}
