@@ -91,7 +91,7 @@ def build(write):
             'No limits on bills or menu items, no card, and it keeps billing when the internet is down.</p>'
             + btns(("Sign up free", SIGNUP), ("Download for Windows", SIGNUP))
             + ticks(["₹0 forever on 1 PC", "No card needed", "Works offline", "GST ready"])
-            + f'</div><div class="rel fz-vis"><div class="fr">{img("core-pos", "POSINEXT free restaurant POS showing live tables and open takeaway and delivery orders", eager=True)}</div>'
+            + f'</div><div class="rel fz-vis"><div class="fr">{img("core-pos", "POSINEXT free restaurant POS showing tables and an open order", eager=True)}</div>'
             + price_card + "</div></div></section>")
     stats = ('<section class="st"><div class="w">' + "".join(f"<div><b>{a}</b><span>{b}</span></div>" for a, b in [
         ("₹0", "Free forever on one PC"), ("0", "Limits on bills or menu items"), ("9", "Modules included free"), ("2", "Products: Fine Dine and QSR")]) + "</div></section>")

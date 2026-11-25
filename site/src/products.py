@@ -5,7 +5,7 @@ P = [
     dict(
         slug="fine-dine-pos", name="Fine Dine", icon="monitor", num="01", group="Front of house", tone="",
         stat="&lt; 3 sec", statl="Average bill time", img="core-pos", side="r",
-        alt="POSINEXT Fine Dine POS floor with table cards, their state and amount, and open takeaway and delivery orders",
+        alt="POSINEXT Fine Dine POS floor plan with table cards and order summary",
         home="Lightning-fast billing built for rush hour. See every table, pending KOT and delivery order in one live view, so nothing falls through the cracks.",
         bullets=["Live floor plan with table status, timers and running totals",
                  "One-tap KOTs routed straight to the right kitchen station",
@@ -67,7 +67,7 @@ P = [
     dict(
         slug="table-qr-ordering", name="Table QR", icon="qr", num="03", group="Self ordering", tone="h",
         stat="+22%", statl="Higher average ticket", img="table-qr", side="r",
-        alt="Table QR card for table T2 next to a phone showing the guest menu with dish photos and two items in the order",
+        alt="Guest scanning a Table QR stand to browse a digital menu on their phone",
         home="Let guests scan, order and pay from their own phone — zero wait, zero friction. Orders land in your POS instantly with the table already attached.",
         bullets=["Beautiful digital menu with photos, modifiers and upsells", "Pay at table with UPI, cards and wallets",
                  "Menu updates go live everywhere in seconds"],
@@ -184,7 +184,7 @@ P = [
     dict(
         slug="online-ordering-website", name="Website Ordering", icon="globe", num="07", group="Online ordering", tone="g",
         stat="3.4×", statl="More direct orders", img="delivery-website", side="r",
-        alt="Restaurant online ordering website in a browser and on a phone, with the menu, dish photos and cart",
+        alt="Restaurant online ordering website shown on a laptop",
         home="A conversion-optimised online ordering website that drives direct orders and feeds them back into your central POS — no re-keying, no tablets on the counter.",
         bullets=["SEO-friendly storefront on your own domain", "Pickup, delivery and scheduled orders out of the box",
                  "Synced menu, pricing and stock with your POS"],
