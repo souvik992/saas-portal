@@ -68,5 +68,10 @@
   "model": "@cf/black-forest-labs/flux-1-schnell",
   "quality": "8 steps",
   "prompt": "A young cook in a bright Indian café kitchen filming a sizzling tawa of paneer tikka with a smartphone held vertically, steam rising, warm window light, colleagues plating food in the background. Realistic editorial photograph for a restaurant business blog. Natural warm light, shallow depth of field, 35mm lens, set in India with Indian people, warm tones with a subtle orange accent, calm uncluttered composition, plain unmarked surfaces and packaging, wide landscape 16:9 framing."
+ },
+ "food-influencer-marketing-restaurants-india": {
+  "model": "@cf/black-forest-labs/flux-1-schnell",
+  "quality": "8 steps",
+  "prompt": "A young woman food creator seated at a wooden table in a warm, softly lit Indian restaurant, filming a steaming copper handi of biryani with a phone held vertically while a waiter sets down a plate of kebabs. Realistic editorial photograph for a restaurant business blog. Natural warm light, shallow depth of field, 35mm lens, set in India with Indian people, warm tones with a subtle orange accent, calm uncluttered composition, plain unmarked surfaces and packaging, wide landscape 16:9 framing."
  }
 }
