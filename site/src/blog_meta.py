@@ -21,9 +21,11 @@ IMAGE_STYLE = ("Editorial photograph for a restaurant business blog cover. Reali
 # The same house style for FLUX (Cloudflare Workers AI). FLUX ignores "no ..." instructions and naming text, signs or
 # logos tends to add them, so this says only what to show. Subjects for it should avoid paper bills, menus, signboards,
 # storefronts and screens facing the camera, which it fills with garbled lettering.
-IMAGE_STYLE_FLUX = ("Realistic editorial photograph for a restaurant business blog. Natural warm light, shallow depth of "
-                    "field, 35mm lens, set in India with Indian people, warm tones with a subtle orange accent, calm "
-                    "uncluttered composition, plain unmarked surfaces and packaging, wide landscape 16:9 framing.")
+IMAGE_STYLE_FLUX = ("Clean flat isometric vector illustration, modern SaaS infographic style, simple geometric objects "
+                    "and icons joined by arrows and dotted connector lines, soft off-white background, POSINEXT palette "
+                    "of crimson red and deep navy with light grey and a touch of warm orange, smooth soft shadows, "
+                    "plain unlabelled shapes, generous empty space, minimal and uncluttered, wide landscape 16:9 "
+                    "composition.")
 
 # Posts written in posts.py (code). slug -> (category, image prompt subject, image alt text)
 CODE_POSTS = {

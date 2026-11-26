@@ -25,11 +25,13 @@ Each post goes deep on one channel or problem and links back to the pillar guide
   /app-ordering/, /food-delivery-app/, /swiggy-zomato-integration/, /features/, /pricing/, /book-a-demo/).
   Mention POSINEXT once or twice where it fits; the post must be useful even to someone who never buys.
 - 4–6 FAQs answering real follow-up questions in 1–3 sentences each.
-- Add `image_prompt` (one or two sentences describing a realistic scene for the AI cover: no text, logos or brand
-  names) and `image_alt` (a short description of that scene) to the post's JSON. Covers are made with
-  `python site/tools/blog_images.py`. The free image model draws garbled lettering, so the scene must not feature
-  paper bills, menus, signboards, storefronts or screens facing the camera; show people, food, kitchens, counters and
-  plain packaging instead, and don't mention text or logos in the prompt.
+- Add `image_prompt` and `image_alt` to the post's JSON. Covers are flat diagram-style illustrations (no people),
+  made with `python site/tools/blog_images.py` in the house style from `site/src/blog_meta.py`. `image_prompt` is one
+  or two sentences naming 3-6 objects and how they connect to show the post's idea, e.g. "a POS terminal in the
+  centre linked by arrows to a phone, a kitchen printer and a delivery bag, with a rising bar chart beside it".
+  Use objects, icons, arrows, coins, bar charts and pie charts; no people, words, numbers, labels, logos, brand
+  names or screens with content (the free image model turns any lettering into gibberish). `image_alt` is a short
+  plain description of the picture.
 - Allowed HTML in body_html: p h2 h3 ul ol li strong em blockquote table thead tbody tr th td a br. No h1, images,
   classes, scripts or inline styles.
 
