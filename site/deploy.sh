@@ -153,9 +153,24 @@ posinext.com {
   handle {
     @fonts path /fonts/*
     header @fonts Cache-Control "public, max-age=31536000, immutable"
-    @img path /img/* /favicon.svg
+    # pages link scripts and pictures with ?v=<hash of the file>: a change gets a new URL, so these never go stale
+    @versioned {
+      path /js/* /img/*
+      query v=*
+    }
+    header @versioned Cache-Control "public, max-age=31536000, immutable"
+    @img {
+      path /img/* /favicon.svg
+      not query v=*
+    }
     header @img Cache-Control "public, max-age=2592000"
-    @pages not path /fonts/* /img/* /favicon.svg /admin /admin/*
+    @pages {
+      not path /fonts/* /img/* /favicon.svg /admin /admin/*
+      not {
+        path /js/*
+        query v=*
+      }
+    }
     header @pages Cache-Control "public, max-age=600"
     # old Lovable script and style files are gone: no page needs them
     @lovable path /assets/*

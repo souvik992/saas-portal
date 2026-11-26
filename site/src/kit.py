@@ -115,7 +115,7 @@ def sprite(body):
 LOGO = ('<span class="logo"><svg viewBox="0 0 32 24" aria-hidden="true"><path class="a" d="M2 2 L12 12 L2 22 H8 L18 12 L8 2 Z"/>'
         '<path class="b" d="M14 2 L24 12 L14 22 H20 L30 12 L20 2 Z"/></svg>POSINEXT</span>')
 
-# ---- images: WebP at 480/800/1200 px (img/<key>-<w>.webp), made by build.py from the originals ----
+# ---- images: WebP at 480/640/800/1200 px (img/<key>-<w>.webp), made by build.py from the originals ----
 WIDE = {"qsr-billing", "ods-online-orders"}
 
 
@@ -134,17 +134,17 @@ def iver(key):
 
 
 def isrc(key, w):
-    """URL of one generated size: /img/<key>-<w>.webp (w=480/800/1200) or /img/<key>-og.jpg / /img/og.jpg (w='og')."""
+    """URL of one generated size: /img/<key>-<w>.webp (w=480/640/800/1200) or /img/<key>-og.jpg / /img/og.jpg (w='og')."""
     if w == "og":
         return ("/img/og.jpg" if key == "og" else f"/img/{key}-og.jpg") + iver(key)
     return f"/img/{key}-{w}.webp" + iver(key)
 
 
 def isrcset(key):
-    return ", ".join(f"{isrc(key, w)} {w}w" for w in (480, 800, 1200))
+    return ", ".join(f"{isrc(key, w)} {w}w" for w in (480, 640, 800, 1200))
 
 
-def img(key, alt, eager=False, sizes="(min-width:1024px) 600px, calc(100vw - 2.5rem)"):
+def img(key, alt, eager=False, sizes="(min-width:1024px) 584px, calc(100vw - 3.5rem)"):
     h = 406 if key in WIDE else 504
     cls = ' class="wide"' if key in WIDE else ""
     srcset = isrcset(key)
@@ -328,7 +328,7 @@ def software(name, desc, url, extra=None):
 
 
 def page(path, title, desc, body, schema=(), og_type="website", og_img=None, preload=None, noindex=False, modified=None,
-         preload_sizes="(min-width:1024px) 600px, calc(100vw - 2.5rem)"):
+         preload_sizes="(min-width:1024px) 584px, calc(100vw - 3.5rem)"):
     """The full HTML document. path: '/x/' (canonical). schema: extra JSON-LD nodes."""
     url = SITE + path
     og_img = og_img or isrc("og", "og")

@@ -129,7 +129,7 @@ def simple(path, title, desc, eyebrow, h1, lead, inner, trail, schema=(), priori
 
 
 def images():
-    """src/images/<key>.(jpg|png) -> public/img/<key>-<480|800|1200>.webp (only when missing or older), and img/og.jpg."""
+    """src/images/<key>.(jpg|png) -> public/img/<key>-<480|640|800|1200>.webp (only when missing or older), and img/og.jpg."""
     src = Path(__file__).parent / "images"
     (OUT / "img").mkdir(exist_ok=True)
     for f in sorted(src.iterdir()):
@@ -149,7 +149,7 @@ def images():
                 from PIL import Image, ImageOps
                 im = Image.open(f).convert("RGB")
                 ImageOps.fit(im, (1200, 675), Image.LANCZOS).save(o, "JPEG", quality=80, optimize=True, progressive=True)
-        for w in (480, 800, 1200):
+        for w in (480, 640, 800, 1200):
             o = OUT / "img" / f"{key}-{w}.webp"
             if o.exists() and o.stat().st_mtime >= f.stat().st_mtime:
                 continue
