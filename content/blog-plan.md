@@ -43,7 +43,7 @@ Each post goes deep on one channel or problem and links back to the pillar guide
 - [x] WhatsApp ordering and marketing for restaurants: opt-ins, broadcasts and reorders — whatsapp-ordering-marketing-restaurants (2026-11-23)
 - [x] ONDC for restaurants: how to join, costs, and what results to expect — ondc-for-restaurants-india (2026-11-24)
 - [x] Instagram and reels marketing for restaurants and cafés in India — instagram-marketing-restaurants-india (2026-11-25)
-- [ ] Working with local food influencers and creators: briefs, pricing and tracking
+- [x] Working with local food influencers and creators: briefs, pricing and tracking — food-influencer-marketing-restaurants-india (2026-11-26)
 - [ ] Restaurant loyalty programs that work in India (points, cashback, memberships)
 - [ ] Table QR ordering: does it increase average order value and table turns?
 - [ ] Corporate and office lunch orders: how restaurants win bulk and recurring B2B orders
@@ -83,3 +83,4 @@ questions restaurant owners search for) before writing.
 - 2026-11-23 whatsapp-ordering-marketing-restaurants — Business app vs Platform table, India per-message rates from Oct 2026, 7-step ordering setup, opt-in rules (WhatsApp policy, DPDP Rules) with sample wording, ₹ cost-per-reorder example and 30-day plan, sourced from Meta developer docs, WhatsApp policy, FPJ, IBTimes, TechCrunch, PIB and India Briefing
 - 2026-11-24 ondc-for-restaurants-india — how ONDC works, 6-step seller-app joining route and question checklist, cost table, ₹400 illustrative order (aggregator vs ONDC with/without restaurant-paid delivery), 2026 status (Flipkart, Ownly) and 30-day tracking, sourced from ONDC, PIB, state EoDB guides, Inc42, Business Standard, Business Today, Outlook Business and TechCrunch
 - 2026-11-25 instagram-marketing-restaurants-india — what Instagram ranks (watch time, likes, sends, originality, trial reels), profile setup, reels content table, ASCI creator disclosure rules, ₹3,000 illustrative boost example and POS code tracking, sourced from NapoleonCat, Meta Newsroom, Social Media Today, SEJ, TechCrunch and ASCI
+- 2026-11-26 food-influencer-marketing-restaurants-india — finding local creators, published ₹ fee estimates table, barter/fee/bonus models, ASCI and Consumer Affairs disclosure rules, Section 194R TDS, one-page brief, per-code tracking, ₹12,600 illustrative 3-creator example and 30-day plan, sourced from Kofluence (MediaInfoline), Outlook Business, IBTimes, PIB/Consumer Affairs, ASCI and Income Tax Department
